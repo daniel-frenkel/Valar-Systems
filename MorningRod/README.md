@@ -1,4 +1,4 @@
-<b>The MorningRod</b>
+<h1>The MorningRod</h1>
 
 The MorningRod is a first-of-its-kind IoT smart curtain rod that helps you wake up feeling refreshed. 
 
