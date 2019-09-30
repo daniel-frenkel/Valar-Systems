@@ -6,4 +6,4 @@ It uses one NEMA 17 motor, Trinamic driver, and ESP32 to move your curtains when
 
 Use the MorningRod app and schedule your open times, or modify the Arduino code to do whatever you'd like.
 
-<img src="https://img.etimg.com/thumb/msid-68333505,width-643,imgsize-204154,resizemode-4/googlechrome.jpg" alt="Smiley face" height="400">
+<img src="" alt="" height="400">
