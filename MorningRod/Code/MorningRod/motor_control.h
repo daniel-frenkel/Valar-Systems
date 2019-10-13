@@ -41,12 +41,10 @@ void turnMotor(int dir);
 // these variables keep track of which motors are running
 bool motor_running = false;
 
-
-
 void move_close(){
   
   digitalWrite(ENABLE_PIN,LOW);       // enable the TMC5130
-  sendData(0x10+0x80, 0x00011600);     // 25 = 1.97A current for close function //11500 =1.66A works/ 11600 works / 
+  sendData(0x10+0x80, 0x00011500);     // 25 = 1.97A current for close function //11500 =1.66A works/ 11600 works / 
   sendData(0xA0,0x00000000); //RAMPMODE=0
   
   sendData(0x14+0x80, 99000);//GET_VELOCITY-1); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
@@ -201,7 +199,7 @@ void setup_motors(){
   SPI.setDataMode(SPI_MODE3);
   SPI.begin(SCLK,MISO,MOSI,chipCS); // Edit 'pins.h' to change pins
 
-  sendData(0x00+0x80, 0x0);     // General settings / en_pwm_mode ON
+  sendData(0x00+0x80, 0x0);     // General settings / en_pwm_mode OFF
   sendData(0x6C+0x80, 0x000101D5);     // CHOPCONF
   sendData(0x10+0x80, 0x00010D00);     // IHOLD_IRUN // 0x00011900 = 25 = 2 Amps // 0x00010D00 = 13 = 1 Amp
   sendData(0x20+0x80,0x00000000);      //RAMPMODE=0
