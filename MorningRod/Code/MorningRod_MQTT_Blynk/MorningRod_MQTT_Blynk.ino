@@ -1,12 +1,21 @@
+/* This firmware is primarily used with the MorningRod app and allows for automatic provisioning. 
+ *  
+ * If you would like to add more features, you will need to change a few lines to work with the Blynk app.
+ * 
+ * //MorningRod-Mode// is used for automatic provisioning
+ * 
+ * //Blynk-Mode is used for custom Blynk apps
+ */
 
-
+#define USE_CUSTOM_BOARD // See "Custom board configuration" in Settings.h
 #define APP_DEBUG        // Comment this out to disable debug prints
-
-float MOVE_DISTANCE;
-float MOVE_PERCENT = 389911.13;
-
+#define MOVE_DISTANCE preferences.getFloat("move_distance", 0)
+#define MOVE_PERCENT preferences.getFloat("move_percent", 389911.13)
 #define BLYNK_PRINT Serial
-#include <BlynkSimpleEsp32.h>
+
+#include "driver/ledc.h"
+#include "BlynkProvisioning.h"
+#include <PubSubClient.h>
 #include <SPI.h> 
 #include <WiFi.h> 
 #include <HTTPClient.h> 
@@ -14,70 +23,150 @@ float MOVE_PERCENT = 389911.13;
 #include <WiFiClientSecure.h> 
 #include <TimeLib.h>
 #include <WidgetRTC.h>
-#include <Update.h>
-#include <Preferences.h>
 #include "time_store.cpp"
 #include "time.h"
-#include "cred.h"
-#include "pins.h"
-#include "motor_control.h"
-#include "blynk_pins.h"
 #include "driver/periph_ctrl.h"
 #include "driver/timer.h"
-#include "driver/ledc.h"
-#include "OTA_S3.h"
+#include <Update.h>
 
-Preferences preferences;
-
-#define DEBUG_STREAM terminal
+//#define DEBUG_STREAM terminal
+#define DEBUG_STREAM Serial
 
 WidgetTerminal terminal(V2);
-
+#include "motor_control.h"
+#include "blynk_pins.h"
+#include "GPS.h"
+//#include "OTA_S3.h"
+#include "pins.h"
 
 TaskHandle_t TaskA;
 
 const char* ntpServer = "pool.ntp.org"; // where to get the current date and time
+String sunsetsunrisebaseurl="https://api.sunrise-sunset.org/json?formatted=0&lng="; //Sunrise/sunset API address
 
-String sunsetsunrisebaseurl="https://api.sunrise-sunset.org/json?formatted=0&lng=";
+// Blynk Wireless settings: Used in Blynk-Mode
+const char AUTH[] = "utZTGeGw1w7XrrYKQS_zZrCg9Or9adBN"; //Your Blynk Auth Token
+const char SSID[] = "Tony"; //Your 2.4GHz WiFi ID
+const char PASSWORD[] = "spockntony"; // Your WiFi Password
 
+//MQTT Setup
+#include <SimpleTimer.h>
+SimpleTimer timer;
+int counter = 0;
+long int last_UP_change = millis();
 
+//MQTT Settings
+IPAddress mqtt_server(192,168,50,178); 
+const char* mqtt_username = "user";
+const char* mqtt_password = "pass";
+char* InTopic = "room/curtain"; //subscribe to topic to be notified about
+char* InTopic1 = "room";
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void callback(char* topic, byte* message, unsigned int length) { //Used for MQTT
+  Serial.print("Message arrived on topic: ");
+  Serial.print(topic);
+  Serial.print(". Message: ");
+  String messageTemp;
+  
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)message[i]);
+    messageTemp += (char)message[i];
+  }
+  Serial.println();
+
+  // Feel free to add more if statements to control more GPIOs with MQTT
+  // If a message is received on the topic esp32/output, you check if the message is either "open" or "close". 
+  // Changes the output state according to the message
+  if (String(topic) == "room/curtain") {
+    Serial.print("Changing output to ");
+    if(messageTemp == "open"){
+      Serial.println("open");
+      command = MOVE_OPEN;
+    }
+    else if(messageTemp == "close"){
+      Serial.println("close");
+      command = MOVE_CLOSE;
+    }
+  }
+}
+
+void reconnect() {
+ // Loop until we're reconnected
+ while (!client.connected()) {
+   Serial.print("Attempting MQTT connection...");
+   // Attempt to connect
+   if (client.connect("BlinkMQTTBridge",mqtt_username,mqtt_password)) {
+     Serial.println("connected");
+     counter = 0;
+     // ... and resubscribe
+     client.subscribe(InTopic);
+     client.subscribe(InTopic1);
+   } else {
+     Serial.print("failed, rc=");
+     Serial.print(client.state());
+     Serial.println(" try again in 0.3 second");
+     ++counter;
+     if (counter > 180) ESP.restart();
+     // Wait .3 seconds before retrying
+     delay(300);
+   }
+ }
+}
+
+//SETUP
 void setup() {
+
   Serial.begin(115200);
 
   pinMode(btn1,INPUT_PULLUP);
   pinMode(btn2,INPUT_PULLUP);
 
   // for storing the times over power cycle
-  preferences.begin("auto-blinds", false);
+  preferences.begin("auto-curtain", false);
 
   clockout_setup();
   setup_motors();
+   
   xTaskCreatePinnedToCore(
-   IndependentTask,                  /* pvTaskCode */
-   "NoBlynkSafe",            /* pcName */
+   IndependentTask,        /* pvTaskCode */
+   "NoBlynkSafe",          /* pcName */
    8192,                   /* usStackDepth */
    NULL,                   /* pvParameters */
    1,                      /* uxPriority */
    &TaskA,                 /* pxCreatedTask */
-   0);                     /* xCoreID */ 
+   0);                     /* xCoreID */  
 
-  //delay(50000);
-  Serial.println("Connecting...");
-
-  #ifdef DANIEL_FRENKEL
-    Blynk.begin(auth, ssid, pass, "morningrod.blynk.cc", 8080);
-  #else
-    Blynk.begin(auth, ssid, pass);
-  #endif
-  
-  while(!Blynk.connected()){
-    delay(300);
-    Serial.print(".");
-  }
+//Blynk-Mode//
+WiFi.mode(WIFI_STA);
+//Use this for Blynk server
+//Blynk.begin(AUTH, SSID, PASSWORD);
+//Use this for MorningRod server
+Blynk.begin(AUTH, SSID, PASSWORD, "morningrod.blynk.cc", 8080);
+  while (Blynk.connect() == false) {  // Wait until connected
+    if ((millis() - last_UP_change) > 30000) { // 30s before reset
+      Serial.println(F("resetting"));
+      ESP.restart();
+   }
+ }
  
+//MQTT setup
+delay(10);
+client.setServer(mqtt_server, 1883);
+client.setCallback(callback);
+
+//End Blynk-Mode//
+
+  //Use For MorningRod App Provisioning Mode
+  /*
+  BlynkProvisioning.begin();
+  Blynk.sendInternal("rtc", "sync"); 
   DEBUG_STREAM.println("Connected!");
-  //setSyncInterval(10 * 60);
-  //DEBUG_STREAM.println("Done.");
+  Blynk.syncAll();
+  */
+  //End MorningRod-Mode//
+
   
   lat=preferences.getFloat("lat", -1);
   lon=preferences.getFloat("lon", -1);
@@ -86,7 +175,7 @@ void setup() {
   sun_delay = preferences.getInt("sun_delay",0); // load the delay time (in minutes) between sunset/sunrise and open/close
   //reset_motors(1);
   DEBUG_STREAM.println("Ready!");
-  sendData(0x21,0);
+  //sendData(0x21,0); Not sure what this does
 
   check_timer=millis()+10000;
   daylight_timer=millis()+9000;
@@ -105,47 +194,62 @@ long update_timer = millis();
 int update_count = 0;
 int last_dir; // last direction the motors moved
 
-void IndependentTask( void * parameter ){  
+void IndependentTask( void * parameter ) {
   // the internet should not be used AT ALL in this function!!!!
-  while(true) {
+while(true) {
     // buttons
 
     // A press sets the command to open or close the track motor.
     if(!digitalRead(btn1)){
       command = MOVE_CLOSE;
-      //move_close();
     }
     if(!digitalRead(btn2)){
       command = MOVE_OPEN;
-      //move_open();
     }
-
-    // shaft motor is M1, track motor is M2
-
+    
     // commands are sent from other threads so that blocking function calls
     // (like trackClose(), shaftClose(), trackOpen(), and shaftOpen()) can be
     // called without causing bizzare hickups in the other threads, namely the main thread
     // which controls Blynk.
+    
     if(command!=-1){
       DEBUG_STREAM.print("Executing command ");
       DEBUG_STREAM.println(command);
     }
     if(command==MOVE_CLOSE){
       move_close();
+      last_dir=DIR_CLOSE;
     }else if(command==MOVE_OPEN){
       move_open();
+      last_dir=DIR_OPEN;
     }
     if(command!=-1)DEBUG_STREAM.println("[ready for next movement]");
     command = -1;
     delay(16);
-  }//*/
+  }
 }
 
 void loop() {
-  // This handles the network and cloud connection
-  Blynk.run();
+// MorningRod-Mode//
+  //BlynkProvisioning.run();
+//End MorningRod-Mode//
+  
+//Blynk-Mode//
+Blynk.run();
+ if(!Blynk.connected()) {
+   Serial.println(F("Resetting in loop"));
+   ESP.restart();
+ }
+
+//MQTT
+ timer.run();
+ if (!client.connected()) {
+   reconnect();
+  }
+ client.loop();
+//End Blynk-Mode// 
+
   // check if the direction changed
- 
   if(preferences.getChar("last_dir",-1)!=last_dir){
     preferences.putChar("last_dir",last_dir);
     Serial.printf("Saving direction %i\n", last_dir);
@@ -155,37 +259,21 @@ void loop() {
       Serial.printf("Writing direction %i\n", last_dir);
       // write 1023 because Blynk writes accept values 0-1023 to control brightness
       if(last_dir==DIR_OPEN){
-        DEBUG_STREAM.println("(open)");
-        Blynk.virtualWrite(V50, 0);
-        Blynk.virtualWrite(V51, 1023);
-        //close_led.off();
-        //open_led.on();
+        //lcd.clear(); //Use it to clear the LCD Widget
       }else{
-        DEBUG_STREAM.println("(close)");
-        Blynk.virtualWrite(V50, 1023);
-        Blynk.virtualWrite(V51, 0);
-        //close_led.on();
-        //open_led.off();
+       //lcd.clear(); //Use it to clear the LCD Widget
+   
+   //lcd.print(4, 0, "Status:"); // use: (position X: 0-15, position Y: 0-1, "Message you want to print")
+  //lcd.print(4, 1, "World");
+  // Please use timed events when LCD printintg in void loop to avoid sending too many commands
+  // It will cause a FLOOD Error, and connection will be dropped
       }
-      Blynk.syncAll();
+      //Blynk.syncAll();
     }
-  }
-
-
-  update_count++;
-  if((update_timer+5000)<millis()){
-    //DEBUG_STREAM.print("Updates: ");
-    //DEBUG_STREAM.print(update_count);
-    //DEBUG_STREAM.print(" in ");
-    //DEBUG_STREAM.print(millis()-update_timer);
-    //DEBUG_STREAM.print("ms.  UPS: ");
-    //DEBUG_STREAM.println(update_count/((millis()-update_timer)/1000.0));
-    update_count = 0;
-    update_timer = millis();
   }
   
   if(check_timer<millis()){
-    check_timer=millis()+20000; // check every 20 seconds. (avoid missing minutes)
+    check_timer=millis()+55000; // check every 55 seconds. (avoid missing minutes)
     // get the current time
     struct tm ctime;
     ctime.tm_hour=hour();
@@ -206,12 +294,28 @@ void loop() {
     DEBUG_STREAM.println((lon==0||lat==0||lon==-1||lat==-1) ? "NO" : "YES");
     
     for(int i=0;i<4;i++){
-      DEBUG_STREAM.print("Check: ");
+      DEBUG_STREAM.print("Timer: ");
       DEBUG_STREAM.print(i);
       DEBUG_STREAM.print(" is ");
       DEBUG_STREAM.println((bool)times[i].active);
       // don't waste CPU time
       if(!times[i].active)continue;
+
+      // check for different time zones
+      /*if(times[i].offset!=last_timezone_offset){
+        // reconfigure clock
+        DEBUG_STREAM.print("Clock is being reconfigured...\nNew time zone=");
+        DEBUG_STREAM.println(times[i].offset);
+        configTime(times[i].offset, 0, ntpServer, "time.nist.gov", "time.windows.com");
+        last_timezone_offset=times[i].offset;
+        // get the current time
+        getLocalTime(&ctime);
+        DEBUG_STREAM.print(" ---- Time is ");
+        DEBUG_STREAM.print(ctime.tm_hour);
+        DEBUG_STREAM.print(":");
+        DEBUG_STREAM.print(ctime.tm_min);
+        DEBUG_STREAM.println(" ----");
+      }*/
       
       if(times[i].type==1){ // sunrise
         // change times[i] to target the sunrise
@@ -240,16 +344,15 @@ void loop() {
       if(ctime.tm_min==times[i].minute&&ctime.tm_hour==times[i].hour){
         // check week day (day_sel is days since monday, tm_wday is days since sunday)
         if(times[i].day_sel[(ctime.tm_wday+6)%7]){
-          // Activate!  Change direction!
-
           // odd indexes close and even indexes open
           if(i%2==0){
             // even (open)
-            command = MOVE_OPEN;
+            if(last_dir!=DIR_OPEN)
+              command = MOVE_OPEN;
           }else{
             // odd (close)
-            command = MOVE_CLOSE;
-            
+            if(last_dir!=DIR_CLOSE)
+              command = MOVE_CLOSE;
           }
         }
       }
@@ -332,16 +435,8 @@ void load_time(int i){
   }
 }
 
+
 void clockout_setup(){
-  /* Dylan Brophy from Upwork, code to create 16 MHz clock output
-  *
-  * This code will print the frequency output when the program starts
-  * so that it is easy to verify the output frequency is correct.
-  *
-  * This code finds the board clock speed using compiler macros; no need
-  * to specify 80 or 40 MHz.
-  */
-  
   periph_module_enable(PERIPH_LEDC_MODULE);
   
   uint32_t bit_width = 2; // 1 - 20 bits

@@ -1,4 +1,4 @@
-WiFiClient client;
+WiFiClient s3client;
 
 // Variables to validate response from S3
 int contentLength = 0;
@@ -7,7 +7,7 @@ bool isValidContentType = false;
 // S3 Bucket Config for OTA
 String host = "morningrodupdate.s3.us-east-1.amazonaws.com"; // Host => bucket-name.s3.region.amazonaws.com
 int port = 80; // Non https. For HTTPS 443. As of today, HTTPS doesn't work.
-String bin = "/blinds.ino.bin"; // bin file name with a slash in front.
+String bin = "/Model_R2_1M.ino.bin"; // bin file name with a slash in front.
 
 // Utility to extract header value from headers
 String getHeaderValue(String header, String headerName) {
@@ -19,13 +19,13 @@ void execOTA() {
   
   DEBUG_STREAM.println("Connecting to: " + String(host));
   // Connect to S3
-  if (client.connect(host.c_str(), port)) {
+  if (s3client.connect(host.c_str(), port)) {
     // Connection Succeed.
     // Fecthing the bin
     DEBUG_STREAM.println("Fetching Bin: " + String(bin));
 
     // Get the contents of the bin file
-    client.print(String("GET ") + bin + " HTTP/1.1\r\n" +
+    s3client.print(String("GET ") + bin + " HTTP/1.1\r\n" +
                  "Host: " + host + "\r\n" +
                  "Cache-Control: no-cache\r\n" +
                  "Connection: close\r\n\r\n");
@@ -37,10 +37,10 @@ void execOTA() {
     //                 "Connection: close\r\n\r\n");
 
     unsigned long timeout = millis();
-    while (client.available() == 0) {
+    while (s3client.available() == 0) {
       if (millis() - timeout > 5000) {
         DEBUG_STREAM.println("Client Timeout !");
-        client.stop();
+        s3client.stop();
         return;
       }
     }
@@ -63,9 +63,9 @@ void execOTA() {
         {{BIN FILE CONTENTS}}
 
     */
-    while (client.available()) {
+    while (s3client.available()) {
       // read line till /n
-      String line = client.readStringUntil('\n');
+      String line = s3client.readStringUntil('\n');
       // remove space, to check if the line is end of headers
       line.trim();
 
@@ -126,7 +126,7 @@ void execOTA() {
       DEBUG_STREAM.println("Begin OTA. This may take 2 - 5 mins to complete. Things might be quite for a while.. Patience!");
       // No activity would appear on the Serial monitor
       // So be patient. This may take 2 - 5mins to complete
-      size_t written = Update.writeStream(client);
+      size_t written = Update.writeStream(s3client);
 
       if (written == contentLength) {
         DEBUG_STREAM.println("Written : " + String(written) + " successfully");
@@ -152,11 +152,11 @@ void execOTA() {
       // Understand the partitions and
       // space availability
       DEBUG_STREAM.println("Not enough space to begin OTA");
-      client.flush();
+      s3client.flush();
     }
   } else {
     DEBUG_STREAM.println("There was no content in the response");
-    client.flush();
+    s3client.flush();
   }
 }
 

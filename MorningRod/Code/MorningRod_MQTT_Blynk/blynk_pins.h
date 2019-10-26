@@ -1,7 +1,3 @@
-
-WidgetLED close_led(V50);
-WidgetLED open_led(V51);
-
 int sun_delay = 0;
 long check_timer = 0;
 long daylight_timer = 0;
@@ -18,6 +14,10 @@ BLYNK_CONNECTED() {
   // Synchronize time on connection
   rtc.begin();
 }
+
+
+
+WidgetLCD lcd(V3);
 
 BLYNK_WRITE(V64) { // sunrise/sunset delay
   sun_delay = param.asInt();
@@ -62,44 +62,31 @@ BLYNK_WRITE(V122) { // set global velocity
   preferences.putLong("velocity", q);
   DEBUG_STREAM.println(q);
   sendData(0xA7, q);     // VMAX_M1
-  sendData(0xC7, q);     // VMAX_M1
 }
 
-BLYNK_WRITE(V123) { // set stallguard value left
-  DEBUG_STREAM.print("set M1 stall: ");
+BLYNK_WRITE(V123) { // set stallguard value
+  DEBUG_STREAM.print("set stall: ");
   int q=param.asInt()-64;
   DEBUG_STREAM.println(q);
   if(q>63)q=63;
   if(q<-64)q=-64;
-  preferences.putInt("stallguard_1", q);
+  preferences.putInt("stallguard", q);
   q&=0x7F;
   q=q<<16;
-  sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD_M1
+  sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
 }
 
-BLYNK_WRITE(V124) { // set stallguard value right
-  DEBUG_STREAM.print("set M2 stall: ");
-  int q=param.asInt()-64;
-  if(q>63)q=63;
-  if(q<-64)q=-64;
-  preferences.putInt("stallguard_2", q);
-  DEBUG_STREAM.println(q);
-  q&=0x7F;
-  q=q<<16;
-  sendData(0x7D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD_M2
-}
-
-BLYNK_WRITE(V22) { // set distance value track
-  DEBUG_STREAM.print("set track distance: ");
-  MOVE_DISTANCE = param.asInt()*32492.59347;
+BLYNK_WRITE(V22) { // set distance value
+  DEBUG_STREAM.print("set distance: ");
+  preferences.putFloat("move_distance", param.asInt()*32492.59347);
   //float q=param.asInt()*32492.59347; // One inch require this many microsteps
   //preferences.putFloat("track_distance", q);
   DEBUG_STREAM.println(MOVE_DISTANCE);
 }
 
-BLYNK_WRITE(V23) { // set track percent open
-  DEBUG_STREAM.print("set track open percent to: ");
-  MOVE_PERCENT = (MOVE_DISTANCE/100)*param.asInt();
+BLYNK_WRITE(V23) { // set percent open
+  DEBUG_STREAM.print("set open percent to: ");
+  preferences.putFloat("move_percent", (MOVE_DISTANCE/100)*param.asInt());
   //float q=(GET_TRACK_DISTANCE/100)*param.asInt();
   //preferences.putFloat("track_distance_percent", q);
   DEBUG_STREAM.println(MOVE_PERCENT);
@@ -221,36 +208,9 @@ BLYNK_WRITE(V10) {
   times[3].offset=t.getTZ_Offset();
   save_time(3);
 }
-// GPS code here
-float lslat=-1; // NEVER use these variables in the code above, only below.  They are a security risk otherwise.
-float lslon=-1;
 
-float lat;
-float lon;
-
-BLYNK_WRITE(V127) {
-  GpsParam gps(param);
-  lslat=gps.getLat();
-  lslon=gps.getLon();
-  DEBUG_STREAM.print("Lat: ");
-  DEBUG_STREAM.println(lslat, 7);
-  DEBUG_STREAM.print("Lon: ");
-  DEBUG_STREAM.println(lslon, 7);
-}
-BLYNK_WRITE(V126) {
+BLYNK_WRITE(V35) { 
   if(param.asInt()!=0){
-    DEBUG_STREAM.println();
-    DEBUG_STREAM.print("Lat: ");
-    DEBUG_STREAM.println(lslat, 7);
-    DEBUG_STREAM.print("Lon: ");
-    DEBUG_STREAM.println(lslon, 7);
-    if(lslat==-1||lslon==-1){
-      DEBUG_STREAM.println("Invalid!");
-    }else{
-      lon=lslon;
-      lat=lslat;
-      preferences.putFloat("lat", lat);
-      preferences.putFloat("lon", lon);
-    }
+    Blynk.email("{DEVICE_NAME} : Token", configStore.cloudToken);
   }
 }
