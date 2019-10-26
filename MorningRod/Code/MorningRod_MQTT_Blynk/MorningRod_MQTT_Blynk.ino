@@ -47,7 +47,7 @@ String sunsetsunrisebaseurl="https://api.sunrise-sunset.org/json?formatted=0&lng
 // Blynk Wireless settings: Used in Blynk-Mode
 const char AUTH[] = "AUTH TOKEN"; //Your Blynk Auth Token
 const char SSID[] = "WIFI"; //Your 2.4GHz WiFi ID
-const char PASSWORD[] = "PASSWORDntony"; // Your WiFi Password
+const char PASSWORD[] = "PASSWORD"; // Your WiFi Password
 
 //MQTT Setup
 #include <SimpleTimer.h>
