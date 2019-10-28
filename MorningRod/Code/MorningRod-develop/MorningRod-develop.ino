@@ -7,9 +7,10 @@
  * //Blynk-Mode is used for creating Blynk apps
  */
 
-//To switch to Blynk-App mode, uncomment the line below
+//To switch to Blynk-App mode, uncomment "//#define Blynk_App" below
 //Go to Blynk_MQTT.h to enter your auth and wifi credentials
-#define Blynk_App
+
+//#define Blynk_App
 
 #define USE_CUSTOM_BOARD // See "Custom board configuration" in Settings.h
 #define APP_DEBUG        // Comment this out to disable debug prints
@@ -33,8 +34,8 @@
 #include "driver/timer.h"
 #include <Update.h>
 
-#define DEBUG_STREAM terminal
-//#define DEBUG_STREAM Serial
+//#define DEBUG_STREAM terminal
+#define DEBUG_STREAM Serial
 
 WidgetTerminal terminal(V2);
 #include "motor_control.h"
@@ -42,10 +43,8 @@ WidgetTerminal terminal(V2);
 #include "GPS.h"
 #include "OTA_S3.h"
 #include "pins.h"
-
-#ifdef Blynk_App
 #include "Blynk_MQTT.h"
-#endif
+
 
 TaskHandle_t TaskA;
 
@@ -90,12 +89,6 @@ Blynk.begin(AUTH, SSID, PASSWORD, "morningrod.blynk.cc", 8080);
       ESP.restart();
    }
  }
- 
-//MQTT setup
-delay(10);
-client.setServer(mqtt_server, 1883);
-client.setCallback(callback);
-
 #else
 BlynkProvisioning.begin();
 Blynk.sendInternal("rtc", "sync"); 
@@ -119,7 +112,19 @@ Blynk.syncAll();
     if(times[i].active)
       last_timezone_offset=times[i].offset;
   }
-  //configTime(last_timezone_offset, 0, ntpServer, "time.nist.gov", "time.windows.com");
+
+  //Load MQTT configs from preferences
+  preferences.getString("mqtt_device_name", mqtt_device_name);
+  preferences.getString("mqtt_server", mqtt_server);
+  preferences.getString("mqtt_username", mqtt_username);
+  preferences.getString("mqtt_password", mqtt_password);
+  
+  //Load MQTT configs from App if internet available
+  Blynk.syncVirtual(V16);
+  Blynk.syncVirtual(V17);
+  Blynk.syncVirtual(V18);
+  Blynk.syncVirtual(V19);
+  
 }
 
 time_store sunrise;
@@ -167,22 +172,30 @@ while(true) {
 void loop() {
   
 #ifdef Blynk_App
-
 Blynk.run();
  if(!Blynk.connected()) {
    Serial.println(F("Resetting in loop"));
    ESP.restart();
  }
-//MQTT
+#else
+BlynkProvisioning.run();
+#endif
+
+if(MQTT_ON == true){
+  if(MQTT_SETUP == false){
+//MQTT setup Run Once
+delay(10);
+client.setServer(mqtt_server.c_str(), 1883);
+client.setCallback(callback);
+MQTT_SETUP = true;
+  }
+//MQTT loop
  timer.run();
  if (!client.connected()) {
    reconnect();
   }
  client.loop();
-
-#else
-BlynkProvisioning.run();
-#endif
+}
 
   // check if the direction changed
   if(preferences.getChar("last_dir",-1)!=last_dir){
