@@ -18,7 +18,7 @@
 
 #define COOLCONF_DEFAULT 0
 #define GET_VELOCITY preferences.getLong("velocity",100000)
-#define STALLGUARD preferences.getInt("stallguard", -9)
+#define STALLGUARD preferences.getInt("stallguard", 63)
 
 //#define GET_TRACK_DISTANCE preferences.getFloat("track_distance",100000)
 //#define GET_SHAFT_DEGREES preferences.getFloat("shaft_degrees",20000)
@@ -47,7 +47,7 @@ void move_close(){
   DEBUG_STREAM.println(-MOVE_PERCENT);
   
   digitalWrite(ENABLE_PIN,LOW);       // enable the TMC5130
-  sendData(0x10+0x80, 0x00011500);     // 25 = 1.97A current for close function //11500 =1.66A works/ 11600 works / 
+  sendData(0x10+0x80, 0x00011900);     // 11900 =1.68A works
   sendData(0xA0,0x00000000); //RAMPMODE=0
   
   sendData(0x14+0x80, 99000);//GET_VELOCITY-1); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
@@ -95,7 +95,7 @@ void move_open(){
   DEBUG_STREAM.println(MOVE_PERCENT);
 
   digitalWrite(ENABLE_PIN,LOW);       // enable the TMC5130
-  sendData(0x10+0x80, 0x00010A00);     // 13 = 1.06A current for open function
+  sendData(0x10+0x80, 0x10700);     // 7 = 0.52A current for open function
   sendData(0xA0,0x00000000); //RAMPMODE=0
   
   sendData(0x14+0x80, GET_VELOCITY-1); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
