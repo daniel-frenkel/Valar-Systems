@@ -220,7 +220,7 @@ void setup_motors(){
   int q=STALLGUARD;
   DEBUG_STREAM.print("Stall value: ");
   DEBUG_STREAM.println(q);
-  q&=0x7F;
+  q&=0x6F;
   q=q<<16;
   sendData(0x6D+0x80, COOLCONF_DEFAULT|q); // STALLGUARD
    

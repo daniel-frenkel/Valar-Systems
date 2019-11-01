@@ -137,7 +137,7 @@ BLYNK_WRITE(V123) { // set stallguard value
   if(q>63)q=63;
   if(q<-64)q=-64;
   preferences.putInt("stallguard", q);
-  q&=0x7F;
+  q&=0x6F;
   q=q<<16;
   sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
 }

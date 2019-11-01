@@ -45,7 +45,6 @@ WidgetTerminal terminal(V2);
 #include "pins.h"
 #include "Blynk_MQTT.h"
 
-
 TaskHandle_t TaskA;
 
 const char* ntpServer = "pool.ntp.org"; // where to get the current date and time
