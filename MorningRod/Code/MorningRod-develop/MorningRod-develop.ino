@@ -34,8 +34,8 @@
 #include "driver/timer.h"
 #include <Update.h>
 
-//#define DEBUG_STREAM terminal
-#define DEBUG_STREAM Serial
+#define DEBUG_STREAM terminal
+//#define DEBUG_STREAM Serial
 
 WidgetTerminal terminal(V2);
 #include "motor_control.h"
