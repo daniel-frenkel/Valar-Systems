@@ -16,9 +16,17 @@
 #define MOVE_OPEN 5
 #define MOVE_CLOSE 6
 
+int STALLGUARD_OPEN = 0;
+int STALLGUARD_CLOSE = 0;
+
 #define COOLCONF_DEFAULT 0
 #define GET_VELOCITY preferences.getLong("velocity",100000)
-#define STALLGUARD preferences.getInt("stallguard", 63)
+#define STALL_OPEN preferences.getInt("stall_open", 63)
+#define STALL_CLOSE preferences.getInt("stall_close", 63)
+
+#define CURRENT_OPEN preferences.getInt("stall_open", 63)
+#define CURRENT_CLOSE preferences.getInt("stall_close", 63)
+
 
 //#define GET_TRACK_DISTANCE preferences.getFloat("track_distance",100000)
 //#define GET_SHAFT_DEGREES preferences.getFloat("shaft_degrees",20000)
@@ -53,12 +61,8 @@ void move_close(){
   sendData(0x14+0x80, 99000);//GET_VELOCITY-1); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
 
 //Stallguard_open will need to change due to higher current than stallguard_close
-  int q=STALLGUARD;
-  DEBUG_STREAM.print("Stall Open value: ");
-  DEBUG_STREAM.println(q);
-  q&=0x6F;
-  q=q<<16;
-  sendData(0xED, COOLCONF_DEFAULT|q);     // STALLGUARD_OPEN
+
+  sendData(0xED, preferences.getInt("stall_close", 0));     // STALLGUARD_CLOSE
   
   sendData(0x24+0x80, 1000); //A1
   sendData(0x26+0x80, 4000); //AMAX
@@ -100,13 +104,7 @@ void move_open(){
   
   sendData(0x14+0x80, GET_VELOCITY-1); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
 
-//Stallguard_open will need to change due to higher current than stallguard_close
-  int q=STALLGUARD;
-  DEBUG_STREAM.print("Stall Open value: ");
-  DEBUG_STREAM.println(q);
-  q&=0x6F;
-  q=q<<16;
-  sendData(0xED, COOLCONF_DEFAULT|q);     // STALLGUARD_OPEN
+  sendData(0xED, preferences.getInt("stall_open", 0));     // STALLGUARD_OPEN
   
   sendData(0x24+0x80, 1000); //A1
   sendData(0x26+0x80, 4000); //AMAX
@@ -202,7 +200,7 @@ void setup_motors(){
   sendData(0x00+0x80, 0x0);     // General settings / en_pwm_mode OFF
   sendData(0x6C+0x80, 0x000101D5);     // CHOPCONF
   sendData(0x10+0x80, 0x00010D00);     // IHOLD_IRUN // 0x00011900 = 25 = 2 Amps // 0x00010D00 = 13 = 1 Amp
-  sendData(0x20+0x80,0x00000000);      //RAMPMODE=0
+  sendData(0x20+0x80,0x00000000);      // RAMPMODE=0
 
   sendData(0x60+0x80,  0xAAAAB554);    // writing value 0xAAAAB554 = 0 = 0.0 to address 25 = 0x60(MSLUT[0])
   sendData(0x61+0x80,  0x4A9554AA);    // writing value 0x4A9554AA = 1251300522 = 0.0 to address 26 = 0x61(MSLUT[1])
@@ -214,15 +212,7 @@ void setup_motors(){
   sendData(0x67+0x80,  0x00404222);    // writing value 0x00404222 = 4211234 = 0.0 to address 32 = 0x67(MSLUT[7])
   sendData(0x68+0x80,  0xFFFF8056);    // writing value 0xFFFF8056 = 0 = 0.0 to address 33 = 0x68(MSLUTSEL)
   sendData(0x69+0x80,  0x00F70000);    // writing value 0x00F70000 = 16187392 = 0.0 to address 34 = 0x69(MSLUTSTART)
-  sendData(0x70+0x80,  0x00000000);    // PWMCONF
-
-  //Standard values for speed and acceleration
-  int q=STALLGUARD;
-  DEBUG_STREAM.print("Stall value: ");
-  DEBUG_STREAM.println(q);
-  q&=0x6F;
-  q=q<<16;
-  sendData(0x6D+0x80, COOLCONF_DEFAULT|q); // STALLGUARD
+  //sendData(0x70+0x80,  0x00000000);    // PWMCONF
    
   stopMotor();
 

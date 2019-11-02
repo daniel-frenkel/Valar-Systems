@@ -130,17 +130,60 @@ BLYNK_WRITE(V122) { // set global velocity
   sendData(0xA7, q);     // VMAX_M1
 }
 
-BLYNK_WRITE(V123) { // set stallguard value
+BLYNK_WRITE(V123) { // set stallguard OPEN value
+  DEBUG_STREAM.print("set stall: ");
+  int q=param.asInt()-64;
+  if(q>63)q=63;
+  if(q<-64)q=-64;
+  //preferences.putInt("stall_open", q);
+  q&=0x7F;
+  q=q<<16;
+  //sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
+  //STALL_OPEN = q;
+  preferences.putInt("stall_open", q);
+  DEBUG_STREAM.println(q);
+}
+
+
+BLYNK_WRITE(V124) { // set stallguard CLOSE value
+  DEBUG_STREAM.print("set stall: ");
+  int q=param.asInt()-64;
+ 
+  if(q>63)q=63;
+  if(q<-64)q=-64;
+  //preferences.putInt("stall_close", q);
+  q&=0x7F;
+  q=q<<16;
+  //sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
+  //STALL_CLOSE = q;
+   preferences.putInt("stall_close", q);
+   DEBUG_STREAM.println(q);
+}
+
+BLYNK_WRITE(V25) { // set Current OPEN value
   DEBUG_STREAM.print("set stall: ");
   int q=param.asInt()-64;
   DEBUG_STREAM.println(q);
   if(q>63)q=63;
   if(q<-64)q=-64;
-  preferences.putInt("stallguard", q);
+  preferences.putInt("current_open", q);
   q&=0x6F;
   q=q<<16;
   sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
 }
+
+BLYNK_WRITE(V26) { // set Current CLOSE value
+  DEBUG_STREAM.print("set stall: ");
+  int q=param.asInt()-64;
+  DEBUG_STREAM.println(q);
+  if(q>63)q=63;
+  if(q<-64)q=-64;
+  preferences.putInt("current_close", q);
+  q&=0x6F;
+  q=q<<16;
+  sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
+}
+
 
 BLYNK_WRITE(V22) { // set distance value
   DEBUG_STREAM.print("set distance: ");
