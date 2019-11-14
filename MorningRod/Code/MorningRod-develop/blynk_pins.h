@@ -81,9 +81,11 @@ WidgetRTC rtc;
 BLYNK_CONNECTED() {
   // Synchronize time on connection
   rtc.begin();
+  // Synchronize virtual pins on connection
+  Blynk.syncAll();
+  Blynk.virtualWrite(V27, Version);
 }
 
-WidgetLCD lcd(V3);
 
 BLYNK_WRITE(V64) { // sunrise/sunset delay
   sun_delay = param.asInt();
@@ -131,33 +133,30 @@ BLYNK_WRITE(V122) { // set global velocity
 }
 
 BLYNK_WRITE(V123) { // set stallguard OPEN value
-  DEBUG_STREAM.print("set stall: ");
-  int q=param.asInt()-64;
+  DEBUG_STREAM.print("set OPEN stall: ");
+  int q=param.asInt();
+  DEBUG_STREAM.println(q);
   if(q>63)q=63;
   if(q<-64)q=-64;
-  //preferences.putInt("stall_open", q);
   q&=0x7F;
   q=q<<16;
-  //sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
-  //STALL_OPEN = q;
+  stall_open = q;
   preferences.putInt("stall_open", q);
-  DEBUG_STREAM.println(q);
+  DEBUG_STREAM.println(stall_open);
 }
 
 
 BLYNK_WRITE(V124) { // set stallguard CLOSE value
-  DEBUG_STREAM.print("set stall: ");
-  int q=param.asInt()-64;
- 
+  DEBUG_STREAM.print("set CLOSE stall: ");
+  int q=param.asInt();
+  DEBUG_STREAM.println(q);
   if(q>63)q=63;
   if(q<-64)q=-64;
-  //preferences.putInt("stall_close", q);
   q&=0x7F;
   q=q<<16;
-  //sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
-  //STALL_CLOSE = q;
-   preferences.putInt("stall_close", q);
-   DEBUG_STREAM.println(q);
+  stall_close = q;
+  preferences.putInt("stall_close", q);
+  DEBUG_STREAM.println(stall_close);
 }
 
 BLYNK_WRITE(V25) { // set Current OPEN value

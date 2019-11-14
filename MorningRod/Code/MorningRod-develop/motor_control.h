@@ -21,24 +21,17 @@ int STALLGUARD_CLOSE = 0;
 
 #define COOLCONF_DEFAULT 0
 #define GET_VELOCITY preferences.getLong("velocity",100000)
-#define STALL_OPEN preferences.getInt("stall_open", 63)
-#define STALL_CLOSE preferences.getInt("stall_close", 63)
+
+int stall_close;// = preferences.getULong("stall_close", 0);
+int stall_open;// = preferences.getULong("stall_open", 0);
+
+int current_close = 0;
+int current_open = 0;
 
 #define CURRENT_OPEN preferences.getInt("stall_open", 63)
 #define CURRENT_CLOSE preferences.getInt("stall_close", 63)
 
-
-//#define GET_TRACK_DISTANCE preferences.getFloat("track_distance",100000)
-//#define GET_SHAFT_DEGREES preferences.getFloat("shaft_degrees",20000)
-//#define GET_TRACK_DISTANCE_PERCENT preferences.getFloat("track_distance_percent",100000)
-//#define GET_SHAFT_DEGREES_CUSTOM preferences.getFloat("shaft_degrees_custom",20000)
-
-//#define TOTAL_STEPS 1500000
-
 extern Preferences preferences;   // preferences used to configure motor stallguard and curve values.
-
-// These empty function definitions allow the functions to be called before they are created.
-// They are written towards the bottom of the file.
 
 unsigned long sendData(unsigned long address, unsigned long datagram);
 void stopMotor(); // track motor is motor two
@@ -46,7 +39,6 @@ void delayStall(long timeout);
 void waitStall(long timeout);
 void turnMotor(int dir);
 
-// these variables keep track of which motors are running
 bool motor_running = false;
 
 void move_close(){
@@ -55,14 +47,10 @@ void move_close(){
   DEBUG_STREAM.println(-MOVE_PERCENT);
   
   digitalWrite(ENABLE_PIN,LOW);       // enable the TMC5130
-  sendData(0x10+0x80, 0x00011900);     // 11900 =1.68A works
+  sendData(0x10+0x80, 0b00010001010100000000);     // 11900 =1.68A works //
   sendData(0xA0,0x00000000); //RAMPMODE=0
-  
-  sendData(0x14+0x80, 99000);//GET_VELOCITY-1); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
-
-//Stallguard_open will need to change due to higher current than stallguard_close
-
-  sendData(0xED, preferences.getInt("stall_close", 0));     // STALLGUARD_CLOSE
+  sendData(0x14+0x80, GET_VELOCITY-100); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
+  sendData(0x6D+0x80, stall_close);     // STALLGUARD_CLOSE
   
   sendData(0x24+0x80, 1000); //A1
   sendData(0x26+0x80, 4000); //AMAX
@@ -83,7 +71,6 @@ void move_close(){
   sendData(0xA1, 0); // set XACTUAL to zero
   
   motor_running = true;
-
     while(((sendData(0x35, 0)&0x200)==0)&&((sendData(0x35,0)&0x40)==0)){   // wait for position_reached flag OR a STALL EVENT
     delayMicroseconds(500);  // shortened the delay to make the following if statement more sensitive
   }
@@ -101,10 +88,8 @@ void move_open(){
   digitalWrite(ENABLE_PIN,LOW);       // enable the TMC5130
   sendData(0x10+0x80, 0x10700);     // 7 = 0.52A current for open function
   sendData(0xA0,0x00000000); //RAMPMODE=0
-  
-  sendData(0x14+0x80, GET_VELOCITY-1); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
-
-  sendData(0xED, preferences.getInt("stall_open", 0));     // STALLGUARD_OPEN
+  sendData(0x14+0x80, GET_VELOCITY-100); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
+  sendData(0x6D+0x80, stall_open);     // STALLGUARD_OPEN
   
   sendData(0x24+0x80, 1000); //A1
   sendData(0x26+0x80, 4000); //AMAX
@@ -200,7 +185,7 @@ void setup_motors(){
   sendData(0x00+0x80, 0x0);     // General settings / en_pwm_mode OFF
   sendData(0x6C+0x80, 0x000101D5);     // CHOPCONF
   sendData(0x10+0x80, 0x00010D00);     // IHOLD_IRUN // 0x00011900 = 25 = 2 Amps // 0x00010D00 = 13 = 1 Amp
-  sendData(0x20+0x80,0x00000000);      // RAMPMODE=0
+  sendData(0x20+0x80, 0x00000000);      // RAMPMODE=0
 
   sendData(0x60+0x80,  0xAAAAB554);    // writing value 0xAAAAB554 = 0 = 0.0 to address 25 = 0x60(MSLUT[0])
   sendData(0x61+0x80,  0x4A9554AA);    // writing value 0x4A9554AA = 1251300522 = 0.0 to address 26 = 0x61(MSLUT[1])

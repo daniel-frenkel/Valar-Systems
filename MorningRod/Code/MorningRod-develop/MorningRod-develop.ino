@@ -11,6 +11,7 @@
 //Go to Blynk_MQTT.h to enter your auth and wifi credentials
 
 //#define Blynk_App
+String Version = "2.2.3";
 
 #define USE_CUSTOM_BOARD // See "Custom board configuration" in Settings.h
 #define APP_DEBUG        // Comment this out to disable debug prints
@@ -34,8 +35,8 @@
 #include "driver/timer.h"
 #include <Update.h>
 
-#define DEBUG_STREAM terminal
-//#define DEBUG_STREAM Serial
+//#define DEBUG_STREAM terminal
+#define DEBUG_STREAM Serial
 
 WidgetTerminal terminal(V2);
 #include "motor_control.h"
@@ -117,13 +118,17 @@ Blynk.syncAll();
   preferences.getString("mqtt_server", mqtt_server);
   preferences.getString("mqtt_username", mqtt_username);
   preferences.getString("mqtt_password", mqtt_password);
+
+  stall_close = preferences.getULong("stall_close", 0);
+  stall_open = preferences.getULong("stall_open", 0);
   
   //Load MQTT configs from App if internet available
-  Blynk.syncVirtual(V16);
-  Blynk.syncVirtual(V17);
-  Blynk.syncVirtual(V18);
-  Blynk.syncVirtual(V19);
-  
+  //Blynk.syncVirtual(V16);
+  //Blynk.syncVirtual(V17);
+  //Blynk.syncVirtual(V18);
+  //Blynk.syncVirtual(V19);
+
+ 
 }
 
 time_store sunrise;
@@ -158,9 +163,11 @@ while(true) {
     if(command==MOVE_CLOSE){
       move_close();
       last_dir=DIR_CLOSE;
+      Blynk.virtualWrite(V3, "CLOSED");
     }else if(command==MOVE_OPEN){
       move_open();
       last_dir=DIR_OPEN;
+      Blynk.virtualWrite(V3, "OPENED");
     }
     if(command!=-1)DEBUG_STREAM.println("[ready for next movement]");
     command = -1;
