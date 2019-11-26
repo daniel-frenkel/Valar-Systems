@@ -47,7 +47,7 @@ void move_close(){
   DEBUG_STREAM.println(-MOVE_PERCENT);
   
   digitalWrite(ENABLE_PIN,LOW);       // enable the TMC5130
-  sendData(0x10+0x80, 0b00010001101000000000);     // 11900 =1.68A works //
+  sendData(0x10+0x80, 0b00010001010100000000);     // 11900 =1.68A works //
   sendData(0xA0,0x00000000); //RAMPMODE=0
   sendData(0x14+0x80, GET_VELOCITY-100); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
   sendData(0x6D+0x80, stall_close);     // STALLGUARD_CLOSE
