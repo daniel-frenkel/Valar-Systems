@@ -8,4 +8,3 @@ class time_store{
     int type; // 0=time, 1=sunrise, 2=sunset
     long offset; // timezone offset
 };
-
