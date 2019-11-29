@@ -8,14 +8,84 @@ void save_time(int i);
 
 int command = -1;
 
+bool MQTT_ON = false;
+bool MQTT_SETUP = false;
+
+String mqtt_device_name = "MorningRod";
+String mqtt_server = "192.168.50.178";
+
+String mqtt_username = "username";
+String mqtt_password = "password";
+
+//HA Auto Discovery
+String discovery_prefix = "homeassistant";
+String mqtt_discovery_topic = "homeassistant/cover/MorningRod/config";
+String mqtt_state_topic =  "homeassistant/cover/MorningRod/state";
+String mqtt_set_topic =  "homeassistant/cover/MorningRod/set";
+String mqtt_discovery_payload;
+
+BLYNK_WRITE(V15) { // MQTT
+  if(param.asInt()!=0){
+    DEBUG_STREAM.println("MQTT Turned ON");
+    MQTT_ON = true; // tell control loop what to do
+  }
+  else{
+    DEBUG_STREAM.println("MQTT Turned OFF");
+    MQTT_ON = false;
+    MQTT_SETUP = false;
+  }
+}
+
+BLYNK_WRITE(V16) { //MQTT Device Name
+  DEBUG_STREAM.print("Set MQTT Device Name: ");
+  mqtt_device_name = param.asStr();
+  mqtt_discovery_topic = discovery_prefix + "/cover/" + mqtt_device_name + "/config";
+  mqtt_state_topic =  discovery_prefix + "/cover/" + mqtt_device_name + "/state";
+  mqtt_set_topic =  discovery_prefix + "/cover/" + mqtt_device_name + "/set";
+  preferences.putString("mqtt_device_name", mqtt_device_name);
+  DEBUG_STREAM.println(mqtt_device_name);
+}
+
+BLYNK_WRITE(V17) { //IP Address
+  DEBUG_STREAM.print("Set IP Address: ");
+  mqtt_server = param.asStr();
+  preferences.putString("mqtt_server", mqtt_server);
+  DEBUG_STREAM.println(mqtt_server);
+}
+
+BLYNK_WRITE(V18) { //MQTT Username
+  DEBUG_STREAM.print("Set MQTT Username: ");
+  mqtt_username = param.asStr();
+  preferences.putString("mqtt_username", mqtt_username);
+  DEBUG_STREAM.println(mqtt_username);
+}
+
+BLYNK_WRITE(V19) { //MQTT Password
+  DEBUG_STREAM.print("Set MQTT Password: "); 
+  mqtt_password = param.asStr();
+  preferences.putString("mqtt_password", mqtt_password);
+  DEBUG_STREAM.println(mqtt_password);
+}
+
+BLYNK_WRITE(V20) { //Discovery Prefix
+  DEBUG_STREAM.print("Set MQTT Topic 1: ");
+  discovery_prefix = param.asStr();
+  mqtt_discovery_topic = discovery_prefix + "/cover/" + mqtt_device_name + "/config";
+  mqtt_state_topic = discovery_prefix + "/cover/" + mqtt_device_name + "/state";
+  mqtt_set_topic = discovery_prefix + "/covertain/" + mqtt_device_name + "/set";
+  preferences.putString("discovery_prefix", discovery_prefix);
+  DEBUG_STREAM.println(discovery_prefix);
+}
 
 WidgetRTC rtc;
 BLYNK_CONNECTED() {
   // Synchronize time on connection
   rtc.begin();
+  // Synchronize virtual pins on connection
+  Blynk.syncAll();
+  Blynk.virtualWrite(V27, Version);
 }
 
-WidgetLCD lcd(V3);
 
 BLYNK_WRITE(V64) { // sunrise/sunset delay
   sun_delay = param.asInt();
@@ -62,17 +132,57 @@ BLYNK_WRITE(V122) { // set global velocity
   sendData(0xA7, q);     // VMAX_M1
 }
 
-BLYNK_WRITE(V123) { // set stallguard value
+BLYNK_WRITE(V123) { // set stallguard OPEN value
+  DEBUG_STREAM.print("set OPEN stall: ");
+  int q=param.asInt();
+  DEBUG_STREAM.println(q);
+  if(q>63)q=63;
+  if(q<-64)q=-64;
+  q&=0x7F;
+  q=q<<16;
+  stall_open = q;
+  preferences.putInt("stall_open", q);
+  DEBUG_STREAM.println(stall_open);
+}
+
+
+BLYNK_WRITE(V124) { // set stallguard CLOSE value
+  DEBUG_STREAM.print("set CLOSE stall: ");
+  int q=param.asInt();
+  DEBUG_STREAM.println(q);
+  if(q>63)q=63;
+  if(q<-64)q=-64;
+  q&=0x7F;
+  q=q<<16;
+  stall_close = q;
+  preferences.putInt("stall_close", q);
+  DEBUG_STREAM.println(stall_close);
+}
+
+BLYNK_WRITE(V25) { // set Current OPEN value
   DEBUG_STREAM.print("set stall: ");
   int q=param.asInt()-64;
   DEBUG_STREAM.println(q);
   if(q>63)q=63;
   if(q<-64)q=-64;
-  preferences.putInt("stallguard", q);
-  q&=0x7F;
+  preferences.putInt("current_open", q);
+  q&=0x6F;
   q=q<<16;
   sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
 }
+
+BLYNK_WRITE(V26) { // set Current CLOSE value
+  DEBUG_STREAM.print("set stall: ");
+  int q=param.asInt()-64;
+  DEBUG_STREAM.println(q);
+  if(q>63)q=63;
+  if(q<-64)q=-64;
+  preferences.putInt("current_close", q);
+  q&=0x6F;
+  q=q<<16;
+  sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
+}
+
 
 BLYNK_WRITE(V22) { // set distance value
   DEBUG_STREAM.print("set distance: ");

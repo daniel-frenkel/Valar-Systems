@@ -1,15 +1,27 @@
-#define USE_CUSTOM_BOARD          // See "Custom board configuration" in Settings.h
-#define APP_DEBUG        // Comment this out to disable debug prints
+/* This firmware is primarily used with the MorningRod app and allows for automatic provisioning. 
+ *  
+ * If you would like to add more features, you will need to change one line in order to use the Blynk app
+ * 
+ * //MorningRod-Mode// is used for automatic provisioning
+ * 
+ * //Blynk-Mode is used for creating Blynk apps
+ */
 
+//To switch to Blynk-App mode, uncomment "//#define Blynk_App" below
+//Go to Blynk_MQTT.h to enter your auth and wifi credentials
+
+//#define Blynk_App
+String Version = "2.2.3";
+
+#define USE_CUSTOM_BOARD // See "Custom board configuration" in Settings.h
+#define APP_DEBUG        // Comment this out to disable debug prints
 #define MOVE_DISTANCE preferences.getFloat("move_distance", 0)
 #define MOVE_PERCENT preferences.getFloat("move_percent", 389911.13)
-
 #define BLYNK_PRINT Serial
 
 #include "driver/ledc.h"
-
 #include "BlynkProvisioning.h"
-
+#include <PubSubClient.h>
 #include <SPI.h> 
 #include <WiFi.h> 
 #include <HTTPClient.h> 
@@ -32,18 +44,12 @@ WidgetTerminal terminal(V2);
 #include "GPS.h"
 #include "OTA_S3.h"
 #include "pins.h"
-
-/*#define DEBUG_STREAM.print(...) terminal.print(__VA_ARGS__); Serial.print(__VA_ARGS__);
-#define DEBUG_STREAM.printf(...) terminal.printf(__VA_ARGS__); Serial.printf(__VA_ARGS__);
-#define DEBUG_STREAM.println(...) terminal.println(__VA_ARGS__); Serial.println(__VA_ARGS__);
-*/
+#include "Blynk_MQTT.h"
 
 TaskHandle_t TaskA;
 
 const char* ntpServer = "pool.ntp.org"; // where to get the current date and time
-
-String sunsetsunrisebaseurl="https://api.sunrise-sunset.org/json?formatted=0&lng=";
-
+String sunsetsunrisebaseurl="https://api.sunrise-sunset.org/json?formatted=0&lng="; //Sunrise/sunset API address
 
 //SETUP
 void setup() {
@@ -60,19 +66,35 @@ void setup() {
   setup_motors();
    
   xTaskCreatePinnedToCore(
-   IndependentTask,                  /* pvTaskCode */
-   "NoBlynkSafe",            /* pcName */
+   IndependentTask,        /* pvTaskCode */
+   "NoBlynkSafe",          /* pcName */
    8192,                   /* usStackDepth */
    NULL,                   /* pvParameters */
    1,                      /* uxPriority */
    &TaskA,                 /* pxCreatedTask */
    0);                     /* xCoreID */  
-  
 
-  BlynkProvisioning.begin();
-  Blynk.sendInternal("rtc", "sync"); 
-  DEBUG_STREAM.println("Connected!");
-  Blynk.syncAll();
+
+//Use For MorningRod App Provisioning Mode
+#ifdef Blynk_App
+//Blynk-Mode//
+WiFi.mode(WIFI_STA);
+//Use this for Blynk server
+//Blynk.begin(AUTH, SSID, PASSWORD);
+//Use this for MorningRod server
+Blynk.begin(AUTH, SSID, PASSWORD, "morningrod.blynk.cc", 8080);
+  while (Blynk.connect() == false) {  // Wait until connected
+    if ((millis() - last_UP_change) > 30000) { // 30s before reset
+      Serial.println(F("resetting"));
+      ESP.restart();
+   }
+ }
+#else
+BlynkProvisioning.begin();
+Blynk.sendInternal("rtc", "sync"); 
+DEBUG_STREAM.println("Connected!");
+Blynk.syncAll();
+#endif
   
   lat=preferences.getFloat("lat", -1);
   lon=preferences.getFloat("lon", -1);
@@ -90,7 +112,23 @@ void setup() {
     if(times[i].active)
       last_timezone_offset=times[i].offset;
   }
-  //configTime(last_timezone_offset, 0, ntpServer, "time.nist.gov", "time.windows.com");
+
+  //Load MQTT configs from preferences
+  preferences.getString("mqtt_device_name", mqtt_device_name);
+  preferences.getString("mqtt_server", mqtt_server);
+  preferences.getString("mqtt_username", mqtt_username);
+  preferences.getString("mqtt_password", mqtt_password);
+
+  stall_close = preferences.getULong("stall_close", 0);
+  stall_open = preferences.getULong("stall_open", 0);
+  
+  //Load MQTT configs from App if internet available
+  //Blynk.syncVirtual(V16);
+  //Blynk.syncVirtual(V17);
+  //Blynk.syncVirtual(V18);
+  //Blynk.syncVirtual(V19);
+
+ 
 }
 
 time_store sunrise;
@@ -125,10 +163,11 @@ while(true) {
     if(command==MOVE_CLOSE){
       move_close();
       last_dir=DIR_CLOSE;
-      //DEBUG_STREAM.println("Move Close Executed");
+      Blynk.virtualWrite(V3, "CLOSED");
     }else if(command==MOVE_OPEN){
       move_open();
       last_dir=DIR_OPEN;
+      Blynk.virtualWrite(V3, "OPENED");
     }
     if(command!=-1)DEBUG_STREAM.println("[ready for next movement]");
     command = -1;
@@ -137,8 +176,32 @@ while(true) {
 }
 
 void loop() {
-  // This handles the network and cloud connection
-  BlynkProvisioning.run();
+  
+#ifdef Blynk_App
+Blynk.run();
+ if(!Blynk.connected()) {
+   Serial.println(F("Resetting in loop"));
+   ESP.restart();
+ }
+#else
+BlynkProvisioning.run();
+#endif
+
+if(MQTT_ON == true){
+  if(MQTT_SETUP == false){
+//MQTT setup Run Once
+delay(10);
+client.setServer(mqtt_server.c_str(), 1883);
+client.setCallback(callback);
+MQTT_SETUP = true;
+  }
+//MQTT loop
+ timer.run();
+ if (!client.connected()) {
+   reconnect();
+  }
+ client.loop();
+}
 
   // check if the direction changed
   if(preferences.getChar("last_dir",-1)!=last_dir){
@@ -150,7 +213,7 @@ void loop() {
       Serial.printf("Writing direction %i\n", last_dir);
       // write 1023 because Blynk writes accept values 0-1023 to control brightness
       if(last_dir==DIR_OPEN){
-        //lcd.clear(); //Use it to clear the LCD Widge
+        //lcd.clear(); //Use it to clear the LCD Widget
       }else{
        //lcd.clear(); //Use it to clear the LCD Widget
    
@@ -328,15 +391,6 @@ void load_time(int i){
 
 
 void clockout_setup(){
-  /* Dylan Brophy from Upwork, code to create 16 MHz clock output
-  *
-  * This code will print the frequency output when the program starts
-  * so that it is easy to verify the output frequency is correct.
-  *
-  * This code finds the board clock speed using compiler macros; no need
-  * to specify 80 or 40 MHz.
-  */
-  
   periph_module_enable(PERIPH_LEDC_MODULE);
   
   uint32_t bit_width = 2; // 1 - 20 bits
