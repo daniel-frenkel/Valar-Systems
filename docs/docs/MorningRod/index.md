@@ -3,19 +3,11 @@ layout: default
 title: The MorningRod
 permalink: /MorningRod
 has_toc: true
-nav_order: 2
+nav_order: 1
 has_children: true
 ---
 
-# In this page
+# The MorningRod
 
-1. [I'm an inline-style link](#this-page-has-information-about-this-and-that)
+Use the Table of Content below to find the information you need.
 
-# This Page has information about this and that
-
-## Second header
-
-1. First ordered list item
-2. Another item
-⋅⋅* Unordered sub-list.
-4. Another item 4
