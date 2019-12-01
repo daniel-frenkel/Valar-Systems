@@ -3,6 +3,7 @@ layout: page
 title: Assembly
 permalink: /MorningRod/assembly
 parent: The MorningRod
+nav_order: 1
 ---
 
 <p>If you purchased the MorningRod Self-3D printed kit, you will need to print your own parts and assemble them.</p>
