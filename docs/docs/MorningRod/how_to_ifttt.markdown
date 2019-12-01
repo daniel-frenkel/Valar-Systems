@@ -45,5 +45,5 @@ Fill in the fields as below, but replace “auth_token” with your authorizatio
 ## Closing the Curtains
 
 Do the same as above. But use this URL instead:
-`http://morningrod.blynk.cc/auth_token/update/V12?value=1,http://morningrod.blynk.cc/auth_token/update/V12?value=0`
+```http://morningrod.blynk.cc/auth_token/update/V12?value=1,http://morningrod.blynk.cc/auth_token/update/V12?value=0```
 
