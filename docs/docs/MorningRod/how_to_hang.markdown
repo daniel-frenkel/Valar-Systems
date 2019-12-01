@@ -3,7 +3,7 @@ layout: page
 title: Wall Hanging
 permalink: /MorningRod/how_to_hang
 parent: The MorningRod
-nav_order: 3
+nav_order: 2
 ---
 
 ## This tutorial will explain how to install your MorningRod curtain rod.
