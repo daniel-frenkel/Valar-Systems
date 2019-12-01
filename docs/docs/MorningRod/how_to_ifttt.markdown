@@ -35,15 +35,12 @@ In the search field type Webhooks
 Select Webhooks
 Click “Make a web request”
 
-Fill in the fields as below, but replace “<auth_token>” with your authorization code from your email. Copy the URL below.
+Fill in the fields as below, but replace “auth_token” with your authorization code from your email. Copy the URL below.
 
-http://morningrod.blynk.cc/auth_token/update/V13?value=1,http://morningrod.blynk.cc/auth_token/update/V13?value=0
+```http://morningrod.blynk.cc/auth_token/update/V13?value=1,http://morningrod.blynk.cc/auth_token/update/V13?value=0```
 
+![Webhooks settings](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/IFTTT_fill_in.png?463 "IFTTT Settings")
 
-[I'm an inline-style link](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/IFTTT_fill_in.png?463)
-
-
- 
 
 ## Closing the Curtains
 
