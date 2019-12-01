@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Setup Guide
-permalink: /MorningRod/setup
+title: IFTTT Guide
+permalink: /MorningRod/IFTTT
 parent: The MorningRod
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Wall Hanging Guide
+title: Wall Hanging
 permalink: /MorningRod/how_to_hang
 parent: The MorningRod
 ---

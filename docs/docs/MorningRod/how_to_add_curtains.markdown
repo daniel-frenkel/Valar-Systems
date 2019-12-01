@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Setup Guide
-permalink: /MorningRod/setup
+title: Adding Curtains
+permalink: /MorningRod/adding_curtains
 parent: The MorningRod
 ---
 

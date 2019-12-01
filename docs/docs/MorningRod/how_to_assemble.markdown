@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Assembly Guide
+title: Assembly
 permalink: /MorningRod/assembly
 parent: The MorningRod
 ---

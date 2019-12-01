@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Setup Guide
-permalink: /MorningRod/setup
+title: App Setup Guide
+permalink: /MorningRod/app_setup
 parent: The MorningRod
 ---
 

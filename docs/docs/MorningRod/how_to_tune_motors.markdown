@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Setup Guide
-permalink: /MorningRod/setup
+title: Tuning Motors Guide
+permalink: /MorningRod/tuning_motors
 parent: The MorningRod
 ---
 
