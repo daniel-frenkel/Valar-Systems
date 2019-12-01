@@ -41,6 +41,8 @@ Fill in the fields as below, but replace “auth_token” with your authorizatio
 
 ![Webhooks settings](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/IFTTT_fill_in.png?463 "IFTTT Settings")
 
+![Webhooks settings](\docs\images\IFTTT_fill_in.png "IFTTT Settings")
+
 
 ## Closing the Curtains
 
