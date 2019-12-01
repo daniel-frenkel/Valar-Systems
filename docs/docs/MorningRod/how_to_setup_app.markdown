@@ -22,44 +22,53 @@ nav_order: 4
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-174831_MorningRod_grande.jpg?v=1554257031" alt="" /></p>
 
+![App Settings](\images\app_setup1.jpg)
+
+
 <p>If this is your first time setting up a device, this main screen will be empty. In this picture, there are already 3 devices set up.</p>
 
 <p>Click the 3 lines in the upper right corner.</p>
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-174922_MorningRod_grande.jpg?v=1554257031" alt="" /></p>
+![App Settings](\images\app_setup2.jpg)
 
 <p>Click on "Add new device"</p>
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-174928_MorningRod_grande.jpg?v=1554257031" alt="" /></p>
+![App Settings](\images\app_setup3.jpg)
 
 <p>Choose a WiFi network ( Do NOT use a 5Ghz network), enter your password, and "Continue"</p>
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-174945_MorningRod_grande.jpg?v=1554257031" alt="" /></p>
+![App Settings](\images\app_setup4.jpg)
 
 <p>You will see this screen. If your device has an LED on it, it should be flashing blue.</p>
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-174951_MorningRod_grande.jpg?v=1554257030" alt="" /></p>
+![App Settings](\images\app_setup5.jpg)
 
 <p>Pick the device, it will be named MorningRod.</p>
 
 <p><strong>If you do not see it, reset the WiFi settings on the device by pressing the button on TOP of the motor housing. Wait 20 seconds. This will erase the WiFi name and password that is stored in it.</strong></p>
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-175226_MorningRod_grande.jpg?v=1554257029" alt="" /></p>
+![App Settings](\images\app_setup6.jpg)
 
 <p>It will now take a minute to connect.</p>
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-175234_MorningRod_grande.jpg?v=1554257029" alt="" /></p>
+![App Settings](\images\app_setup7.jpg)
 
 <p>Once connected, give it a unique name.</p>
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-175407_MorningRod_grande.jpg?v=1554257029" alt="" /></p>
+![App Settings](\images\app_setup8.jpg)
 
 <p>It should now appear on your main screen.</p>
 
 <p><img src="//cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20190402-174922_MorningRod_grande.jpg?v=1554257031" alt="" /></p>
+![App Settings](\images\app_setup9.jpg)
 
 <p>You should now see your device on the main screen.</p>
 
 <p>Now we need to tune the motors so they open and close properly. </p>
-
-<p><a href="https://covy.io/pages/tuning-the-motors">Follow the instructions located here </a></p>
