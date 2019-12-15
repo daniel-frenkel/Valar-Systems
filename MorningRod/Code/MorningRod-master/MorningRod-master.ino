@@ -11,12 +11,12 @@
 //Go to Blynk_MQTT.h to enter your auth and wifi credentials
 
 //#define Blynk_App
-String Version = "2.2.4";
+String Version = "2.3.0";
 
 #define USE_CUSTOM_BOARD // See "Custom board configuration" in Settings.h
 #define APP_DEBUG        // Comment this out to disable debug prints
-#define MOVE_DISTANCE preferences.getFloat("move_distance", 0)
-#define MOVE_PERCENT preferences.getFloat("move_percent", 389911.13)
+//#define MOVE_DISTANCE preferences.getFloat("move_distance", 0)
+//#define MOVE_PERCENT preferences.getFloat("move_percent", 389911.13)
 #define BLYNK_PRINT Serial
 
 #include "driver/ledc.h"
@@ -113,22 +113,39 @@ Blynk.syncAll();
       last_timezone_offset=times[i].offset;
   }
 
-  //Load MQTT configs from preferences
-  preferences.getString("mqtt_device_name", mqtt_device_name);
-  preferences.getString("mqtt_server", mqtt_server);
-  preferences.getString("mqtt_username", mqtt_username);
-  preferences.getString("mqtt_password", mqtt_password);
-
-  stall_close = preferences.getULong("stall_close", 0);
-  stall_open = preferences.getULong("stall_open", 0);
+  //Load configs from preferences upon reset
+  DEBUG_STREAM.print("Loading values: ");
   
-  //Load MQTT configs from App if internet available
-  //Blynk.syncVirtual(V16);
-  //Blynk.syncVirtual(V17);
-  //Blynk.syncVirtual(V18);
-  //Blynk.syncVirtual(V19);
+  mqtt_device_name = preferences.getString("mqtt_device_name", mqtt_device_name);
+  DEBUG_STREAM.println(mqtt_device_name);
 
- 
+  mqtt_server = preferences.getString("mqtt_server", mqtt_server);
+  DEBUG_STREAM.println(mqtt_server);
+  
+  mqtt_username = preferences.getString("mqtt_username", mqtt_username);
+  DEBUG_STREAM.println(mqtt_username);
+  
+  mqtt_password = preferences.getString("mqtt_password", mqtt_password);
+  DEBUG_STREAM.println(mqtt_password);
+  
+  stall_close = preferences.getLong("stall_close", 0);
+  DEBUG_STREAM.println(stall_close);
+  stall_open = preferences.getLong("stall_open", 0);
+  DEBUG_STREAM.println(stall_open);
+
+  current_open = preferences.getInt("current_open", 0);
+  DEBUG_STREAM.println(current_open);
+  current_close = preferences.getInt("current_close", 0);
+  DEBUG_STREAM.println(current_close);
+
+  move_percent = preferences.getFloat("move_percent", 100);
+  DEBUG_STREAM.println(move_percent);
+  move_distance = preferences.getFloat("move_distance", 300000);
+  DEBUG_STREAM.println(move_distance);
+
+  velocity = preferences.getLong("velocity", 0);
+  DEBUG_STREAM.println(velocity);
+  
 }
 
 time_store sunrise;

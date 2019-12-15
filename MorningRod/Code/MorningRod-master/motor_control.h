@@ -20,13 +20,17 @@ int STALLGUARD_OPEN = 0;
 int STALLGUARD_CLOSE = 0;
 
 #define COOLCONF_DEFAULT 0
-#define GET_VELOCITY preferences.getLong("velocity",100000)
+//#define GET_VELOCITY preferences.getLong("velocity",100000)
 
 int stall_close;// = preferences.getULong("stall_close", 0);
 int stall_open;// = preferences.getULong("stall_open", 0);
 
 int current_close = 0;
 int current_open = 0;
+
+float move_percent;
+float move_distance;
+int velocity;
 
 #define CURRENT_OPEN preferences.getInt("stall_open", 63)
 #define CURRENT_CLOSE preferences.getInt("stall_close", 63)
@@ -44,12 +48,12 @@ bool motor_running = false;
 void move_close(){
   
   DEBUG_STREAM.println("Opening to: ");
-  DEBUG_STREAM.println(-MOVE_PERCENT);
+  DEBUG_STREAM.println(-move_percent);
   
   digitalWrite(ENABLE_PIN,LOW);       // enable the TMC5130
   sendData(0x10+0x80, 0b00010001101000000000);     // 11900 =1.68A works //
   sendData(0xA0,0x00000000); //RAMPMODE=0
-  sendData(0x14+0x80, GET_VELOCITY-100); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
+  sendData(0x14+0x80, velocity-100); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
   sendData(0x6D+0x80, stall_close);     // STALLGUARD_CLOSE
   
   sendData(0x24+0x80, 1000); //A1
@@ -59,7 +63,7 @@ void move_close(){
   sendData(0x23+0x80, 0);     // VSTART
   sendData(0x2B+0x80, 10); //VSTOP
   sendData(0x25+0x80, 40000); //V1
-  sendData(0x27+0x80, GET_VELOCITY); //VMAX
+  sendData(0x27+0x80, velocity); //VMAX
 
   delay(5);
  
@@ -67,7 +71,7 @@ void move_close(){
   sendData(0x35, 0);
   sendData(0x34+0x80, 0x400); // Enable stallguard
     
-  sendData(0xAD, MOVE_PERCENT); //XTARGET: Positive makes it move right
+  sendData(0xAD, move_percent); //XTARGET: Positive makes it move right
   sendData(0xA1, 0); // set XACTUAL to zero
   
   motor_running = true;
@@ -83,12 +87,12 @@ void move_close(){
 void move_open(){
   
   DEBUG_STREAM.println("Opening to: ");
-  DEBUG_STREAM.println(MOVE_PERCENT);
+  DEBUG_STREAM.println(move_percent);
 
   digitalWrite(ENABLE_PIN,LOW);       // enable the TMC5130
   sendData(0x10+0x80, 0x10700);     // 7 = 0.52A current for open function
   sendData(0xA0,0x00000000); //RAMPMODE=0
-  sendData(0x14+0x80, GET_VELOCITY-100); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
+  sendData(0x14+0x80, velocity-100); // VCOOLTHRS: This value disable stallGuard below a certain velocity to prevent premature stall
   sendData(0x6D+0x80, stall_open);     // STALLGUARD_OPEN
   
   sendData(0x24+0x80, 1000); //A1
@@ -98,7 +102,7 @@ void move_open(){
   sendData(0x23+0x80, 0);     // VSTART
   sendData(0x2B+0x80, 10); //VSTOP
   sendData(0x25+0x80, 40000); //V1
-  sendData(0x27+0x80, GET_VELOCITY); //VMAX
+  sendData(0x27+0x80, velocity); //VMAX
 
   delay(5);
  
@@ -106,7 +110,7 @@ void move_open(){
   sendData(0x35, 0);
   sendData(0x34+0x80, 0x400); // Enable stallguard
   
-  sendData(0xAD, -MOVE_PERCENT); //XTARGET: Positive makes it move right
+  sendData(0xAD, -move_percent); //XTARGET: Positive makes it move right
   sendData(0xA1, 0); // set XACTUAL to zero
   
   motor_running = true;
@@ -137,7 +141,7 @@ void stopMotor(){
   sendData(0x21+0x80, 0);             // target=xactual=0 to keep motor stopped
   sendData(0x2D+0x80, 0);             //
   sendData(0x23+0x80, 0x180);         // fix VMAX and VSTART to previous values so motor can run again
-  sendData(0x27+0x80, GET_VELOCITY);  //
+  sendData(0x27+0x80, velocity);  //
   motor_running = false;              // mark that the shaft motor is stopped
   opt_motors();                       // disable the motor driver if possible
 }

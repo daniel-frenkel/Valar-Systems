@@ -92,13 +92,13 @@ BLYNK_WRITE(V64) { // sunrise/sunset delay
   preferences.putInt("sun_delay", sun_delay);
 }
 
-BLYNK_WRITE(V12) { // track close now
+BLYNK_WRITE(V12) { // Move close now
   if(param.asInt()!=0){
     command = MOVE_CLOSE; // tell control loop what to do
   }
 }
 
-BLYNK_WRITE(V13) { // track open now
+BLYNK_WRITE(V13) { // Move open now
   if(param.asInt()!=0){
     command = MOVE_OPEN; // tell control loop what to do
   }
@@ -125,11 +125,11 @@ BLYNK_WRITE(V11) { // close2
 }
 
 BLYNK_WRITE(V122) { // set global velocity
-  DEBUG_STREAM.print("set all velocity: ");
+  DEBUG_STREAM.print("set velocity: ");
   long q=param.asInt()*1000L;
-  preferences.putLong("velocity", q);
   DEBUG_STREAM.println(q);
-  sendData(0xA7, q);     // VMAX_M1
+  preferences.putLong("velocity", q);
+  velocity = q;
 }
 
 BLYNK_WRITE(V123) { // set stallguard OPEN value
@@ -141,8 +141,9 @@ BLYNK_WRITE(V123) { // set stallguard OPEN value
   q&=0x7F;
   q=q<<16;
   stall_open = q;
-  preferences.putInt("stall_open", q);
+  preferences.putInt("stall_open", stall_open);
   DEBUG_STREAM.println(stall_open);
+  DEBUG_STREAM.println(preferences.getInt("stall_open", stall_open));
 }
 
 
@@ -155,49 +156,60 @@ BLYNK_WRITE(V124) { // set stallguard CLOSE value
   q&=0x7F;
   q=q<<16;
   stall_close = q;
-  preferences.putInt("stall_close", q);
-  DEBUG_STREAM.println(stall_close);
+  preferences.putInt("stall_close", stall_close);
+  DEBUG_STREAM.println(preferences.getInt("stall_close", stall_close));
 }
 
 BLYNK_WRITE(V25) { // set Current OPEN value
-  DEBUG_STREAM.print("set stall: ");
-  int q=param.asInt()-64;
+  DEBUG_STREAM.print("set open current: ");
+  int q=param.asInt();
   DEBUG_STREAM.println(q);
-  if(q>63)q=63;
-  if(q<-64)q=-64;
-  preferences.putInt("current_open", q);
-  q&=0x6F;
-  q=q<<16;
-  sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
+  double current = (255/(float)256)*((q+1)/(float)32)*(0.325/0.075)*(1/sqrt(2));
+  Serial.print("Current: ");
+  Serial.print(current);
+  Serial.println(" Amps");
+  Blynk.virtualWrite(V56, current);
+  q&=0x1F;
+  q=q<<8;
+  current_open=q;
+  preferences.putInt("current_open", current_open);
+  DEBUG_STREAM.println(current_open);
 }
 
 BLYNK_WRITE(V26) { // set Current CLOSE value
-  DEBUG_STREAM.print("set stall: ");
-  int q=param.asInt()-64;
+  DEBUG_STREAM.print("set close current: ");
+  int q=param.asInt();
   DEBUG_STREAM.println(q);
-  if(q>63)q=63;
-  if(q<-64)q=-64;
-  preferences.putInt("current_close", q);
-  q&=0x6F;
-  q=q<<16;
-  sendData(0x6D+0x80, COOLCONF_DEFAULT|q);     // STALLGUARD
+  double current = (255/(float)256)*((q+1)/(float)32)*(0.325/0.075)*(1/sqrt(2));
+  Serial.print("Current: ");
+  Serial.print(current);
+  Serial.println(" Amps");
+  Blynk.virtualWrite(V55, current);
+  q&=0x1F;
+  q=q<<8;
+  current_close=q;
+  preferences.putInt("current_close", current_close);
+  DEBUG_STREAM.println(current_close);
+  
 }
 
 
 BLYNK_WRITE(V22) { // set distance value
   DEBUG_STREAM.print("set distance: ");
-  preferences.putFloat("move_distance", param.asInt()*32492.59347);
-  //float q=param.asInt()*32492.59347; // One inch require this many microsteps
-  //preferences.putFloat("track_distance", q);
-  DEBUG_STREAM.println(MOVE_DISTANCE);
+  float q=param.asInt()*32492.59347; // One inch require this many microsteps
+  preferences.putFloat("move_distance", q);
+  move_distance = q;
+  move_percent = q;
+  DEBUG_STREAM.println(move_distance);
 }
 
 BLYNK_WRITE(V23) { // set percent open
   DEBUG_STREAM.print("set open percent to: ");
-  preferences.putFloat("move_percent", (MOVE_DISTANCE/100)*param.asInt());
-  //float q=(GET_TRACK_DISTANCE/100)*param.asInt();
-  //preferences.putFloat("track_distance_percent", q);
-  DEBUG_STREAM.println(MOVE_PERCENT);
+//  preferences.putFloat("move_percent", (move_distance/100)*param.asInt());
+  float q=(move_distance/100)*param.asInt();
+  preferences.putFloat("move_percent", q);
+  move_percent = q;
+  DEBUG_STREAM.println(move_percent);
 }
 
 BLYNK_WRITE(V4) {
