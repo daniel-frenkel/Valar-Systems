@@ -11,7 +11,7 @@
 //Go to Blynk_MQTT.h to enter your auth and wifi credentials
 
 //#define Blynk_App
-String Version = "2.3.0";
+String Version = "2.3.1";
 
 #define USE_CUSTOM_BOARD // See "Custom board configuration" in Settings.h
 #define APP_DEBUG        // Comment this out to disable debug prints
@@ -128,9 +128,9 @@ Blynk.syncAll();
   mqtt_password = preferences.getString("mqtt_password", mqtt_password);
   DEBUG_STREAM.println(mqtt_password);
   
-  stall_close = preferences.getLong("stall_close", 0);
+  stall_close = preferences.getLong("stall_close", 4128768);
   DEBUG_STREAM.println(stall_close);
-  stall_open = preferences.getLong("stall_open", 0);
+  stall_open = preferences.getLong("stall_open", 4128768);
   DEBUG_STREAM.println(stall_open);
 
   current_open = preferences.getInt("current_open", 0);
@@ -138,12 +138,13 @@ Blynk.syncAll();
   current_close = preferences.getInt("current_close", 0);
   DEBUG_STREAM.println(current_close);
 
-  move_percent = preferences.getFloat("move_percent", 100);
-  DEBUG_STREAM.println(move_percent);
   move_distance = preferences.getFloat("move_distance", 300000);
   DEBUG_STREAM.println(move_distance);
 
-  velocity = preferences.getLong("velocity", 0);
+  move_percent = preferences.getFloat("move_percent", 300000);
+  DEBUG_STREAM.println(move_percent);
+
+  velocity = preferences.getLong("velocity", 120000);
   DEBUG_STREAM.println(velocity);
   
 }
