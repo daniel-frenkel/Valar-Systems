@@ -16,15 +16,15 @@ Each device has a unique token assigned to it. You can trigger your device to op
 
 ## Opening the Curtains
 
-Request your MorningRod auth token by pressing the "EMAIL" button on the MorningRod setup page
-Go to ifttt.com and create an account if you do not already have one
-Log in to ifttt.com 
-If you have not already done so, add the IFTTT service to your Google assistant or Alexa device
-At top right search for Google assistant
-Click Google assistant connect
-Select your Google account
-Go to ‘My applets’
-Create a new applet
+Request your MorningRod auth token by pressing the "EMAIL" button on the MorningRod setup page  
+Go to ifttt.com and create an account if you do not already have one  
+Log in to ifttt.com  
+If you have not already done so, add the IFTTT service to your Google assistant or Alexa device  
+At top right search for Google assistant  
+Click Google assistant connect  
+Select your Google account  
+Go to ‘My applets’  
+Create a new applet  
 Click the blue "+this" text
 In the search field type Google Assistant (or Alexa), press enter
 Select the Google assistant or Alexa trigger
