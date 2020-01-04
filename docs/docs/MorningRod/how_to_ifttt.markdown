@@ -16,26 +16,25 @@ Each device has a unique token assigned to it. You can trigger your device to op
 
 ## Opening the Curtains
 
-Request your MorningRod auth token by pressing the "EMAIL" button on the MorningRod setup page  
-Go to ifttt.com and create an account if you do not already have one  
-Log in to ifttt.com  
-If you have not already done so, add the IFTTT service to your Google assistant or Alexa device  
-At top right search for Google assistant  
-Click Google assistant connect  
-Select your Google account  
-Go to ‘My applets’  
-Create a new applet  
-Click the blue "+this" text
-In the search field type Google Assistant (or Alexa), press enter
-Select the Google assistant or Alexa trigger
-Google: Pick “Say a simple phrase”
-Click “Create Trigger”
-Click the blue +that  text
-In the search field type Webhooks 
-Select Webhooks
-Click “Make a web request”
-
-Fill in the fields as below, but replace “auth_token” with your authorization code from your email. Copy the URL below.
+1) Request your MorningRod auth token by pressing the "EMAIL" button on the MorningRod setup page  
+2) Go to ifttt.com and create an account if you do not already have one  
+3) Log in to ifttt.com  
+4) If you have not already done so, add the IFTTT service to your Google assistant or Alexa device  
+5) At top right search for Google assistant  
+6) Click Google assistant connect  
+7) Select your Google account  
+8) Go to ‘My applets’  
+9) Create a new applet  
+10) Click the blue "+this" text  
+11) In the search field type Google Assistant (or Alexa), press enter  
+12) Select the Google assistant or Alexa trigger  
+13) Google: Pick “Say a simple phrase”  
+14) Click “Create Trigger”  
+15) Click the blue +that  text  
+16) In the search field type Webhooks  
+17) Select Webhooks  
+18) Click “Make a web request”  
+19) Fill in the fields as below, but replace “auth_token” with your authorization code from your email. Copy the URL below.  
 
 ```http://morningrod.blynk.cc/auth_token/update/V13?value=1,http://morningrod.blynk.cc/auth_token/update/V13?value=0```
 
