@@ -207,17 +207,17 @@ BlynkProvisioning.run();
 
 if(MQTT_ON == true){
   if(MQTT_SETUP == false){
-//MQTT setup Run Once
-delay(10);
-client.setServer(mqtt_server.c_str(), 1883);
-client.setCallback(callback);
-MQTT_SETUP = true;
+   //MQTT setup Run Once
+   delay(10);
+   client.setServer(mqtt_server.c_str(), 1883);
+   client.setCallback(callback);
+   MQTT_SETUP = true;
   }
-//MQTT loop
- timer.run();
- if (!client.connected()) {
+  //MQTT loop
+  timer.run();
+  if (!client.connected()) {
    reconnect();
-  }
+   }
  client.loop();
 }
 

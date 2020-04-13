@@ -33,11 +33,11 @@ void callback(char* topic, byte* message, unsigned int length) { //Used for MQTT
     if(messageTemp == "OPEN"){
       Serial.println("Opening");
       command = MOVE_OPEN;
-    }
+      }
     else if(messageTemp == "CLOSE"){
       Serial.println("Closing");
       command = MOVE_CLOSE;
-    }
+      }
   }
 }
 
