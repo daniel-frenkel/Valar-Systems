@@ -72,7 +72,7 @@ BLYNK_WRITE(V20) { //Discovery Prefix
   discovery_prefix = param.asStr();
   mqtt_discovery_topic = discovery_prefix + "/cover/" + mqtt_device_name + "/config";
   mqtt_state_topic = discovery_prefix + "/cover/" + mqtt_device_name + "/state";
-  mqtt_set_topic = discovery_prefix + "/covertain/" + mqtt_device_name + "/set";
+  mqtt_set_topic = discovery_prefix + "/cover/" + mqtt_device_name + "/set";
   preferences.putString("discovery_prefix", discovery_prefix);
   DEBUG_STREAM.println(discovery_prefix);
 }

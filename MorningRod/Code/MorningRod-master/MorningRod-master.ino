@@ -11,7 +11,7 @@
 //Go to Blynk_MQTT.h to enter your auth and wifi credentials
 
 //#define Blynk_App
-String Version = "2.3.1";
+String Version = "2.9.0";
 
 #define USE_CUSTOM_BOARD // See "Custom board configuration" in Settings.h
 #define APP_DEBUG        // Comment this out to disable debug prints
