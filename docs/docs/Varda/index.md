@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Varda (MorningRod)
+title: Varda
 permalink: /Varda
 has_toc: true
 nav_order: 1
