@@ -40,7 +40,7 @@ Each device has a unique token assigned to it. You can trigger your device to op
 
 ```http://morningrod.blynk.cc/AUTH_TOKEN/update/V3?value=2```
 
-![Webhooks settings](\images\IFTTT_fill_in.jpg "IFTTT Settings")
+![Webhooks settings](\images\IFTTT_fill_in.JPG "IFTTT Settings")
 
 
 ## Closing the Curtains
