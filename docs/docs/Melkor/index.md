@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Devices
-permalink: /docs
+title: MorningRod
+permalink: /MorningRod
 has_toc: true
 nav_order: 2
 has_children: true
