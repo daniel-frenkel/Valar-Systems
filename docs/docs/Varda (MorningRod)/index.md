@@ -7,7 +7,7 @@ nav_order: 1
 has_children: true
 ---
 
-# The MorningRod
+# Varda
 
 Use the Table of Content below to find the information you need.
 

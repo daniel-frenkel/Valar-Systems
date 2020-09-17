@@ -2,7 +2,7 @@
 layout: page
 title: Adding Curtains
 permalink: /Varda/adding_curtains
-parent: MorningRod
+parent: Varda
 nav_order: 3
 ---
 
