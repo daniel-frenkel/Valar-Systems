@@ -1,7 +1,7 @@
 ---
 layout: default
-title: MorningRod
-permalink: /MorningRod
+title: Melkor
+permalink: /melkor
 has_toc: true
 nav_order: 2
 has_children: true
