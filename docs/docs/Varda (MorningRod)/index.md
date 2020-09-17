@@ -1,7 +1,7 @@
 ---
 layout: default
-title: MorningRod
-permalink: /MorningRod
+title: Varda (MorningRod)
+permalink: /Varda
 has_toc: true
 nav_order: 1
 has_children: true
