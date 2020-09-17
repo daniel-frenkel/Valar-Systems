@@ -2,4 +2,4 @@
 layout: home
 ---
 
-Hello Everyone!
+Select a device to get started.
