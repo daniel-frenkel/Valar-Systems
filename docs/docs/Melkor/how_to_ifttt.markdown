@@ -36,13 +36,15 @@ Each device has a unique token assigned to it. You can trigger your device to op
 18) Click “Make a web request”  
 19) Fill in the fields as below, but replace <b>both</b> “AUTH_TOKEN” fields with your authorization code from your email. Copy the URL below.  
 
-```http://morningrod.blynk.cc/AUTH_TOKEN/update/V13?value=1,http://morningrod.blynk.cc/AUTH_TOKEN/update/V13?value=0```
 
-![Webhooks settings](\images\IFTTT_fill_in.png "IFTTT Settings")
+
+```http://morningrod.blynk.cc/AUTH_TOKEN/update/V3?value=2```
+
+![Webhooks settings](\images\IFTTT_fill_in.jpg "IFTTT Settings")
 
 
 ## Closing the Curtains
 
 Do the same as above. But use this URL instead:
-```http://morningrod.blynk.cc/auth_token/update/V12?value=1,http://morningrod.blynk.cc/auth_token/update/V12?value=0```
+```http://morningrod.blynk.cc/AUTH_TOKEN/update/V3?value=1```
 
