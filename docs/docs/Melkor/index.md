@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Melkor
-permalink: /melkor
+permalink: /Melkor
 has_toc: true
 nav_order: 2
 has_children: true
