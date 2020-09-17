@@ -3,7 +3,7 @@ layout: default
 title: MorningRod
 permalink: /MorningRod
 has_toc: true
-nav_order: 2
+nav_order: 1
 has_children: true
 ---
 
