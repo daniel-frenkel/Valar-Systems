@@ -1,13 +1,13 @@
 ---
 layout: page
 title: Tuning Motors Guide
-permalink: /MorningRod/tuning_motors
-parent: The MorningRod
+permalink: /Varda/tuning_motors
+parent: Varda
 nav_order: 5
 ---
 
 <p>Your MorningRod uses a very advanced stepper motor and driver to move the motor. </p>
-<p>Instead of using a sensor to detect when the curtain has reached either end, it detects when the motor stalls by reaching the end. The motor driver measures the back EMF of the motor. When the curtains stall and cannot move, the back EMF sharply increases and the driver knows to shut it off.</p>
+<p>Instead of using a sensor to detect when the curtain has reached either end, it counts the number of steps to move in each direciton based on the length (in inches) of the rods. In addition, it can also detect when it reaches eatierh end by stalling. The motor driver measures the back EMF of the motor. When the curtains stall and cannot move, the back EMF sharply increases and the driver knows to shut it off.</p>
 <p>We need to fine tune some settings to let the motor know when it should and should not be stalling. </p>
 <p>Watch this video to get started.</p>
 <p><iframe width="560" height="315" src="https://www.youtube.com/embed/eR2Ug87tsek" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></p>

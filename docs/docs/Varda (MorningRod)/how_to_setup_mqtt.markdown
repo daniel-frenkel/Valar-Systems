@@ -1,8 +1,8 @@
 ---
 layout: page
 title: MQTT Setup
-permalink: /MorningRod/mqtt_setup
-parent: The MorningRod
+permalink: /Varda/mqtt_setup
+parent: Varda
 nav_order: 8
 ---
 
