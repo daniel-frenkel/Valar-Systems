@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Tuning Motors Guide
-permalink: /Varda/tuning_motors
-parent: Varda
+permalink: /Tulkas/tuning_motors
+parent: Tulkas
 nav_order: 5
 ---
 

@@ -1,8 +1,8 @@
 ---
 layout: page
 title: IFTTT Guide
-permalink: /Varda/IFTTT
-parent: Varda
+permalink: /Tulkas/IFTTT
+parent: Tulkas
 nav_order: 7
 ---
 

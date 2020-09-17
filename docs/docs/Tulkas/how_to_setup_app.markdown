@@ -1,8 +1,8 @@
 ---
 layout: page
 title: App Setup Guide
-permalink: /Varda/app_setup
-parent: Varda
+permalink: /Tulkas/app_setup
+parent: Tulkas
 nav_order: 4
 ---
 

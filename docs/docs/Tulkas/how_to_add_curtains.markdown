@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Adding Curtains
-permalink: /Varda/adding_curtains
-parent: Varda
+permalink: /Tulkas/adding_curtains
+parent: Tulkas
 nav_order: 3
 ---
 

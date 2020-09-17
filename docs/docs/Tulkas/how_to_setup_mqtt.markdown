@@ -1,8 +1,8 @@
 ---
 layout: page
 title: MQTT Setup
-permalink: /Varda/mqtt_setup
-parent: Varda
+permalink: /Tulkas/mqtt_setup
+parent: Tulkas
 nav_order: 8
 ---
 

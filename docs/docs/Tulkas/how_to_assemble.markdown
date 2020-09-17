@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Assembly
-permalink: /Varda/assembly
-parent: Varda
+permalink: /Tulkas/assembly
+parent: Tulkas
 nav_order: 1
 ---
 
