@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Adding Curtains
-permalink: /Varda (MorningRod)/adding_curtains
+permalink: /Varda/adding_curtains
 parent: MorningRod
 nav_order: 3
 ---
