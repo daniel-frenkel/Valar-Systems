@@ -1,13 +1,13 @@
 ---
 layout: default
-title: The MorningRod
-permalink: /MorningRod
+title: Melkor
+permalink: /Melkor
 has_toc: true
-nav_order: 1
+nav_order: 2
 has_children: true
 ---
 
-# The MorningRod
+# Melkor: Door Opener
 
 Use the Table of Content below to find the information you need.
 
