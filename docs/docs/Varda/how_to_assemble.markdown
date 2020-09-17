@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Assembly
-permalink: /MorningRod/assembly
-parent: The MorningRod
+permalink: /Varda/assembly
+parent: Varda
 nav_order: 1
 ---
 

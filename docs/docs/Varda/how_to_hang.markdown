@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Wall Hanging
-permalink: /MorningRod/how_to_hang
-parent: The MorningRod
+permalink: /Varda/how_to_hang
+parent: Varda
 nav_order: 2
 ---
 

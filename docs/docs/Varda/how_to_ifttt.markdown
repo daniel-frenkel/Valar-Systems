@@ -1,8 +1,8 @@
 ---
 layout: page
 title: IFTTT Guide
-permalink: /MorningRod/IFTTT
-parent: The MorningRod
+permalink: /Varda/IFTTT
+parent: Varda
 nav_order: 7
 ---
 
