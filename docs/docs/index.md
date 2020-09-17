@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Melkor
-permalink: /Melkor
+title: Devices
+permalink: /docs
 has_toc: true
 nav_order: 2
 has_children: true
