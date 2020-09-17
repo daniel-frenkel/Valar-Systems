@@ -2,7 +2,7 @@
 layout: page
 title: Adding Curtains
 permalink: /MorningRod/adding_curtains
-parent: The MorningRod
+parent: MorningRod
 nav_order: 3
 ---
 
