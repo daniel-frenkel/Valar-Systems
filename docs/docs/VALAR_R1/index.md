@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Melkor
-permalink: /VALAR R1
+title: VALAR R1 - Curtain Opener
+permalink: /VALAR_R1
 has_toc: true
 nav_order: 2
 has_children: true

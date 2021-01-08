@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Varda
-permalink: /Varda
+title: VALAR D1 - Door Opener
+permalink: /VALAR_D1
 has_toc: true
 nav_order: 1
 has_children: true
