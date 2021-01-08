@@ -1,9 +1,9 @@
 ---
 layout: default
 title: VALAR W1 - Window Opener
-permalink: /VALAR_W1
+permalink: /valar_w1
 has_toc: true
-nav_order: 1
+nav_order: 2
 has_children: true
 ---
 

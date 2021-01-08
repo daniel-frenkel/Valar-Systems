@@ -1,7 +1,7 @@
 ---
 layout: default
 title: VALAR S1 - String Curtain Opener
-permalink: /VALAR_S1
+permalink: /valar_s1
 has_toc: true
 nav_order: 1
 has_children: true
