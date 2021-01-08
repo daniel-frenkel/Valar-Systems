@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Melkor
-permalink: /Melkor
+permalink: /VALAR R1
 has_toc: true
 nav_order: 2
 has_children: true
