@@ -90,21 +90,21 @@ Use the purple buttons to move the opener to set it up.
 
 Test out OPEN and CLOSE, ensure the carriage stops on its own on both ends
 
-## 4) Attach to the Window
+## 4. Attach to the Window
 
 We will go over attaching the window opener to your window and sill.
 
 Pay very close attention to these, otherwise damage may occur if installed poorly.
 
-### 4.1) Set Sill Height
+### 4a. Set Sill Height
 
-### 4.2) Set 
+### 4b. Set 
 
-### 4.3) Set 
+### 4c. Set 
 
-### 4.4) Set 
+### 4d. Set 
 
-### 4.5) Set 
+### 4e. Set 
 
-### 4.6) Set 
+### 4f. Set 
 
