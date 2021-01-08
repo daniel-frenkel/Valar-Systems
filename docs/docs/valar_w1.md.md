@@ -23,7 +23,7 @@ Use the Table of Content below to find the information you need. If starting new
 
 ---
 
-## 1) Download the App
+# 1) Download the App
 
 The Android or iOS app is required. Please download using the links below
 
@@ -34,7 +34,7 @@ Before mounting any hardware, we need to test the connection and the device.
 
 Open up the app, create an account, and log in.
 
-## 2) Reset the WiFI
+# 2) Reset the WiFI
 
 During manufacturing, WiFi credentials may have been stored in your device. You need to clear them out before you can connect.
 
