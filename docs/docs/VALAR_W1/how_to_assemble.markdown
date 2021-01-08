@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Assembly
-permalink: /Tulkas/assembly
+permalink: /VALAR_W1/assembly
 parent: Tulkas
 nav_order: 1
 ---
