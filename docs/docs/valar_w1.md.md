@@ -28,6 +28,7 @@ Use the Table of Content below to find the information you need. If starting new
 The Android or iOS app is required. Please download using the links below
 
 [For Android](https://play.google.com/store/apps/details?id=cc.blynk.appexport.morning_rod)
+
 [For iOS](https://apps.apple.com/al/app/morningrod/id1455653248)
 
 Before mounting any hardware, we need to test the connection and the device.
