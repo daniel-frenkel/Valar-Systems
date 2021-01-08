@@ -1,8 +1,8 @@
 ---
 layout: page
 title: App Setup Guide
-permalink: /MorningRod/app_setup
-parent: The MorningRod
+permalink: /valar_r1/app_setup
+parent: VALAR R1 - Curtain Opener
 nav_order: 4
 ---
 

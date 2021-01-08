@@ -1,8 +1,8 @@
 ---
 layout: page
 title: IFTTT Guide
-permalink: /Melkor/IFTTT
-parent: Melkor
+permalink: /valar_r1/IFTTT
+parent: VALAR R1 - Curtain Opener
 nav_order: 7
 ---
 

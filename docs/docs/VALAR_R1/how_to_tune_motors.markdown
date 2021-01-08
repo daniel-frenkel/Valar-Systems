@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Tuning Motors Guide
-permalink: /MorningRod/tuning_motors
-parent: The MorningRod
+permalink: /valar_r1/tuning_motors
+parent: VALAR R1 - Curtain Opener
 nav_order: 5
 ---
 

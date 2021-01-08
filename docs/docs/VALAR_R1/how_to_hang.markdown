@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Wall Hanging
-permalink: /MorningRod/how_to_hang
-parent: The MorningRod
+permalink: /valar_r1/how_to_hang
+parent: VALAR R1 - Curtain Opener
 nav_order: 2
 ---
 

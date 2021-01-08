@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Assembly
-permalink: /MorningRod/assembly
-parent: The MorningRod
+permalink: /valar_ra/assembly
+parent: VALAR R1 - Curtain Opener
 nav_order: 1
 ---
 
