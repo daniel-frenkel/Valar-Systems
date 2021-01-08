@@ -23,12 +23,28 @@ Use the Table of Content below to find the information you need.
 
 ---
 
-## STEP 1
+## 1) Download App
 
-Step 1
+The Android or iOS app is required. Please download using the links below
 
-## STEP 2
+[For Android](https://play.google.com/store/apps/details?id=cc.blynk.appexport.morning_rod)
+[For iOS](https://apps.apple.com/al/app/morningrod/id1455653248)
 
-Step 2
+Before mounting any hardware, we need to test the connection and the device.
 
-W1
+Open up the app, create an account, and log in.
+
+## 2) Reset WiFI
+
+During manufacturing, WiFi credentials may have been stored in your device. You need to clear them out before you can connected.
+
+If you have an "Open Left" window opener, the clear WiFi button is located here:
+
+![WIFI Reset Button Left](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset.jpg?v=1610127152)
+
+If you have an "Open Right" window opener, the clear WiFi button is located here:
+
+![WIFI Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset_Right.jpg?v=1610127412)
+
+
+
