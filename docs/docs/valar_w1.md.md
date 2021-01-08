@@ -17,7 +17,7 @@ Use the Table of Content below to find the information you need. If starting new
     Table of contents
   </summary>
   {: .text-delta }
-1. TOC
+
 {:toc}
 </details>
 
