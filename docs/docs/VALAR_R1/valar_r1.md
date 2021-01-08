@@ -29,7 +29,7 @@ Step 1
 Step 2
 
 
-# How to add open and close commands to your Google Assistant, Alexa, or almost anything else.
+## How to add open and close commands to your Google Assistant, Alexa, or almost anything else.
 
 Melkor does not yet have direct integration with Alexa and Google, however, you can use IFTTT to create a connection with almost any device out there.
 
