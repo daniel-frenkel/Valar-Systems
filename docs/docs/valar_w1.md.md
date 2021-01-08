@@ -48,5 +48,11 @@ If you have an "Open Right" window opener, the clear WiFi button is located here
 
 Hold the button for **15 seconds** until the LED light begins flashing quickly 
 
+The credintials are now cleared and we can connect to it.
 
+## 3) Adding Device in App
+
+![WIFI add device 1](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot1.jpg?v=1610129559)
+
+![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot2.jpg?v=1610129559)
 
