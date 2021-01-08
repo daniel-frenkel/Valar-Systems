@@ -95,11 +95,11 @@ Use the purple buttons to move the opener to set it up.
 
 Test out OPEN and CLOSE, ensure the carriage stops on its own on both ends
 
-## 4. Attach to the Window
+## 4. Attaching to the Window
 
-We will go over attaching the window opener to your window and sill.
+We will cover attaching the window opener to your window and sill.
 
-Pay very close attention to these, otherwise damage may occur if installed poorly.
+Pay very close attention to the instruction, otherwise damage may occur if installed poorly.
 
 **DO NOT REMOVE ADHESIVE UNTIL INSTRUCTED TO LATER ON**
 
@@ -113,14 +113,13 @@ Quick overview video of what we will do next
 </figure>
 
 ### 4a. Adjusting Sill Height
+
 <figure class="video_container">
 <iframe src="https://drive.google.com/file/d/1-ElJk9Vj7evdLrjtkDMWpiPavZiwAzXp/preview" width="800" height="600"></iframe>
 </figure>
 
 
 ### 4b. Proper Positioning 
-
-Proper Positioning
 
 <figure class="video_container">
 <iframe src="https://drive.google.com/file/d/1-LXT9Bb7hntIYwuqFMs0nZXzBPFBcNk_/preview" width="800" height="600"></iframe>
@@ -141,6 +140,14 @@ Proper Positioning
 
 
 
+**ALLOW THE ADHESIVE TO SET FOR 24 HOURS BEFORE USING IT!!!!!!!!!**
+
+
+
+## 5. Current and Stall Setup
+
+Every window requires a different amount of force to move it. For safety reasons, we need to provide just enough force to move the window, and not any more. This way it can be easily stopped if something gets in the way or the window is locked.
+ 
 
 
 ## 10. How to add open and close commands to your Google Assistant, Alexa, or almost anything else.
