@@ -1,8 +1,8 @@
 ---
 layout: page
 title: Adding Curtains
-permalink: /MorningRod/adding_curtains
-parent: The MorningRod
+permalink: /valar_r1/adding_curtains
+parent: VALAR R1 - Curtain Opener
 nav_order: 3
 ---
 
