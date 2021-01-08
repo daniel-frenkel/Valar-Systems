@@ -2,4 +2,4 @@
 layout: home
 ---
 
-Select a device to get started.
+Select a device in the menu to get started.
