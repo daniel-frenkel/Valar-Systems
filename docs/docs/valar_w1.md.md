@@ -52,7 +52,7 @@ The credintials are now cleared and we can connect to it.
 
 ## 3) Adding Device in App
 
-![WIFI add device 1](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot1.jpg?v=1610129559 =450x)
+![WIFI add device 1](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/small_Screenshot1.jpg?v=1610130491)
 
 ![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot2.jpg?v=1610129559 =250x)
 
