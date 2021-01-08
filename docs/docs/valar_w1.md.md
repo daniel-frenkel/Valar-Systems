@@ -52,7 +52,12 @@ The credintials are now cleared and we can connect to it.
 
 ## 3) Adding Device in App
 
-![WIFI add device 1](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot1.jpg?v=1610129559)
+![WIFI add device 1](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot1.jpg?v=1610129559 =450x)
 
-![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot2.jpg?v=1610129559)
+![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot2.jpg?v=1610129559 =250x)
 
+**WARNING: Only 2.4Ghz networks will work. Your phone must be connected to a 2.4Ghz network for this to work**
+
+### 3.1) Testing
+
+Before attaching the device to a window, 
