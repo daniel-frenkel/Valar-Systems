@@ -101,7 +101,7 @@ We will go over attaching the window opener to your window and sill.
 
 Pay very close attention to these, otherwise damage may occur if installed poorly.
 
-### 4a. Set Sill Height
+### 4a. Adjust Sill Height
 
 ### 4b. Set 
 
@@ -112,6 +112,11 @@ Pay very close attention to these, otherwise damage may occur if installed poorl
 ### 4e. Set 
 
 ### 4f. Set 
+
+
+
+
+
 
 ## 10. How to add open and close commands to your Google Assistant, Alexa, or almost anything else.
 
@@ -155,6 +160,7 @@ IFTTT works by triggering an HTTP request whenever a certain action is done.
 
 
 ### 10b. Closing the Window
+
 
 Do the same as above. But use this URL instead:
 ```http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=0```
