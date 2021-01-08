@@ -17,13 +17,13 @@ Use the Table of Content below to find the information you need. If starting new
     Table of contents
   </summary>
   {: .text-delta }
-
+1. TOC
 {:toc}
 </details>
 
 ---
 
-# 1) Download the App
+## 1) Download the App
 
 The Android or iOS app is required. Please download using the links below
 
@@ -34,7 +34,7 @@ Before mounting any hardware, we need to test the connection and the device.
 
 Open up the app, create an account, and log in.
 
-# 2) Reset the WiFI
+## 2) Reset the WiFi
 
 During manufacturing, WiFi credentials may have been stored in your device. You need to clear them out before you can connect.
 
@@ -77,7 +77,9 @@ Select "FAST/LOUD" so it moves faster
 
 **WARNING: Damage may occur if the magnets fell out during shipment. Ensure BOTH magnets are still in the carriage**
 
-**NOTE: If the carriage does not stop on either end and damage begins, unplug immediately **
+**NOTE: If the carriage does not stop on either end and damage begins, unplug immediately**
+
+
 
 Use the purple buttons to move the opener to set it up.
     1) "ADJUST" will open the window 1 inch, this helps when setting up the magnet
@@ -87,3 +89,22 @@ Use the purple buttons to move the opener to set it up.
 ![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Settings_Window1.jpg?v=1610131256)
 
 Test out OPEN and CLOSE, ensure the carriage stops on its own on both ends
+
+## 4) Attach to the Window
+
+We will go over attaching the window opener to your window and sill.
+
+Pay very close attention to these, otherwise damage may occur if installed poorly.
+
+### 4.1) Set Sill Height
+
+### 4.2) Set 
+
+### 4.3) Set 
+
+### 4.4) Set 
+
+### 4.5) Set 
+
+### 4.6) Set 
+
