@@ -6,9 +6,9 @@ nav_order: 2
 has_children: false
 ---
 
-# VALAR_W1
+# VALAR W1: Window Opener Setup Instructions
 
-Use the Table of Content below to find the information you need.
+Use the Table of Content below to find the information you need. If starting new, begin at the top and work your way down, step by step.
 
 {: .no_toc }
 
@@ -23,7 +23,7 @@ Use the Table of Content below to find the information you need.
 
 ---
 
-## 1) Download App
+## 1) Download the App
 
 The Android or iOS app is required. Please download using the links below
 
@@ -34,7 +34,7 @@ Before mounting any hardware, we need to test the connection and the device.
 
 Open up the app, create an account, and log in.
 
-## 2) Reset WiFI
+## 2) Reset the WiFI
 
 During manufacturing, WiFi credentials may have been stored in your device. You need to clear them out before you can connect.
 
@@ -58,7 +58,7 @@ The credintials are now cleared and we can connect to it.
 
 **WARNING: Only 2.4Ghz networks will work. Your phone must be connected to a 2.4Ghz network for this to work**
 
-### 3.1) Testing
+### 3.1) Initial Test
 
 Before attaching the device to a window, we need to test the motor. 
 
