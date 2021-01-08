@@ -145,7 +145,7 @@ IFTTT works by triggering an HTTP request whenever a certain action is done.
 18) Click “Make a web request”  
 19) Fill in the fields as below, but replace the “AUTH_TOKEN” field with your authorization code from your email. Copy the URL below.  
 
-The value perameter is the percentage of the window to open/close. Setting 0 will close the window all the way, setting 100 will open to 100%. Any value from 0-100 will work.
+**The value perameter in the URL is the percentage of the window to open/close. Setting value=0 will close the window all the way, setting value=100 will open to 100%. Any value from 0-100 will work.**
 
 ```http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=100```
 
