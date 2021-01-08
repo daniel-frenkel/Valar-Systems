@@ -101,6 +101,11 @@ We will go over attaching the window opener to your window and sill.
 
 Pay very close attention to these, otherwise damage may occur if installed poorly.
 
+** DO NOT REMOVE ADHESIVE UNTIL INSTRUCTED TO LATER ON**
+
+You can purchase more 3M VHB tape if an error occurs. Here is what is attached to your device, but other VHB will work as well.
+![McMaster-Carr Purchase Link](https://www.mcmaster.com/76675A21)
+
 <!-- blank line -->
 <figure class="video_container">
 <iframe src="https://drive.google.com/file/d/1-1iaJNHpKYRnrCVxs312azscdo9dG1Jn/preview" width="800" frameborder="2" allowfullscreen="true"></iframe>
