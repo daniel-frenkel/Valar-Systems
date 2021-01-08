@@ -149,7 +149,9 @@ IFTTT works by triggering an HTTP request whenever a certain action is done.
 
 ```http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=100```
 
-![Webhooks settings](\images\IFTTT_fill_in.JPG "IFTTT Settings")
+
+
+![Webhooks settings](\images\IFTTT_fill_in.JPG "IFTTT Settings" )
 
 
 ### 10b. Closing the Window
