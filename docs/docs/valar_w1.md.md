@@ -101,6 +101,12 @@ We will go over attaching the window opener to your window and sill.
 
 Pay very close attention to these, otherwise damage may occur if installed poorly.
 
+<!-- blank line -->
+<figure class="video_container">
+<iframe src="https://drive.google.com/file/d/1-1iaJNHpKYRnrCVxs312azscdo9dG1Jn/preview" width="640" height="480" frameborder="0" allowfullscreen="true"></iframe>
+</figure>
+<!-- blank line -->
+
 ### 4a. Adjust Sill Height
 
 ### 4b. Set 
