@@ -23,7 +23,7 @@ Use the Table of Content below to find the information you need. If starting new
 
 ---
 
-## 1) Download the App
+## 1. Download the App
 
 The Android or iOS app is required. Please download using the links below
 
@@ -34,7 +34,7 @@ Before mounting any hardware, we need to test the connection and the device.
 
 Open up the app, create an account, and log in.
 
-## 2) Reset the WiFi
+## 2. Reset the WiFi
 
 During manufacturing, WiFi credentials may have been stored in your device. You need to clear them out before you can connect.
 
@@ -50,7 +50,7 @@ Hold the button for **15 seconds** until the LED light begins flashing quickly
 
 The credintials are now cleared and we can connect to it.
 
-## 3) Adding Device in App
+## 3. Adding Device in App
 
 ![WIFI add device 1](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/small_Screenshot1.jpg?v=1610130491)
 
@@ -58,7 +58,7 @@ The credintials are now cleared and we can connect to it.
 
 **WARNING: Only 2.4Ghz networks will work. Your phone must be connected to a 2.4Ghz network for this to work**
 
-### 3.1) Initial Test
+### 3a. Initial Test
 
 Before attaching the device to a window, we need to test the motor. 
 
