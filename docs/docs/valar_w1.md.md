@@ -106,23 +106,37 @@ Pay very close attention to these, otherwise damage may occur if installed poorl
 You can purchase more 3M VHB tape if an error occurs. Here is what is attached to your device, but other VHB will work as well.
 [McMaster-Carr Purchase Link](https://www.mcmaster.com/76675A21)
 
-<!-- blank line -->
+Quick overview video of what we will do next
+
 <figure class="video_container">
 <iframe src="https://drive.google.com/file/d/1-1iaJNHpKYRnrCVxs312azscdo9dG1Jn/preview" width="800" height="600" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
-<!-- blank line -->
 
-### 4a. Adjust Sill Height
+### 4a. Adjusting Sill Height
+<figure class="video_container">
+<iframe src="https://drive.google.com/file/d/1-ElJk9Vj7evdLrjtkDMWpiPavZiwAzXp/preview" width="800" height="600"></iframe>
+</figure>
 
-### 4b. Set 
 
-### 4c. Set 
+### 4b. Proper Positioning 
 
-### 4d. Set 
+Proper Positioning
 
-### 4e. Set 
+<figure class="video_container">
+<iframe src="https://drive.google.com/file/d/1-LXT9Bb7hntIYwuqFMs0nZXzBPFBcNk_/preview" width="800" height="600"></iframe>
+</figure>
 
-### 4f. Set 
+### 4c. Frame Mount Setup
+
+<figure class="video_container">
+<iframe src="https://drive.google.com/file/d/1-ivxybllIJw1swqz3bM3C8B39uX40Fsw/preview" width="800" height="600"></iframe>
+</figure>
+
+### 4d. Sill Mount Setup 
+
+<figure class="video_container">
+<iframe src="https://drive.google.com/file/d/1-NV6KbZa3SEOwbMl1Kw4MbjtRxVyIbw7/preview" width="800" height="600"></iframe>
+</figure>
 
 
 
