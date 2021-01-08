@@ -36,7 +36,7 @@ Open up the app, create an account, and log in.
 
 ## 2) Reset WiFI
 
-During manufacturing, WiFi credentials may have been stored in your device. You need to clear them out before you can connected.
+During manufacturing, WiFi credentials may have been stored in your device. You need to clear them out before you can connect.
 
 If you have an "Open Left" window opener, the clear WiFi button is located here:
 
@@ -54,10 +54,36 @@ The credintials are now cleared and we can connect to it.
 
 ![WIFI add device 1](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/small_Screenshot1.jpg?v=1610130491)
 
-![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot2.jpg?v=1610129559 =250x)
+![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Add_New_Device.jpg?v=1610131320)
 
 **WARNING: Only 2.4Ghz networks will work. Your phone must be connected to a 2.4Ghz network for this to work**
 
 ### 3.1) Testing
 
-Before attaching the device to a window, 
+Before attaching the device to a window, we need to test the motor. 
+
+To select a device, find it on the main page and **long press it**, holding it for 2 seconds
+
+![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Settings_Window_3.jpg?v=1610131256)
+
+Select the settings tab
+
+![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Settings_Window_2.jpg?v=1610131256)
+
+
+Be sure "DANGER: 1 CLOSE" is selected. We will learn more about this later
+
+Select "FAST/LOUD" so it moves faster
+
+**WARNING: Damage may occur if the magnets fell out during shipment. Ensure BOTH magnets are still in the carriage**
+
+**NOTE: If the carriage does not stop on either end and damage begins, unplug immediately **
+
+Use the purple buttons to move the opener to set it up.
+    1) "ADJUST" will open the window 1 inch, this helps when setting up the magnet
+    2) "CLOSE" will close to the end
+    3) "OPEN" will open towards the motor housing
+
+![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Settings_Window1.jpg?v=1610131256)
+
+Test out OPEN and CLOSE, ensure the carriage stops on its own on both ends
