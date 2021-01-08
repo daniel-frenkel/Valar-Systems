@@ -7,7 +7,23 @@ has_children: true
 ---
 
 # VALAR R1: Curtain Opener
+{: .no_toc }
 
-Use the Table of Content below to find the information you need.
-
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
 {:toc}
+</details>
+
+---
+
+## STEP 1
+
+Step 1
+
+## STEP 2
+
+Step 2
