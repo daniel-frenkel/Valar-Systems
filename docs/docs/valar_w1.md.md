@@ -46,5 +46,7 @@ If you have an "Open Right" window opener, the clear WiFi button is located here
 
 ![WIFI Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset_Right.jpg?v=1610127412)
 
+Hold the button for **15 seconds** until the LED light begins flashing quickly 
+
 
 
