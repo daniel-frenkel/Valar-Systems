@@ -108,7 +108,7 @@ You can purchase more 3M VHB tape if an error occurs. Here is what is attached t
 
 <!-- blank line -->
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-1iaJNHpKYRnrCVxs312azscdo9dG1Jn/preview" width="800" frameborder="2" allowfullscreen="true"></iframe>
+<iframe src="https://drive.google.com/file/d/1-1iaJNHpKYRnrCVxs312azscdo9dG1Jn/preview" frameborder="2" allowfullscreen="true"></iframe>
 </figure>
 <!-- blank line -->
 
