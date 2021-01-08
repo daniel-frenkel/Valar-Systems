@@ -3,7 +3,7 @@ layout: default
 title: VALAR R1 - Curtain Opener
 permalink: /valar_r1
 nav_order: 2
-has_children: true
+has_children: false
 ---
 
 # VALAR R1: Curtain Opener
