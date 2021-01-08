@@ -2,7 +2,6 @@
 layout: default
 title: VALAR W1 - Window Opener
 permalink: /valar_w1
-has_toc: true
 nav_order: 2
 has_children: false
 ---
@@ -31,3 +30,5 @@ Step 1
 ## STEP 2
 
 Step 2
+
+W1
