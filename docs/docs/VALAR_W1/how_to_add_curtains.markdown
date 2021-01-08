@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Adding Curtains
-permalink: /Tulkas/adding_curtains
+permalink: /VALAR_W1/adding_curtains
 parent: Tulkas
 nav_order: 3
 ---

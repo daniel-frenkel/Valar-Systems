@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Tuning Motors Guide
-permalink: /Tulkas/tuning_motors
+permalink: /VALAR_W1/tuning_motors
 parent: Tulkas
 nav_order: 5
 ---

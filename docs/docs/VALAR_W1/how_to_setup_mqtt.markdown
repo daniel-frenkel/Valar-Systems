@@ -1,7 +1,7 @@
 ---
 layout: page
 title: MQTT Setup
-permalink: /Tulkas/mqtt_setup
+permalink: /VALAR_W1/mqtt_setup
 parent: Tulkas
 nav_order: 8
 ---

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Wall Hanging
-permalink: /Tulkas/how_to_hang
+permalink: /VALAR_W1/how_to_hang
 parent: Tulkas
 nav_order: 2
 ---

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: App Setup Guide
-permalink: /Tulkas/app_setup
+permalink: /VALAR_W1/app_setup
 parent: Tulkas
 nav_order: 4
 ---

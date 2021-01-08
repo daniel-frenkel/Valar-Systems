@@ -1,7 +1,7 @@
 ---
 layout: page
 title: IFTTT Guide
-permalink: /Tulkas/IFTTT
+permalink: /VALAR_W1/IFTTT
 parent: Tulkas
 nav_order: 7
 ---
