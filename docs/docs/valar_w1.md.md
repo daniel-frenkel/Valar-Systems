@@ -109,32 +109,32 @@ You can purchase more 3M VHB tape if an error occurs. Here is what is attached t
 Quick overview video of what we will do next
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-1iaJNHpKYRnrCVxs312azscdo9dG1Jn/preview" width="800" height="600" frameborder="0" allowfullscreen="true"></iframe>
+<iframe src="https://drive.google.com/file/d/1-1iaJNHpKYRnrCVxs312azscdo9dG1Jn/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
 
 ### 4a. Adjusting Sill Height
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-ElJk9Vj7evdLrjtkDMWpiPavZiwAzXp/preview" width="800" height="600"></iframe>
+<iframe src="https://drive.google.com/file/d/1-ElJk9Vj7evdLrjtkDMWpiPavZiwAzXp/preview" width="800" height="450"></iframe>
 </figure>
 
 
 ### 4b. Proper Positioning 
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-LXT9Bb7hntIYwuqFMs0nZXzBPFBcNk_/preview" width="800" height="600"></iframe>
+<iframe src="https://drive.google.com/file/d/1-LXT9Bb7hntIYwuqFMs0nZXzBPFBcNk_/preview" width="800" height="450"></iframe>
 </figure>
 
 ### 4c. Frame Mount Setup
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-ivxybllIJw1swqz3bM3C8B39uX40Fsw/preview" width="800" height="600"></iframe>
+<iframe src="https://drive.google.com/file/d/1-ivxybllIJw1swqz3bM3C8B39uX40Fsw/preview" width="800" height="450"></iframe>
 </figure>
 
 ### 4d. Sill Mount Setup 
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-NV6KbZa3SEOwbMl1Kw4MbjtRxVyIbw7/preview" width="800" height="600"></iframe>
+<iframe src="https://drive.google.com/file/d/1-NV6KbZa3SEOwbMl1Kw4MbjtRxVyIbw7/preview" width="800" height="450"></iframe>
 </figure>
 
 
@@ -147,7 +147,7 @@ Quick overview video of what we will do next
 ## 5. Current and Stall Setup
 
 Every window requires a different amount of force to move it. For safety reasons, we need to provide just enough force to move the window, and not any more. This way it can be easily stopped if something gets in the way or the window is locked.
- 
+
 
 
 ## 10. How to add open and close commands to your Google Assistant, Alexa, or almost anything else.
