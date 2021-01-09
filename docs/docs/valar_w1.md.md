@@ -147,22 +147,58 @@ Quick overview video of what we will do next
 
 ## 5. Current and Stall Setup
 
-Each window requires a unique amount of force to move it. For safety reasons, we need to provide just enough force to move the window, and not any more. This way it can be easily stopped if something gets in the way or the window is locked.
+Each window requires a unique amount of force to move it. These next steps will set those perameters.
 
-In addition, the CrushGuard feature depends on the stall value that you set. When the motor is turned on, back EMF is produced. When resistance increases, so does the back EMF. The device can measure this level of back EMF and automically stop the motor once a threshold is reached. The stall value is the thershold value.
+**WARNING:** Do NOT lock your window during these steps. If your windows Auto-Lock, keep them from locking. Damage may occur if locked.
 
-### 5a. Step 1
+**NOTE:** Changing speed from FAST to SLOW (or SLOW to FAST) will require resetting the current and stall perameters. 
 
-### 5b. Step 2
+The CrushGuard feature will only work if the stall values are perfect. When the motor is running, back EMF is produced. When resistance increases, so does the back EMF. The device measures this level of back EMF and automically stops the motor once a threshold is reached. The stall value is the thershold value and must be accurate.
 
-### 5c. Step 3
+### 5a. Step 1 - Set Max Distance
 
-### 5d. Step 4
+Press the STEP 1 button. The device will automatically measure the exact distance of travel and set it for you. You may change this if required.
 
-### 5e. Step 5
+### 5b. Step 2 - Set Just-Open Position
 
-### 5f. Step 6
+Your windows has two levels of friction, which are called the "High-Friction" zone and "Low-Friction" zone. The High-Friction zone is the area within the pocket of the frame. The window expereinces very high friction when in this zone. 
 
+High-Frction Zone in Red. Low-Friction Zone in Green.
+
+![High Friction Zone](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/High_Friction_Zone.jpg?v=1610154965)
+
+You will be setting two current and stall values. One for the High and low zones. This way high current is only used in the High zone, allowing the motor to run quieter and cooler.
+
+Watch this video to set the Just-Open position, which tells the window opener where to transition from High to Low settings. 
+
+<figure class="video_container">
+<iframe src="https://drive.google.com/file/d/1VCFY0jOTt8wXNtpZYoyxfePHxuSMJxg1/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
+</figure>
+
+
+### 5c. Step 3 - High Friction Current Calibration
+
+Press the Run button to start the calibration. The device will automatically figure out the best value for the high friction zone.
+
+### 5d. Step 4 - Low Friction Current Calibration
+
+Press the Run button to start the calibration. The device will automatically figure out the best value for the low friction zone.
+
+### 5e. Step 5 - High Friction Stall Calibration
+
+Press the Run button to start the calibration. The device will automatically figure out the best value for the high friction zone.
+
+If the device is still stalling when not required, increase this value by one until fixed. 
+
+**NOTE:** Cold weather may increase resistance and require recalibration
+
+### 5f. Step 6 - Low Friction Stall Calibration
+
+Press the Run button to start the calibration. The device will automatically figure out the best value for the high friction zone.
+
+If the device is still stalling when not required, increase this value by one until fixed. 
+
+**NOTE:** Cold weather may increase resistance and require recalibration
 
 
 
