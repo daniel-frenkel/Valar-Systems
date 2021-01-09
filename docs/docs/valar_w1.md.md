@@ -193,7 +193,11 @@ Press the Run button to start the calibration. The device will automatically fig
 
 Press the Run button to start the calibration. The device will automatically figure out the best value for the high friction zone.
 
-If the device is still stalling when not required, increase this value by one until fixed. 
+Stall values range from -64 to 63. **Increasing** the value will **decrease** the sensitivity. 
+
+If the device is still stalling when not required, increase this value by one until fixed.
+
+If you place your finger in front of it and it does not stop, **decrease** the value in order to **increase** the sensitivity.
 
 **NOTE:** Cold weather may increase resistance and require recalibration
 
