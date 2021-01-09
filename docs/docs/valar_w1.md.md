@@ -145,7 +145,7 @@ Quick overview video of what we will do next
 
 
 
-<span style="color:purple">## 5. Current and Stall Setup</span>
+## 5. Current and Stall Setup
 
 Each window requires a unique amount of force to move it. For safety reasons, we need to provide just enough force to move the window, and not any more. This way it can be easily stopped if something gets in the way or the window is locked.
 
