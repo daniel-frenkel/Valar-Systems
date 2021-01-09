@@ -217,7 +217,7 @@ Each device has a unique token assigned to it. You can trigger your device to op
 
 IFTTT works by triggering an HTTP request whenever a certain action is done.
 
-### 10a. Opening the Window
+### 6a. Opening the Window
 
 1) Request your auth token by pressing the "EMAIL" button on the Valar device setup page  
 2) Go to ifttt.com and create an account if you do not already have one  
@@ -248,7 +248,7 @@ IFTTT works by triggering an HTTP request whenever a certain action is done.
 ![Webhooks settings](\images\IFTTT_fill_in.JPG "IFTTT Settings" )
 
 
-### 10b. Closing the Window
+### 6b. Closing the Window
 
 
 Do the same as above. But use this URL instead:
