@@ -41,15 +41,15 @@ During manufacturing, WiFi credentials may have been stored in your device. You 
 
 If you have an "Open Left" window opener, the clear WiFi button is located here:
 
-![WIFI Reset Button Left](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset.jpg?v=1610127152)
+![WiFi Reset Button Left](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset.jpg?v=1610127152)
 
 If you have an "Open Right" window opener, the clear WiFi button is located here:
 
-![WIFI Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset_Right.jpg?v=1610127412)
+![WiFi Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset_Right.jpg?v=1610127412)
 
 Hold the button for **15 seconds** until the LED light begins flashing quickly 
 
-The credintials are now cleared and we can connect to it.
+The credentials are now cleared and we can connect to it.
 
 ## 3. Adding Device in App
 
@@ -152,13 +152,13 @@ Quick overview video of what we will do next
 
 ## 5. Current and Stall Setup
 
-Each window requires a unique amount of force to move it. These next steps will set those perameters.
+Each window requires a unique amount of force to move it. These next steps will set those parameters.
 
 **WARNING:** Do NOT lock your window during these steps. If your windows Auto-Lock, keep them from locking. Damage may occur if locked.
 
-**NOTE:** Changing speed from FAST to SLOW (or SLOW to FAST) will require resetting the current and stall perameters. 
+**NOTE:** Changing speed from FAST to SLOW (or SLOW to FAST) will require resetting the current and stall parameters. 
 
-The CrushGuard feature will only work if the stall values are perfect. When the motor is running, back EMF is produced. When resistance increases, so does the back EMF. The device measures this level of back EMF and automically stops the motor once a threshold is reached. The stall value is the thershold value and must be accurate.
+The CrushGuard feature will only work if the stall values are perfect. When the motor is running, back EMF is produced. When resistance increases, so does the back EMF. The device measures this level of back EMF and automatically stops the motor once a threshold is reached. The stall value is the threshold value and must be accurate.
 
 ### 5a. Step 1 - Set Max Distance
 
@@ -166,9 +166,9 @@ Press the STEP 1 button. The device will automatically measure the exact distanc
 
 ### 5b. Step 2 - Set Just-Open Position
 
-Your windows has two levels of friction, which are called the "High-Friction" zone and "Low-Friction" zone. The High-Friction zone is the area within the pocket of the frame. The window expereinces very high friction when in this zone. 
+Your windows has two levels of friction, which are called the "High-Friction" zone and "Low-Friction" zone. The High-Friction zone is the area within the pocket of the frame. The window experiences very high friction when in this zone. 
 
-High-Frction Zone in Red. Low-Friction Zone in Green.
+High-Friction Zone in Red. Low-Friction Zone in Green.
 
 ![High Friction Zone](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/High_Friction_Zone.jpg?v=1610154965)
 
@@ -239,7 +239,7 @@ IFTTT works by triggering an HTTP request whenever a certain action is done.
 18) Click “Make a web request”  
 19) Fill in the fields as below, but replace the “AUTH_TOKEN” field with your authorization code from your email. Copy the URL below.  
 
-**The value perameter in the URL is the percentage of the window to open/close. Setting value=0 will close the window all the way, setting value=100 will open to 100%. Any value from 0-100 will work.**
+**The value parameter in the URL is the percentage of the window to open/close. Setting value=0 will close the window all the way, setting value=100 will open to 100%. Any value from 0-100 will work.**
 
 ```http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=100```
 
