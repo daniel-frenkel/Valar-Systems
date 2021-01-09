@@ -100,7 +100,11 @@ Test out OPEN and CLOSE, ensure the carriage stops on its own on both ends
 
 ## 4. Attaching to the Window
 
-We will cover attaching the window opener to your window and sill.
+We will cover attaching the window opener to your window and sill. The instruction only work if "DANGER: 1 CLOSE" is selected.
+
+OPTIONAL: "DANGER: 1 CLOSE" refers to the direction of travel when closing the window. The window opener may be attached to a window that travels in either direction. If you look at the bottom of the unit, you will see a large "1" printed into the plastic. This is position 1. The opposite side, next to the motor is Position 2. If Position 1 is selected, that is the direction the carriage will travel in order to CLOSE your window. If Position 2 is selected, the window will close towards the motor.
+
+You should try to use 1 CLOSE, but 2 CLOSE may also be used if required. **The following instructions only work for 1 CLOSE.**
 
 Pay very close attention to the instructions, otherwise damage may occur if installed poorly.
 
@@ -142,6 +146,7 @@ Quick overview video of what we will do next
 
 
 **ALLOW THE ADHESIVE TO SET FOR 24 HOURS BEFORE USING IT!!!!!!!!!**
+
 
 
 
