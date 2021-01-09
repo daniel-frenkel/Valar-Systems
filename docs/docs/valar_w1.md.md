@@ -95,11 +95,14 @@ Use the purple buttons to move the opener to set it up.
 
 Test out OPEN and CLOSE, ensure the carriage stops on its own on both ends
 
+
+
+
 ## 4. Attaching to the Window
 
 We will cover attaching the window opener to your window and sill.
 
-Pay very close attention to the instruction, otherwise damage may occur if installed poorly.
+Pay very close attention to the instructions, otherwise damage may occur if installed poorly.
 
 **DO NOT REMOVE ADHESIVE UNTIL INSTRUCTED TO LATER ON**
 
@@ -115,42 +118,55 @@ Quick overview video of what we will do next
 ### 4a. Adjusting Sill Height
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-ElJk9Vj7evdLrjtkDMWpiPavZiwAzXp/preview" width="800" height="450"></iframe>
+<iframe src="https://drive.google.com/file/d/1-ElJk9Vj7evdLrjtkDMWpiPavZiwAzXp/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
 
 
 ### 4b. Proper Positioning 
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-LXT9Bb7hntIYwuqFMs0nZXzBPFBcNk_/preview" width="800" height="450"></iframe>
+<iframe src="https://drive.google.com/file/d/1-LXT9Bb7hntIYwuqFMs0nZXzBPFBcNk_/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
 
 ### 4c. Frame Mount Setup
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-ivxybllIJw1swqz3bM3C8B39uX40Fsw/preview" width="800" height="450"></iframe>
+<iframe src="https://drive.google.com/file/d/1-ivxybllIJw1swqz3bM3C8B39uX40Fsw/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
 
 ### 4d. Sill Mount Setup 
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-NV6KbZa3SEOwbMl1Kw4MbjtRxVyIbw7/preview" width="800" height="450"></iframe>
+<iframe src="https://drive.google.com/file/d/1-NV6KbZa3SEOwbMl1Kw4MbjtRxVyIbw7/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
-
-
 
 
 **ALLOW THE ADHESIVE TO SET FOR 24 HOURS BEFORE USING IT!!!!!!!!!**
 
 
 
-## 5. Current and Stall Setup
+<span style="color:purple">## 5. Current and Stall Setup</span>
 
-Every window requires a different amount of force to move it. For safety reasons, we need to provide just enough force to move the window, and not any more. This way it can be easily stopped if something gets in the way or the window is locked.
+Each window requires a unique amount of force to move it. For safety reasons, we need to provide just enough force to move the window, and not any more. This way it can be easily stopped if something gets in the way or the window is locked.
+
+In addition, the CrushGuard feature depends on the stall value that you set. When the motor is turned on, back EMF is produced. When resistance increases, so does the back EMF. The device can measure this level of back EMF and automically stop the motor once a threshold is reached. The stall value is the thershold value.
+
+### 5a. Step 1
+
+### 5b. Step 2
+
+### 5c. Step 3
+
+### 5d. Step 4
+
+### 5e. Step 5
+
+### 5f. Step 6
 
 
 
-## 10. How to add open and close commands to your Google Assistant, Alexa, or almost anything else.
+
+## 6.  Integrating Google Assistant, Alexa, and More.
 
 Valar devices to do not yet have direct integration with Alexa and Google, however, you can use IFTTT to create a connection with almost any device out there.
 
