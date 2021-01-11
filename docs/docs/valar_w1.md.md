@@ -258,3 +258,39 @@ IFTTT works by triggering an HTTP request whenever a certain action is done.
 Do the same as above. But use this URL instead:
 ```http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=0```
 
+
+## MQTT Setup
+
+You can control your window locally via Home Assistant's MQTT Auto Discovery feature
+
+![Learn More Here](https://www.home-assistant.io/docs/mqtt/discovery)
+
+In the Valar App device settings, select the MQTT tab. 
+
+**NOTE:** When entering values in the app, press the send button in the bottom right corner. Otherwise values won't save.
+
+Device Name: Enter the device name
+
+Server IP Address: Enter your Home Assistant IP Address
+
+MQTT Username: Enter the MQTT username
+
+MQTT Password: Enter password you set up in Home Assistant
+
+Prefix: Set as **homeassistant** in order to use Auto Discovery (recommended)
+
+Press "START" button.
+
+You will now see the MQTT Set Topic and State Topic to monitor in MQTT
+
+Set topic allows you to control the device
+
+State topic allows you to monitor the state of the device
+
+Currently there are only two options to set:
+
+    1) Send "OPEN" to open the window completely.
+    2) Send "CLOSE" to close the window completely.
+
+
+
