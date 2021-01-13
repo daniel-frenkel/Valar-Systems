@@ -261,9 +261,7 @@ http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=0
 
 ## 7. MQTT Setup
 
-You can control your window locally via Home Assistant's MQTT Auto Discovery feature
-
-[Learn More Here](https://www.home-assistant.io/docs/mqtt/discovery)
+You can control your window locally via Home Assistant's MQTT [Auto Discovery feature](https://www.home-assistant.io/docs/mqtt/discovery)
 
 In the Valar App device settings, select the MQTT tab. 
 
@@ -275,8 +273,9 @@ In the Valar App device settings, select the MQTT tab.
 Install the [Mosquitto Add-On](https://github.com/home-assistant/addons/blob/master/mosquitto/DOCS.md)
 
 **Create a username and password.** You must make one for this to work
-Supervisor-->Mosquitto Broker-->Configuration
-Add the login information. 
+Go to Supervisor-->Mosquitto Broker-->Configuration
+
+Add the following text to your configuration. Change the username and password:
 
 ```
 logins:
@@ -284,7 +283,7 @@ logins:
     password: password
 ```
 
-It should look something like this:
+The configuration should look something like this:
 
 ```
 logins:
@@ -299,35 +298,75 @@ keyfile: privkey.pem
 require_certificate: false
 ```
 
+Save it. Now we'll set up the app and return to HA in a bit.
+
 
 ### 7b. VALAR App Setup
-Under the MQTT tab of your device, enter the following:
+Open up the Valar app. Under the MQTT tab of your device, enter the following:
 
-Device Name: Enter the device name
+Device Name: Create a name. **NO SPACES**
 Server IP Address: Enter your Home Assistant IP Address
-MQTT Username: Enter the MQTT username
-MQTT Password: Enter password you set up in Home Assistant
+MQTT Username: Enter the MQTT username you set earlier
+MQTT Password: Enter password you set earlier
 Prefix: Set as **homeassistant** in order to use Auto Discovery (recommended)
 
 Press "START" button.
 
 You will now see the MQTT Set Topic and State Topic to monitor in MQTT
 
-Set topic allows you to control the device
+The set topic is where you will control the device.
 
-State topic allows you to monitor the state of the device
+The state topic is where you monitor the state of the device.
 
 ### 7c. MQTT Commands
 
+    Set:
     1. Send **CLOSE** to close the window completely.
     2. Any digit from **1-100** will set the percent open. Send "50" to set 50% open. Send "100" to set 100% open.
 
+    State:
+    1. State will return a percentage digit. 
+    2. 0 is Closed
+    3. 1-100 is the percent open. 
 
 ### 7d. MQTT Testing
 
-https://mqttfx.jensd.de/
+To test out MQTT, use the [MQTT FX app](https://mqttfx.jensd.de/)
 
+Download and open it up. 
 
+First, we need to connect to the Broker
+Open up the settings by clicking the gear icon
+
+[](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Mqtt_fx_settings.PNG?v=1610555014)
+
+Go to User Credentials and enter the username and password you set up in the MQTT configuration
+
+[](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Mqtt_fx_settings_username.PNG?v=1610555014)
+
+Now connect to the broker. If everything is working, the status light should turn green
+
+To test the connection, send a command to the window opener. 
+
+Type in the set topic
+Enter a command to send in the command section
+Press publish to send
+
+[](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Mqtt_fx_settings_send_arrow.png?v=1610557403)
+
+The window should open or close
+
+### 7e. Adding To Your Dashboard
+
+Now we can add the window opener to HA. 
+
+Go to HA Overview tab.
+
+In the top right corner, edit your dashboard.
+
+In the top right corner, select Unused Entities.
+
+The window opener should be listed here.
 
 
 ## 8. SmartThings Integration Using WebCore
