@@ -263,7 +263,7 @@ http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=0
 
 You can control your window locally via Home Assistant's MQTT Auto Discovery feature
 
-![Learn More Here](https://www.home-assistant.io/docs/mqtt/discovery)
+[Learn More Here](https://www.home-assistant.io/docs/mqtt/discovery)
 
 In the Valar App device settings, select the MQTT tab. 
 
@@ -272,8 +272,7 @@ In the Valar App device settings, select the MQTT tab.
 
 ### 7a. Home Assistant Mosquitto Setup
 
-Install the Mosquitto Add-On
-https://github.com/home-assistant/addons/blob/master/mosquitto/DOCS.md
+Install the [Mosquitto Add-On](https://github.com/home-assistant/addons/blob/master/mosquitto/DOCS.md)
 
 **Create a username and password.** You must make one for this to work
 Supervisor-->Mosquitto Broker-->Configuration
