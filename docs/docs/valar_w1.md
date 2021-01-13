@@ -245,18 +245,18 @@ IFTTT works by triggering an HTTP request whenever a certain action is done.
 
 **The value parameter in the URL is the percentage of the window to open/close. Setting value=0 will close the window all the way, setting value=100 will open to 100%. Any value from 0-100 will work.**
 
-```http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=100```
+```
+http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=100
+```
 
-
-
-![Webhooks settings](\images\IFTTT_fill_in.JPG "IFTTT Settings" )
-
+![Webhooks settings](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Screenshot_20210113-080313.png?v=1610553935)
 
 ### 6b. Closing the Window
 
-
 Do the same as above. But use this URL instead:
-```http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=0```
+```
+http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=0
+```
 
 
 ## 7. MQTT Setup
@@ -285,7 +285,7 @@ logins:
     password: password
 ```
 
-It should look something like this
+It should look something like this:
 
 ```
 logins:
@@ -301,19 +301,13 @@ require_certificate: false
 ```
 
 
-
-
-
 ### 7b. VALAR App Setup
+Under the MQTT tab of your device, enter the following:
 
 Device Name: Enter the device name
-
 Server IP Address: Enter your Home Assistant IP Address
-
 MQTT Username: Enter the MQTT username
-
 MQTT Password: Enter password you set up in Home Assistant
-
 Prefix: Set as **homeassistant** in order to use Auto Discovery (recommended)
 
 Press "START" button.
@@ -326,11 +320,66 @@ State topic allows you to monitor the state of the device
 
 ### 7c. MQTT Commands
 
-    1) Send **CLOSE** to close the window completely.
-    2) Any digit from **1-100** will set the percent open. Send "50" to set 50% open. Send "100" to set 100% open.
+    1. Send **CLOSE** to close the window completely.
+    2. Any digit from **1-100** will set the percent open. Send "50" to set 50% open. Send "100" to set 100% open.
 
 
 ### 7d. MQTT Testing
 
 https://mqttfx.jensd.de/
 
+
+
+
+## 8. SmartThings Integration Using WebCore
+
+To integrate the Valar W1 window opener with Smart Things (henceforth “ST”), you will need to meet the following prerequisites:
+
+1. Functional ST environment.
+2. Basic understanding of the ST IDE.
+3. WebCore installed and configured in ST, or a rules engine that can perform web get, puts, etc.
+4. Optional: ST/Alexa/Google integration to perform voice commands.
+
+The basic functionality will consist of: ST virtual switch, WebCore rule that opens and closes the W1 when the ST virtual switch is ON or OFF.  You may optionally create a 2nd switch that will open/close the window partially.
+
+### 8a. Switch Creation
+Log in to ST IDE, it will be something like https://graph-na02-useast1.api.smartthings.com/.  You will need to find your shard.  Use the ST forum for the process on finding your shard.
+
+Go to My Devices, Select New Device.
+
+1. Give the device a relative Name, for example “Open Kitchen Window”
+2. Give the device a “Device Network Id”, this can be anything unique.  For example OKW1 (open kitchen window 1)
+3. For Type, select “Simulated Switch”
+4. Choose your Location, and Hub.
+5. Hit Create.
+6. Using the ST mobile app, go to SmartApps, WebCore, Settings, Available devices, Available devices, Which actuators, and select the newly available switch from step 1.
+
+### 8b. WebCore rule
+From the Valar app, select OTA, and under API TOKEN, select Email.  You will receive an email with your API key.
+
+Log in to https://dashboard.webcore.co/
+
+1. Select “New Piston” “</> Create a blank piston”
+2. Select relative items for Author and Piston names.
+3. Create the following statement (replace <API KEY> with API KEY you receive via email)
+    a. if Open Kitchen Window's switch changes to on
+        i. when true
+            1.  do Make a GET request to https://morningrod.blynk.cc/<API KEY>/update/V23?value=100;
+4.  Next create an if statement under else on the same level as if.
+    a.  if Open Kitchen Window's switch changes to off
+        i.      when true
+            1. do Make a GET request to https://morningrod.blynk.cc/<API KEY>/update/V23?value=0;
+
+It should look similar to this, only with your api key in the https request.
+ 
+
+
+### 8c. Alexa integration
+At this point, Alexa should have already found a switch called “Open Kitchen Window”.  If not run Alexa device discovery.
+
+### 8d. Google integration
+Perform device discovery (possible authorization of virtual switch device).
+
+### 8e. Partially open window
+Follow all of the same instructions above, giving the switch a unique name, ie “Breeze”.
+For step “Webcore rule 3.1”  Use value=20 instead of value=100.
