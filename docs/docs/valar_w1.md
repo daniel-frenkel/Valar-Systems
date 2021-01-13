@@ -259,7 +259,7 @@ Do the same as above. But use this URL instead:
 ```http://morningrod.blynk.cc/AUTH_TOKEN/update/V23?value=0```
 
 
-## MQTT Setup
+## 7. MQTT Setup
 
 You can control your window locally via Home Assistant's MQTT Auto Discovery feature
 
@@ -268,6 +268,43 @@ You can control your window locally via Home Assistant's MQTT Auto Discovery fea
 In the Valar App device settings, select the MQTT tab. 
 
 **NOTE:** When entering values in the app, press the send button in the bottom right corner. Otherwise values won't save.
+
+
+### 7a. Home Assistant Mosquitto Setup
+
+Install the Mosquitto Add-On
+https://github.com/home-assistant/addons/blob/master/mosquitto/DOCS.md
+
+**Create a username and password.** You must make one for this to work
+Supervisor-->Mosquitto Broker-->Configuration
+Add the login information. 
+
+```
+logins:
+  - username: username
+    password: password
+```
+
+It should look something like this
+
+```
+logins:
+  - username: username
+    password: password
+anonymous: false
+customize:
+  active: false
+  folder: mosquitto
+certfile: fullchain.pem
+keyfile: privkey.pem
+require_certificate: false
+```
+
+
+
+
+
+### 7b. VALAR App Setup
 
 Device Name: Enter the device name
 
@@ -287,10 +324,13 @@ Set topic allows you to control the device
 
 State topic allows you to monitor the state of the device
 
-Currently there are only two options to set:
+### 7c. MQTT Commands
 
-    1) Send "OPEN" to open the window completely.
-    2) Send "CLOSE" to close the window completely.
+    1) Send **CLOSE** to close the window completely.
+    2) Any digit from **1-100** will set the percent open. Send "50" to set 50% open. Send "100" to set 100% open.
 
 
+### 7d. MQTT Testing
+
+https://mqttfx.jensd.de/
 
