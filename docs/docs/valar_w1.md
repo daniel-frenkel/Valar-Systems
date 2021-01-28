@@ -7,10 +7,10 @@ has_children: false
 ---
 
 # VALAR W1: Window Opener Setup Instructions
-
-Use the Table of Content below to find the information you need. If starting new, begin at the top and work your way down, step by step.
-
 {: .no_toc }
+Use the Table of Content below to find the information you need. If starting new, begin at the top and work your way down, step by step.
+{: .no_toc }
+
 
 <details open markdown="block">
   <summary>
