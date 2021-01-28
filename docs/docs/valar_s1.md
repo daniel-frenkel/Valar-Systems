@@ -80,12 +80,12 @@ Select the settings tab
 
 Set up the following values to run a test. 
 
-    1) "OPEN STALL" set to 63
-    2) "CLOSE STALL" set to 63
-    3) "CLOSE CURRENT SETTING" set to 10
-    4) "OPEN CURRENT SETTING" set to 10
-    5) "SPEED" set to 100
-    6) "Max Distance" set to 12
+    1. "OPEN STALL" set to 63
+    2. "CLOSE STALL" set to 63
+    3. "CLOSE CURRENT SETTING" set to 10
+    4. "OPEN CURRENT SETTING" set to 10
+    5. "SPEED" set to 100
+    6. "Max Distance" set to 12
 
 Press OPEN and then CLOSE to test
 
