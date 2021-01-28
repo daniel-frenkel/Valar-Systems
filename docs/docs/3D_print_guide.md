@@ -47,9 +47,9 @@ The easiest way to begin is to open up the platter and delete the parts you do n
 
 **Printer Setup:**
 
--No supports
--0.2mm layer height
--PETG filament. 
+- No supports
+- 0.2mm layer height
+- PETG filament. 
 
 ### b. Assembly
 
