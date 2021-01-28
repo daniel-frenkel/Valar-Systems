@@ -6,7 +6,7 @@ nav_order: 6
 has_children: false
 ---
 
-## 3D-Printing Build Guides
+3D-Printing Build Guides
 
 Use the Table of Content below to find the information you need. If starting new, begin at the top and work your way down, step by step.
 
