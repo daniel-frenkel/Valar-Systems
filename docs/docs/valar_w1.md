@@ -22,6 +22,7 @@ Use the Table of Content below to find the information you need. If starting new
 </details>
 
 ---
+Note: 3D Printing and Assembly instructions can be found [here](http://help.valarsystems.com/3d_print_guides)
 
 ## 1. Download the App
 
