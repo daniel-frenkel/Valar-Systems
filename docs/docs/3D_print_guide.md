@@ -26,7 +26,7 @@ Use the Table of Contents below to find the information you need
 
 ### a. Printing The Files
 
-Download the design files [here.](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Model_W.rar?v=1611853796)
+Download the W1 design files [here.](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Model_W.rar?v=1611863817)
 
 Unzip the folder.
 
