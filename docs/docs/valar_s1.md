@@ -51,3 +51,9 @@ If you have an "Open Right" window opener, the clear WiFi button is located here
 Hold the button for **15 seconds** until the LED light begins flashing quickly 
 
 The credentials are now cleared and we can connect to it.
+
+
+![WiFi Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Copy_of_String_Setup.jpg?v=1611796641)
+
+
+![WiFi Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/String_Setup_1.jpg?v=1611796641)
