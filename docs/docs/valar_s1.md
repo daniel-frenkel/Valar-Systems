@@ -7,9 +7,8 @@ has_children: false
 ---
 
 # VALAR S1
-
+{: .no_toc }
 Use the Table of Content below to find the information you need.
-
 {: .no_toc }
 
 <details open markdown="block">
