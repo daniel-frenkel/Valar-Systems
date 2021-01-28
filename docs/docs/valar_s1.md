@@ -40,20 +40,16 @@ Open up the app, create an account, and log in.
 
 During manufacturing, WiFi credentials may have been stored in your device. You need to clear them out before you can connect.
 
-If you have an "Open Left" window opener, the clear WiFi button is located here:
+Locate the WiFi rest button near the power plug. There are 2 buttons, so be sure to press the correct one.
 
-![WiFi Reset Button Left](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset.jpg?v=1610127152)
+The WiFi button is **opposite** of the USB plug.
 
-If you have an "Open Right" window opener, the clear WiFi button is located here:
+![WiFi Reset Button ](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Bottom.jpg?v=1611857247)
 
-![WiFi Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Window_Opener_WiFi_Reset_Right.jpg?v=1610127412)
-
-Hold the button for **15 seconds** until the LED light begins flashing quickly 
+Press and hold the button for **15 seconds** until the LED light begins flashing quickly 
 
 The credentials are now cleared and we can connect to it.
 
+## 3. Test The Motor
 
-![WiFi Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Copy_of_String_Setup.jpg?v=1611796641)
-
-
-![WiFi Reset Button Right](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/String_Setup_1.jpg?v=1611796641)
+Before hanging anything up, we need to be sure everything is working correctly. 
