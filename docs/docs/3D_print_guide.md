@@ -6,10 +6,9 @@ nav_order: 6
 has_children: false
 ---
 
-3D-Printing Build Guides
-
+# 3D-Printing Build Guides
+{: .no_toc }
 Use the Table of Contents below to find the information you need
-
 {: .no_toc }
 
 <details open markdown="block">
@@ -23,9 +22,9 @@ Use the Table of Contents below to find the information you need
 
 ---
 
-# 1. VALAR W1: Smart Window Opener
+## 1. VALAR W1: Smart Window Opener
 
-## a. Printing The Files
+### a. Printing The Files
 
 Download the design files [here.](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Model_W.rar?v=1611853796)
 
@@ -52,6 +51,6 @@ The easiest way to begin is to open up the platter and delete the parts you do n
 -0.2mm layer height
 -PETG filament. 
 
-## 2b. Assembly
+### b. Assembly
 
 

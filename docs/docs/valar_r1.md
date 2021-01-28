@@ -8,6 +8,8 @@ has_children: false
 
 # VALAR R1: Curtain Opener
 {: .no_toc }
+Use the Table of Content below to find the information you need.
+{: .no_toc }
 
 <details open markdown="block">
   <summary>
