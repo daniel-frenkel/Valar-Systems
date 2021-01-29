@@ -89,6 +89,4 @@ Set up the following values to run a test.
 
 Press OPEN and then CLOSE to test
 
-![WIFI add device 2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Settings_Window1.jpg?v=1610131256)
 
-Test out OPEN and CLOSE, ensure the carriage stops on its own on both ends
