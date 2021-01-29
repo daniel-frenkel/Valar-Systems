@@ -99,6 +99,8 @@ First, decide which side you will attach the motor to and at what height.
 
 You can attach the motor on either the left or the right side of the window. In addition, you can attach it so the front is facing either the left or the right side as well. That gives you 4 options to choose from. 
 
+![Orientation](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Copy_of_Back_Tab_Lock_2.jpg?v=1611935337)
+
 I recommend you install it with the face (where the motor gear is), facing away from the window. This way it remains well hidden behind the curtain.
 
 After deciding on the side, decide the approximate height. You can attach it on the floor, or up near the rod. I prefer something in the middle where the buttons are easy to reach. 
