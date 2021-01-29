@@ -90,3 +90,57 @@ Set up the following values to run a test.
 Press OPEN and then CLOSE to test
 
 
+
+### 4. Attach the String
+
+We will now attached the string to both wall bracket hooks. 
+
+First, decide which side you will attach the motor to and at what height. 
+
+You can attach the motor on either the left or the right side of the window. In addition, you can attach it so the front is facing either the left or the right side as well. That gives you 4 options to choose from. 
+
+I recommend you install it with the face (where the motor gear is), facing away from the window. This way it remains well hidden behind the curtain.
+
+After deciding on the side, decide the approximate height. You can attach it on the floor, or up near the rod. I prefer something in the middle where the buttons are easy to reach. 
+
+Now that you know where it will go, let's attach the strings. 
+
+Begin by preparing the curtains. Place both curtains onto your curtain rod.
+
+(Insert Photo of window)
+
+Now let's prepare the string.
+
+The simplest thing to do is to lay the string, pulleys, and back tab mounts on the floor, make sure they are assembled correctly, then attach them to the hooks.
+
+Place the pulley on the floor, on the **opposite** end of the motor. (#1)
+
+![Curtain1](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/String_Setup_1.jpg?v=1611796641)
+
+
+
+Place the back tab mounts on the floor, in the center. Make sure to orient them in opposite directions. This will allow the string to pass through them correctly. Undo the screws if they are all the way in. The part with 2 screws will hold the ends of the string. The part with 1 screw will have the string pass through it. See below:
+
+![Curtain2](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Copy_of_String_Setup.jpg?v=1611796641)
+
+Now place the double pulley on the opposite end of the single pulley, on the same side as the motor. 
+
+Take the string and put it through both sides of the single single pulley.
+
+(Need more instructions) 
+
+
+
+Now we are ready to attach everything to the wall brackets. 
+
+Take a zip tie and place it through the single pulley. Attach the zip tie to the bracket that is opposite of the motor.
+
+Take another zip tie and attach it to the pulley that is on the same side as the motor
+
+
+
+
+
+https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Back_Tab_Lock.jpg?v=1611858586
+
+
