@@ -140,6 +140,9 @@ Quick overview video of what we will do next
 
 **ALLOW THE ADHESIVE TO SET FOR 24 HOURS BEFORE USING IT!!!!!!!!!**
 
+### 4d. Straightening the Window Opener
+
+After waiting 24 hours, let's go ahead and straighten the window opener as best you can. We can make it better after setting it up to open/close, but for now, look at the window opener from above and try to make it as straight as possible. If it is not straightened, the opener can rip the window frame mount off by pulling it at an angle. We want to avoid this. 
 
 
 
