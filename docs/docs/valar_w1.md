@@ -133,16 +133,10 @@ Quick overview video of what we will do next
 <iframe src="https://drive.google.com/file/d/1-LXT9Bb7hntIYwuqFMs0nZXzBPFBcNk_/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
 
-### 4c. Frame Mount Setup
+### 4c. Frame and Sill Mount Setup
 
 <figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-ivxybllIJw1swqz3bM3C8B39uX40Fsw/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
-</figure>
-
-### 4d. Sill Mount Setup 
-
-<figure class="video_container">
-<iframe src="https://drive.google.com/file/d/1-NV6KbZa3SEOwbMl1Kw4MbjtRxVyIbw7/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
+<iframe src="https://youtu.be/k2_wLvgvBIg" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
 
 
