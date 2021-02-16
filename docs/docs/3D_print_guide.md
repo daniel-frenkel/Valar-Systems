@@ -26,7 +26,7 @@ Use the Table of Contents below to find the information you need
 
 ### a. Printing The Files
 
-Download the W1 design files [here.](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Model_W.rar?v=1611863817)
+Download the W1 design files [here.](https://cdn.shopify.com/s/files/1/0048/6244/3590/files/Model_W.rar?v=1613488031)
 
 Unzip the folder.
 
@@ -51,7 +51,7 @@ The easiest way to begin is to open up the platter and delete the parts you do n
 - 0.2mm layer height
 - PETG filament. 
 
-### b. Assembly
+### b. Assembly Instructions
 
 <figure class="video_container">
 <iframe src="https://drive.google.com/file/d/1YBHHlaPMQlAP-vbfcqusTXKKNP8GxJTQ/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
