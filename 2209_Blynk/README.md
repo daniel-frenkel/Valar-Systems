@@ -1,8 +1,8 @@
 # ESP32 Blynk Firmware Example
 This ESP32 Arduino firmware will get you started with programming the VAL-1000 WiFi stepper board.
 
-## Step 1 - Download and install the Arduino code
-You may need to install several libraries
+## Step 1 - Download and open the Arduino code
+You may need to install several libraries:
 1. TMC Stepper
 2. AccelStepper
 3. Blynk
