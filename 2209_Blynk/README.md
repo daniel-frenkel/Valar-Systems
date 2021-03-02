@@ -18,6 +18,8 @@ Update your wifi SSID and password below the auto token (keep the quotes).
 
 Upload the firmware to the VAL-1000
 
+NOTE: Be sure 12V power is connected when uploading firmware.
+
 
 ## Step 3 - Set up app pins
 Set up the following pins to match those in the pin.h file
