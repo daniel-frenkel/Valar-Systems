@@ -27,10 +27,10 @@ Upload the firmware to the VAL-1000
 Set up the following pins to match those in the pin.h file
 
 Segment Switch 
-  V1
-  1) Close
-  2) Open
-  3) Stop
+  - Name: V1
+  - Option 1: Close
+  - Option 2: Open
+  - Option 3: Stop
 
 Horizonal Slider
   - Percent Open
