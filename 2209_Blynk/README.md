@@ -16,9 +16,11 @@ You will receice an AUTH token in your email. Paste this token into blynk.h, rep
 
 Update your wifi SSID and password below the auto token (keep the quotes).
 
+**NOTE:** Be sure 12V power is connected when uploading firmware.
+
 Upload the firmware to the VAL-1000
 
-NOTE: Be sure 12V power is connected when uploading firmware.
+
 
 
 ## Step 3 - Set up app pins
