@@ -1,5 +1,5 @@
 # ESP32 Blynk Firmware Example
-This ESP32 Arduino firmware will get you started with programming the VAL-1000 WiFi stepper board. You can also use your own ESP32 and TMC2209 stepper driver.
+This ESP32 Arduino firmware will get you started with programming the VAL-1000 WiFi stepper board (you can get it [here](https://valarsystems.com/products/val1000-all-in-one-motion-controller)). You can also use your own ESP32 and TMC2209 stepper driver.
 
 
 ![PCB IMAGE](./PCB_github.jpg)
