@@ -2,8 +2,7 @@
 This ESP32 Arduino firmware will get you started with programming the VAL-1000 WiFi stepper board. You can also use your own ESP32 and TMC2209 stepper driver.
 
 
-
-
+![PCB IMAGE](./PCB_github.jpg)
 
 
 ## Step 1 - Download and open the Arduino code
