@@ -36,7 +36,13 @@ Upload the firmware to the VAL-1000
 
 
 ## Step 3 - Set up app pins
-Set up the following pins to match those in the pin.h file
+
+Blynk works by sending values to the ESP32. These values are received by the ESP32 in the blynk.h file where you can see all of the different functions. 
+For example, if you set up a button in Blynk and place it on Virtual pin 36, and tell it to go 0 to 1. 
+
+Once the button is pressed in Blynk, it sends a "1" to V36, the function BLYNK_WRITE(V36) will execute. 
+
+Set up the following pins to match those in the blynk.h file
 
 Segment Switch 
   - Name: V1
