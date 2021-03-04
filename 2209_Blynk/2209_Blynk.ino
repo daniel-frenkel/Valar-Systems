@@ -1,4 +1,4 @@
-#include <Arduino.h>
+include <Arduino.h>
 #include <AccelStepper.h>
 #include <TMCStepper.h>
 #include <Preferences.h>
@@ -29,27 +29,24 @@ Preferences preferences_local;
 
 // STALLGUARD PIN STOP MOTOR
 void IRAM_ATTR stalled_position(){ 
-  Serial.println("STALLED");
+  //Serial.println("STALLED");
   stepper.setAcceleration(200000);
   stepper.setMaxSpeed(0);
-  delayMicroseconds(100000);
   stepper.moveTo(stepper.currentPosition());
 }
 
 void IRAM_ATTR sensor_1(){ // LIMIT SWITCH 1 STOP MOTOR
-  Serial.println("SENSOR 2");
+  //Serial.println("SENSOR 2");
   stepper.setAcceleration(200000);
   stepper.setMaxSpeed(0);
-  delayMicroseconds(100000);
   stepper.moveTo(stepper.currentPosition());
   stop_motor=true;
 }
 
 void IRAM_ATTR sensor_2(){ // LIMIT SWITCH 2 STOP MOTOR
-  Serial.println("SENSOR 1");
+  //Serial.println("SENSOR 1");
   stepper.setAcceleration(200000);
   stepper.setMaxSpeed(0);
-  delayMicroseconds(100000);
   stepper.moveTo(stepper.currentPosition());
   stop_motor=true;
 }
@@ -67,6 +64,8 @@ void setup() {
   pinMode(STALLGUARD ,INPUT);
   pinMode(BUTTON1,INPUT);
   pinMode(BUTTON2,INPUT);
+  pinMode(SENSOR1,INPUT);
+  pinMode(SENSOR2,INPUT);
 
   //Core 0 Setup
   disableCore0WDT();
