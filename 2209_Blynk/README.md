@@ -9,8 +9,7 @@ The TMC2209 is REVOLUTIONARY! It is literally the best stepper driver out there 
   3) The current is very high
   4) It is SO quiet. At low speeds you only hear the motor bearings move. NUTS.
 
-
-![PCB IMAGE](./PCB_github.jpg)
+![PCB IMAGE](/docs/images/PCB_github.jpg)
 
 
 ## Step 1 - Download and open the Arduino code
