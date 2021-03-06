@@ -12,6 +12,16 @@ The TMC2209 is REVOLUTIONARY! It is literally the best stepper driver out there 
 ![PCB IMAGE](/docs/images/PCB_github.jpg)
 ![PCB IMAGE2](/docs/images/PCB_Details.jpg)
 
+## General Notes:
+
+I use some "advanced" features in this code, but they are very simple. Here are some features and explanations. 
+
+1. Dual Core: In order to run the motor smoothly, I use both cores of the ESP32 (Core 0 and Core 1). Normally, Arduino uses Core 1 for the setup and loop, and Core 0 for WiFi. I keep all motor functions in core 1, and the Blynk wifi connection in core 0. Because the motor.run() function blocks everything, this keeps the wifi connection from dropping. 
+
+2. Preferences: If you reset your device or lose power, you don't want all your variables and settings cleared out. Preferences save different variables into the flash, so they are reloaded when there's a reset. 
+
+3. Interrupts: When a stall occurs on the TMC2209, it sends a HIGH signal to the ESP32. I've programmed the code to detect this signal at any point, and immediately run a function. This stops the motors in its tracks.
+
 
 ## Step 1 - Download and open the Arduino code
 You may need to install several libraries:
