@@ -1,13 +1,18 @@
 # ESP32 Blynk Firmware Example
-This ESP32 Arduino firmware will get you started with programming the VAL-1000 WiFi stepper board (you can get it [here](https://valarsystems.com/products/val1000-all-in-one-motion-controller)). 
+This ESP32 Arduino firmware will get you started with programming the VAL-1000 WiFi stepper board.
+
+- You can get the VAL-1000 from my [website](https://valarsystems.com/products/val1000-all-in-one-motion-controller)
+- Or you can get it from [Tindie](https://www.tindie.com/products/valar/wifi-stepper-motor-board/)
 
 You can also use your own ESP32 and TMC2209 stepper driver.
 
+The VAL-1000 is an ultra-compact wifi-controlled stepper driver that uses an ESP32 and TMC2209.
+
 The TMC2209 is REVOLUTIONARY! It is literally the best stepper driver out there because:
-  1) StallGuard. It's crazy.
-  2) The price is very good
-  3) The current is very high
-  4) It is SO quiet. At low speeds you only hear the motor bearings move. NUTS.
+  1) StallGuard. It's feels like magic.
+  2) The price is incredibly good.
+  3) The current is very high.
+  4) It is EXTREMEMLY quiet. At low speeds you only hear the motor bearings move.
 
 ![PCB IMAGE](/docs/images/PCB_github.jpg)
 ![PCB IMAGE2](/docs/images/PCB_Details.jpg)
