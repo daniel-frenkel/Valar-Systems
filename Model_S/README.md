@@ -10,3 +10,7 @@ Get the apps here:
 [iOS](https://apps.apple.com/al/app/morningrod/id1455653248)
 
 [Android](https://play.google.com/store/apps/details?id=cc.blynk.appexport.morning_rod)
+
+[Learn more here](http://help.valarsystems.com/valar_s1#1-download-the-app) to set up the Model S
+
+
