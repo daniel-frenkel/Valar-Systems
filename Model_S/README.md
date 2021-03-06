@@ -2,6 +2,8 @@
 
 This is the code to use the Model S and VAL-1000 with the Valar App. 
 
+![Video](/Model_S/docs/images/Curtain%20Opener.mp4)
+
 The iOS and Android app allows you to quickly and easily modifiy motor parameters within the app, so you never need to modify this code.
 
 
