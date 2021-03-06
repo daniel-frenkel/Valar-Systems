@@ -11,6 +11,20 @@ Get the apps here:
 
 [Android](https://play.google.com/store/apps/details?id=cc.blynk.appexport.morning_rod)
 
+## Setup Instruction
 [Learn more here](http://help.valarsystems.com/valar_s1#1-download-the-app) to set up the Model S
+
+## Dependancies
+
+You will need the Following Arduino Libraries
+
+1. Blynk
+2. TMC Stepper
+3. AccelStepper
+
+You will also need the following libraries not found in the Arduino library manager
+
+4.  https://github.com/PaulStoffregen/Time
+5.  https://github.com/knolleary/pubsubclient
 
 
