@@ -3,7 +3,16 @@
 
 This firmware will get you started with programming the VAL-1000 WiFi stepper board that I've created and is what I use in all of my Smart Home projects. 
 
-I use it in my curtain openers, window openers, and door openers. But it can be used in nearly anything you can dream of including a pet feeder, camera slider, drawer opener, and more.
+Here are some use cases for this board:
+
+- Automatic Curtain Opener
+- Automatic Blind Opener
+- Automatic Window Opener
+- Automatic Door Opener
+- Automatic Pet Feeder
+- Motorized Camera Slider
+- Automatic Drawer Opener
+- And so much more
 
 If you want to put a safe and highly advanced motor into something, I recommend you use this. It is impossible to burn out, easy to work with, ultra-quite, and extremely safe. StallGuard will prevent your fingers from being crushed.
 
