@@ -1,9 +1,9 @@
 # VAL-1000 Firmware
 ## Getting Started with the TMC2209 and ESP32
 
-This firmware will get you started with programming the VAL-1000 WiFi stepper board that I've created.
+This firmware will get you started with programming the VAL-1000 WiFi stepper board that I've created and is what I use in all of my Smart Home projects. 
 
-It is what I use in all of my Smart Home projects. I use it in my curtain opener, window opener, and door opener. But it can be used in nearly anything you can dream of.
+I use it in my curtain openers, window openers, and door openers. But it can be used in nearly anything you can dream of including a pet feeder, camera slider, drawer opener, and more.
 
 If you want to put a safe and highly advanced motor into something, I recommend you use this. It is impossible to burn out, easy to work with, ultra-quite, and extremely safe. StallGuard will prevent your fingers from being crushed.
 
