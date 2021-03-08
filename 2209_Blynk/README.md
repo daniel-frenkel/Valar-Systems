@@ -1,5 +1,7 @@
 # ESP32 Blynk Firmware Example
-This ESP32 Arduino firmware will get you started with programming the VAL-1000 WiFi stepper board.
+This firmware will get you started with programming the VAL-1000 WiFi stepper board, which is what I use in all of my Smart Home projects. I use it in my curtain opener, window opener, and door opener. But it can be used in nearly anything you can dream of.
+
+If you want to put a safe and highly advanced motor into something, I recommend you use this. It is impossible to burn out, easy to work with, ultra-quite, and extremely safe. StallGuard will prevent your fingers from being crushed.
 
 - You can get the VAL-1000 from my [website](https://valarsystems.com/products/val1000-all-in-one-motion-controller)
 - Or you can get it from [Tindie](https://www.tindie.com/products/valar/wifi-stepper-motor-board/)
