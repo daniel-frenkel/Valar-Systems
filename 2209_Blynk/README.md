@@ -1,9 +1,9 @@
 # VAL-1000 Firmware
 ## Getting Started with the TMC2209 and ESP32
 
-This firmware will get you started with programming the VAL-1000 WiFi stepper board that I've created and is what I use in all of my Smart Home projects. 
+This firmware will get you started with programming the VAL-1000 WiFi stepper board that I created and use in all my Smart Home projects. 
 
-Here are some use cases for this board:
+**Here are some use cases for this board:**
 
 - Automatic Curtain Opener
 - Automatic Blind Opener
