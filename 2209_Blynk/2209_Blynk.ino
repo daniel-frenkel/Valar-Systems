@@ -18,7 +18,7 @@ include <Arduino.h>
 #define STOP 2
 
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
-TMC2209Stepper driver2(&Serial2, 0.12f , 0b00);
+TMC2209Stepper driver2(&Serial2, 0.15f , 0b00);
 TaskHandle_t C0; //Dual Core Setup
 Preferences preferences_local;
 
