@@ -3,6 +3,8 @@
 
 This firmware will get you started with programming the VAL-1000 WiFi stepper board that I created and use in all my Smart Home projects. 
 
+Watch [this video](https://www.canva.com/design/DAEYMV-z7gI/47bbxXw0_f9zS6kkzpX75A/watch?utm_content=DAEYMV-z7gI&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink) to see this code in action.
+
 **Here are some use cases for this board:**
 
 - Automatic Curtain Opener
