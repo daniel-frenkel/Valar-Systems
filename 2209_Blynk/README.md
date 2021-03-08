@@ -9,7 +9,7 @@ You can also use your own ESP32 and TMC2209 stepper driver.
 The VAL-1000 is an ultra-compact wifi-controlled stepper driver that uses an ESP32 and TMC2209.
 
 The TMC2209 is REVOLUTIONARY! It is literally the best stepper driver out there because:
-  1) StallGuard. It's feels like magic.
+  1) StallGuard. It's like magic.
   2) The price is incredibly good.
   3) The current is very high.
   4) It is EXTREMEMLY quiet. At low speeds you only hear the motor bearings move.
