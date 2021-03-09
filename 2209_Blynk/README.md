@@ -18,6 +18,8 @@ Watch [this video](https://youtu.be/wKLAcbiAFKA) to see this code in action.
 
 If you want to put a safe and highly advanced motor into something, I recommend you use this. It is impossible to burn out, easy to work with, ultra-quite, and extremely safe. StallGuard will prevent your fingers from being crushed.
 
+## Where To Obtain a VAL-1000
+
 - You can get the VAL-1000 from my [website](https://valarsystems.com/products/val1000-all-in-one-motion-controller)
 - Or you can get it from [Tindie](https://www.tindie.com/products/valar/wifi-stepper-motor-board/)
 
