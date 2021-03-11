@@ -1,15 +1,32 @@
-# ESP32 Blynk Firmware Example
-This ESP32 Arduino firmware will get you started with programming the VAL-1000 WiFi stepper board.
+# VAL-1000 Firmware
+## Getting Started with the TMC2209 and ESP32
+
+This firmware will get you started with programming the VAL-1000 WiFi stepper board that I created and use in all my Smart Home projects. 
+
+Watch [this video](https://youtu.be/wKLAcbiAFKA) to see this code in action.
+
+**Here are some use cases for this board:**
+
+- Automatic Curtain Opener
+- Automatic Blind Opener
+- Automatic Window Opener
+- Automatic Door Opener
+- Automatic Pet Feeder
+- Motorized Camera Slider
+- Automatic Drawer Opener
+- And so much more
+
+If you want to put a safe and highly advanced motor into something, I recommend you use this. It is impossible to burn out, easy to work with, ultra-quite, and extremely safe. StallGuard will prevent your fingers from being crushed.
+
+## Where To Obtain a VAL-1000
 
 - You can get the VAL-1000 from my [website](https://valarsystems.com/products/val1000-all-in-one-motion-controller)
 - Or you can get it from [Tindie](https://www.tindie.com/products/valar/wifi-stepper-motor-board/)
 
-You can also use your own ESP32 and TMC2209 stepper driver.
-
-The VAL-1000 is an ultra-compact wifi-controlled stepper driver that uses an ESP32 and TMC2209.
+You can also use your own ESP32 and TMC2209 stepper driver with this code.
 
 The TMC2209 is REVOLUTIONARY! It is literally the best stepper driver out there because:
-  1) StallGuard. It's feels like magic.
+  1) StallGuard. It's like magic.
   2) The price is incredibly good.
   3) The current is very high.
   4) It is EXTREMEMLY quiet. At low speeds you only hear the motor bearings move.
@@ -17,14 +34,19 @@ The TMC2209 is REVOLUTIONARY! It is literally the best stepper driver out there 
 ![PCB IMAGE](/docs/images/PCB_github.jpg)
 ![PCB IMAGE2](/docs/images/PCB_Details.jpg)
 
+## Step 1 - Connect Power & Motor
+1. Connect a 12V 2A+ power cord like [this](https://amzn.to/30qsbh7)
+2. Connect a stepper motor like [this](https://amzn.to/3kUWkP4)
 
-## Step 1 - Download and open the Arduino code
+If you need to move something heavy, over 50 lbs, consider [this motor](https://amzn.to/3c9xmI0)
+
+## Step 2 - Download and open the Arduino code
 You may need to install several libraries:
 1. TMC Stepper
 2. AccelStepper
 3. Blynk
 
-## Step 2 - Download phone app
+## Step 3 - Download phone app
 Download the Blynk app for iOS and Android
 
 Create a new project with the ESP32.
@@ -40,7 +62,7 @@ Upload the firmware to the VAL-1000
 
 
 
-## Step 3 - Set up app pins
+## Step 4 - Set up app pins
 
 Blynk works by sending values to the ESP32. These values are received by the ESP32 in the blynk.h file where you can see all of the different functions. 
 For example, if you set up a button in Blynk and place it on Virtual pin 36, and tell it to go 0 to 1. 
