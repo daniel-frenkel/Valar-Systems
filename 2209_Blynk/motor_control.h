@@ -6,7 +6,6 @@ Serial.println(move_to_position);
 move_to_position = stepper.targetPosition();
 XACTUAL = stepper.currentPosition();
 
-motor_running = true;         // mark that the track motor is running
 stepper.enableOutputs();
 stepper.setAcceleration(MOVE_ACCEL);
 stepper.setMaxSpeed(MOVE_VELOCITY);
@@ -48,7 +47,6 @@ Serial.print("MOVED TO POSITION: ");
 Serial.println(preferences_local.getInt("XACTUAL", 404));
 
 stepper.disableOutputs();
-motor_running = false;
 blynk_update = true;
      
 }

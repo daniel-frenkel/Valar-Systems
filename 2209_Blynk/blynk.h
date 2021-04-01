@@ -56,8 +56,6 @@ BLYNK_WRITE(V1) {
 
 BLYNK_WRITE(V2) { // set position slider
   Serial.print("Move to: ");
-  //preferences_local.putFloat("open_percent", (move_to_position/100)*param.asInt());
-  //Need to know max position first
   int q=(max_steps/100)*param.asInt();
   stepper.moveTo(q);
   Serial.print(q);
@@ -127,11 +125,7 @@ BLYNK_WRITE(V25) { // set Current OPEN value
   int q=param.asInt();
   current_open=q;
   if(current_open>2000)current_open=2000;
-  Serial.print("Current: ");
-  Serial.print(q);
-  Serial.println(" Milli Amps");
-  Blynk.virtualWrite(V56, q);
-  preferences_local.putInt("current_open", q);
+  preferences_local.putInt("current_open", current_open);
   driver2.rms_current(current_open);
   Serial.println(current_open);
 }
@@ -142,14 +136,9 @@ BLYNK_WRITE(V26) { // set Current CLOSE value
   int q=param.asInt();
   current_close=q;
   if(current_close>2000)current_close=2000;
-  Serial.print("Current: ");
-  Serial.print(q);
-  Serial.println("Milli  Amps");
-  Blynk.virtualWrite(V55, q);
   driver2.rms_current(current_close);
-  preferences_local.putInt("current_close", q);
+  preferences_local.putInt("current_close", current_close);
   Serial.println(current_close);
-
 }
 
 

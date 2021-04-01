@@ -85,6 +85,7 @@ void setup() {
 
 //DRIVER SETUP
   Serial2.begin(115200);
+  driver2.pdn_disable(true);
   driver2.begin();
   driver2.TPWMTHRS(0);
   driver2.semin(0);
@@ -95,7 +96,7 @@ void setup() {
   driver2.microsteps(motor_microsteps);
   
   driver2.en_spreadCycle(false);
-  driver2.pdn_disable(true);
+  
 
   //MOTOR SETUP
   stepper.setEnablePin(ENABLE_PIN);
