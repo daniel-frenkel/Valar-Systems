@@ -5,12 +5,12 @@
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
-char auth[] = "AUTH_TOKEN_HERE";
+char auth[] = "tjaXj3ibE1qGpb3lrZouKdF1mrMe980P";
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "SSID";
-char pass[] = "PASSWORD";
+char ssid[] = "Tony_2G";
+char pass[] = "spockntony";
 
 
 BlynkTimer blynkTimer;
@@ -30,14 +30,14 @@ BLYNK_WRITE(V1) {
       Serial.print("Closing to position: ");
       stepper.moveTo(0);
       Serial.println(stepper.targetPosition());
-      command = CUSTOM_MOVE;
+      command = MOVE;
       break;
 
     case 2: // Item 4 //Open 100%
       Serial.print("Opening to position: ");
       stepper.moveTo(max_steps);
       Serial.println(stepper.targetPosition());
-      command = CUSTOM_MOVE;
+      command = MOVE;
       break;
 
     case 3: // Item 5 //"STOP"
@@ -59,11 +59,9 @@ BLYNK_WRITE(V2) { // set position slider
   //preferences_local.putFloat("open_percent", (move_to_position/100)*param.asInt());
   //Need to know max position first
   int q=(max_steps/100)*param.asInt();
-  if(motor_running!=true){
-    stepper.moveTo(q);
-    command = CUSTOM_MOVE;
-    }
-  Serial.println(open_percent);
+  stepper.moveTo(q);
+  Serial.print(q);
+  command = MOVE;
 }
 
 BLYNK_WRITE(V22) { // set max distance
@@ -90,7 +88,9 @@ BLYNK_WRITE(V34) { // set velocity
   Serial.println(MOVE_VELOCITY);
   preferences_local.putInt("move_velocity", MOVE_VELOCITY);
   stepper.setMaxSpeed(MOVE_VELOCITY);
-  TCOOLS = (3089838.00*pow(float(MOVE_VELOCITY),-1.00161534))*1.5; //Rsense = 0.12/ Recheck for 0.15
+  
+  TCOOLS = (3089838.00*pow(float(MOVE_VELOCITY),-1.00161534))*1.5;
+  
   Blynk.virtualWrite(V125, TCOOLS/10);
   Serial.print("TCOOLS: ");
   Serial.println(TCOOLS);
