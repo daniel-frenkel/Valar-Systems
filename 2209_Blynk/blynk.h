@@ -5,12 +5,12 @@
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
-char auth[] = "tjaXj3ibE1qGpb3lrZouKdF1mrMe980P";
+char auth[] = "AUTH";
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "Tony_2G";
-char pass[] = "spockntony";
+char ssid[] = "SSID";
+char pass[] = "PASSWORD";
 
 
 BlynkTimer blynkTimer;
