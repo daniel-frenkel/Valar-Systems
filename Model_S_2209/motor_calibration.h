@@ -177,9 +177,9 @@ void new_auto_calibrate_step_3(){ //CURRENT HIGH FRICTION
   Serial.println(open_current_calibration_high);
   open_current_calibration_high&=0x1F;
   open_current_calibration_high=open_current_calibration_high<<8;
-  open_current_high=open_current_calibration_high;
+  current_open_high=open_current_calibration_high;
   //sendData(0x10 + 0x80, open_current);
-  Serial.println(open_current_high);
+  Serial.println(current_open_high);
 
   Serial.print("setting high close current: ");
   close_current_calibration_value_high=current_high_close_initial_value; //current value of 1
@@ -187,9 +187,9 @@ void new_auto_calibrate_step_3(){ //CURRENT HIGH FRICTION
   Serial.println(close_current_calibration_high);
   close_current_calibration_high&=0x1F;
   close_current_calibration_high=close_current_calibration_high<<8;
-  close_current_high=close_current_calibration_high;
+  current_close_high=close_current_calibration_high;
   //sendData(0x10 + 0x80, close_current);
-  Serial.println(close_current_high);
+  Serial.println(current_close_high);
 
   //Set stall open and close to 64
 
@@ -219,7 +219,7 @@ void new_auto_calibrate_step_3(){ //CURRENT HIGH FRICTION
   
   sendData(0x20+0x80, 2); // RAMPMODE=1 Velocity mode to open / RAMPMODE=2 Velocity mode to Negative
   sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-  sendData(0x10+0x80, close_current_high);
+  sendData(0x10+0x80, current_close_high);
   sendData(0x6D+0x80, stall_close_high);
   
   Serial.println("Ramp Mode 1 Set");
@@ -246,7 +246,7 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
       sendData(0x20 + 0x80, 2); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
       sendData(0x14 + 0x80, MOVE_CLOSE_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
-      sendData(0x10 + 0x80, close_current_high);
+      sendData(0x10 + 0x80, current_close_high);
       sendData(0x6D + 0x80, stall_close_high);
       sendData(0x27 + 0x80, MOVE_CLOSE_VELOCITY); //VMAX
       number_open_passes = number_open_passes+1;
@@ -264,7 +264,7 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
       sendData(0x20 + 0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
       sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
-      sendData(0x10 + 0x80, open_current_high);
+      sendData(0x10 + 0x80, current_open_high);
       sendData(0x6D + 0x80, stall_open_high);
       sendData(0x27 + 0x80, MOVE_OPEN_VELOCITY); //VMAX
       sendData(0x21 + 0x80, 0); //XACTUAL = 0
@@ -296,9 +296,9 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
       Serial.println(open_current_calibration_high);
       open_current_calibration_high&=0x1F;
       open_current_calibration_high=open_current_calibration_high<<8;
-      open_current_high=open_current_calibration_high;
-      sendData(0x10 + 0x80, open_current_high);
-      Serial.println(open_current_high);
+      current_open_high=open_current_calibration_high;
+      sendData(0x10 + 0x80, current_open_high);
+      Serial.println(current_open_high);
       blynk_update=true;
       
       sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
@@ -323,9 +323,9 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
         Serial.println(close_current_calibration_high);
         close_current_calibration_high&=0x1F;
         close_current_calibration_high=close_current_calibration_high<<8;
-        close_current_high=close_current_calibration_high;
-        sendData(0x10 + 0x80, close_current_high);
-        Serial.println(close_current_high);
+        current_close_high=close_current_calibration_high;
+        sendData(0x10 + 0x80, current_close_high);
+        Serial.println(current_close_high);
         blynk_update=true;
         
         //sendData(0x20 + 0x80, 2); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
@@ -364,8 +364,8 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
   preferences_local.putInt("C_cur_cal_h", close_current_calibration_high);
   preferences_local.putInt("1_cur_cal_val_h", close_current_calibration_value_high);
   
-  preferences_local.putInt("close_current_h", close_current_high);
-  preferences_local.putInt("open_current_h", open_current_high);
+  preferences_local.putInt("close_current_h", current_close_high);
+  preferences_local.putInt("open_current_h", current_open_high);
 
   sendData(0x26+0x80, 0); //AMAX
   sendData(0x27+0x80, 0); //VMAX
@@ -391,9 +391,9 @@ void new_auto_calibrate_step_4(){ //CURRENT LOW
   Serial.println(open_current_calibration_low);
   open_current_calibration_low&=0x1F;
   open_current_calibration_low=open_current_calibration_low<<8;
-  open_current_low=open_current_calibration_low;
+  current_open_low=open_current_calibration_low;
   //sendData(0x10 + 0x80, open_current);
-  Serial.println(open_current_low);
+  Serial.println(current_open_low);
 
   Serial.print("setting low close current: ");
   close_current_calibration_value_low=current_low_close_initial_value; //current value of 1
@@ -401,9 +401,9 @@ void new_auto_calibrate_step_4(){ //CURRENT LOW
   Serial.println(close_current_calibration_low);
   close_current_calibration_low&=0x1F;
   close_current_calibration_low=close_current_calibration_low<<8;
-  close_current_low=close_current_calibration_low;
+  current_close_low=close_current_calibration_low;
   //sendData(0x10 + 0x80, close_current);
-  Serial.println(close_current_low);
+  Serial.println(current_close_low);
 
   //Set stall open and close to 64
 
@@ -437,7 +437,7 @@ void new_auto_calibrate_step_4(){ //CURRENT LOW
   sendData(0x34 + 0x80, 0x000); // Disable stallguard /
   sendData(0x20 + 0x80, 2); // RAMPMODE=2 Move to 1
   sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
-  sendData(0x10 + 0x80, close_current_high);
+  sendData(0x10 + 0x80, current_close_high);
   sendData(0x6D + 0x80, stall_close_high); // Set to not trigger low in the low-zone
   sendData(0x27 + 0x80, MOVE_CLOSE_VELOCITY); //VMAX
   sendData(0x21 + 0x80, 0);      // XACTUAL to start motion
@@ -464,7 +464,7 @@ void new_auto_calibrate_step_4(){ //CURRENT LOW
   sendData(0x20 + 0x80, 0); // RAMPMODE=2 Move to 1
   sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
-  sendData(0x10 + 0x80, open_current_high);
+  sendData(0x10 + 0x80, current_open_high);
   sendData(0x6D + 0x80, stall_open_high);
   Serial.println("Moving to just_open_position");
   sendData(0x27 + 0x80, MOVE_OPEN_VELOCITY); //VMAX
@@ -493,7 +493,7 @@ void new_auto_calibrate_step_4(){ //CURRENT LOW
   sendData(0x20 + 0x80, 0); // RAMPMODE=2 Move to 1
   sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
-  sendData(0x10 + 0x80, open_current_low);
+  sendData(0x10 + 0x80, current_open_low);
   sendData(0x6D + 0x80, stall_open_low);
   sendData(0x34 + 0x80, 0x400); // Enable stallguard /
   
@@ -516,7 +516,7 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
     //Reverse direction to JOP
     sendData(0x20+0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
     sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-    sendData(0x10+0x80, open_current_high);
+    sendData(0x10+0x80, current_open_high);
     sendData(0x6D+0x80, stall_open_high);    //Disable SG?
     sendData(0x27+0x80, MOVE_OPEN_VELOCITY); //VMAX
     sendData(0x21+0x80, 0); //XACTUAL
@@ -538,7 +538,7 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
       //Reverse direction
       sendData(0x20+0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-      sendData(0x10+0x80, open_current_low); 
+      sendData(0x10+0x80, current_open_low); 
       sendData(0x6D+0x80, stall_open_low);
       sendData(0x27+0x80, MOVE_OPEN_VELOCITY); //VMAX
       Serial.println("Moving to MAX STEPS");
@@ -562,7 +562,7 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
       //Reverse direction
       sendData(0x20+0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-      sendData(0x10+0x80, close_current_low);
+      sendData(0x10+0x80, current_close_low);
       sendData(0x6D+0x80, stall_close_low);
       sendData(0x27+0x80, MOVE_CLOSE_VELOCITY); //VMAX
       sendData(0x2D+0x80, just_open_position);      // XTARGET=0 to start motion
@@ -581,7 +581,7 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
       //Reverse direction
       sendData(0x20+0x80, 2); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-      sendData(0x10+0x80, close_current_high);
+      sendData(0x10+0x80, current_close_high);
       sendData(0x6D+0x80, stall_close_high);
       sendData(0x27+0x80, MOVE_CLOSE_VELOCITY); //VMAX
       //sendData(0x21+0x80, 0);      // XACTUAL=0 to start motion
@@ -600,7 +600,7 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
     //Reverse direction
     sendData(0x20+0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
     sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-    sendData(0x10+0x80, close_current_low);
+    sendData(0x10+0x80, current_close_low);
     sendData(0x6D+0x80, stall_close_low);
     sendData(0x21+0x80, max_steps); //XACTUAL
     sendData(0x27+0x80, MOVE_CLOSE_VELOCITY); //VMAX
@@ -633,9 +633,9 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
       Serial.println(open_current_calibration_low);
       open_current_calibration_low&=0x1F;
       open_current_calibration_low=open_current_calibration_low<<8;
-      open_current_low=open_current_calibration_low;
-      sendData(0x10 + 0x80, open_current_low);
-      Serial.println(open_current_low);
+      current_open_low=open_current_calibration_low;
+      sendData(0x10 + 0x80, current_open_low);
+      Serial.println(current_open_low);
       blynk_update=true;
       //OPEN CURRENT LOW
 
@@ -669,9 +669,9 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
         Serial.println(close_current_calibration_low);
         close_current_calibration_low&=0x1F;
         close_current_calibration_low=close_current_calibration_low<<8;
-        close_current_low=close_current_calibration_low;
-        sendData(0x10 + 0x80, close_current_low);
-        Serial.println(close_current_low);
+        current_close_low=close_current_calibration_low;
+        sendData(0x10 + 0x80, current_close_low);
+        Serial.println(current_close_low);
         blynk_update=true;
       //CURRENT LOW
 
@@ -736,8 +736,8 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
   preferences_local.putInt("C_cur_cal_l", close_current_calibration_low);
   preferences_local.putInt("C_cur_cal_val_l", close_current_calibration_value_low);
   
-  preferences_local.putInt("close_current_l", close_current_low);
-  preferences_local.putInt("open_current_l", open_current_low);
+  preferences_local.putInt("close_current_l", current_close_low);
+  preferences_local.putInt("open_current_l", current_open_low);
 
   sendData(0x26+0x80, 0); //AMAX
   sendData(0x27+0x80, 0); //VMAX
@@ -785,7 +785,7 @@ void new_auto_calibrate_step_5(){
   sendData(0x14 + 0x80,  MOVE_CLOSE_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x20+0x80, 2); // Close door
   sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-  sendData(0x10+0x80, close_current_high);
+  sendData(0x10+0x80, current_close_high);
   sendData(0x6D+0x80, stall_close_high);
 
   calibration_direction=1; //1 to close
@@ -813,7 +813,7 @@ while (number_open_passes<stall_high_open_passes && number_close_passes<stall_hi
       sendData(0x20 + 0x80, 2); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
       sendData(0x14 + 0x80, MOVE_CLOSE_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
-      sendData(0x10 + 0x80, close_current_high);
+      sendData(0x10 + 0x80, current_close_high);
       sendData(0x6D + 0x80, stall_close_high);
       sendData(0x27 + 0x80, MOVE_CLOSE_VELOCITY); //VMAX
       number_open_passes = number_open_passes+1;
@@ -831,7 +831,7 @@ while (number_open_passes<stall_high_open_passes && number_close_passes<stall_hi
       sendData(0x20 + 0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
       sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
-      sendData(0x10 + 0x80, open_current_high);
+      sendData(0x10 + 0x80, current_open_high);
       sendData(0x6D + 0x80, stall_open_high);
       sendData(0x27 + 0x80, MOVE_OPEN_VELOCITY); //VMAX
       sendData(0x21 + 0x80, 0); //XACTUAL = 0
@@ -997,7 +997,7 @@ void new_auto_calibrate_step_6(){
   sendData(0x34 + 0x80, 0x000); // Disable stallguard /
   sendData(0x20 + 0x80, 2); // RAMPMODE=2 Move to 1
   sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
-  sendData(0x10 + 0x80, close_current_high);
+  sendData(0x10 + 0x80, current_close_high);
   sendData(0x6D + 0x80, stall_close_high); // Set to not trigger low in the low-zone
   sendData(0x27 + 0x80, MOVE_CLOSE_VELOCITY); //VMAX
   sendData(0x21 + 0x80, 0);      // XACTUAL to start motion
@@ -1024,7 +1024,7 @@ void new_auto_calibrate_step_6(){
   sendData(0x20 + 0x80, 0); // RAMPMODE=2 Move to 1
   sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
-  sendData(0x10 + 0x80, open_current_high);
+  sendData(0x10 + 0x80, current_open_high);
   sendData(0x6D + 0x80, stall_open_high);
   Serial.println("Moving to just_open_position");
   sendData(0x27 + 0x80, MOVE_OPEN_VELOCITY); //VMAX
@@ -1052,7 +1052,7 @@ void new_auto_calibrate_step_6(){
   sendData(0x20 + 0x80, 0); // RAMPMODE=2 Move to 1
   sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
-  sendData(0x10 + 0x80, open_current_low);
+  sendData(0x10 + 0x80, current_open_low);
   sendData(0x6D + 0x80, stall_open_low);
   sendData(0x34 + 0x80, 0x400); // Enable stallguard /
   
@@ -1079,7 +1079,7 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
       //Reverse direction
       sendData(0x20+0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-      sendData(0x10+0x80, open_current_low); 
+      sendData(0x10+0x80, current_open_low); 
       sendData(0x6D+0x80, stall_open_low);
       sendData(0x27+0x80, MOVE_OPEN_VELOCITY); //VMAX
       Serial.println("Moving to MAX STEPS");
@@ -1103,7 +1103,7 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
       //Reverse direction
       sendData(0x20+0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-      sendData(0x10+0x80, close_current_low);
+      sendData(0x10+0x80, current_close_low);
       sendData(0x6D+0x80, stall_close_low);
       sendData(0x27+0x80, MOVE_CLOSE_VELOCITY); //VMAX
       sendData(0x2D+0x80, just_open_position);      // XTARGET=0 to start motion
@@ -1122,7 +1122,7 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
       //Reverse direction
       sendData(0x20+0x80, 2); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
       sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-      sendData(0x10+0x80, close_current_high);
+      sendData(0x10+0x80, current_close_high);
       sendData(0x6D+0x80, stall_close_high);
       sendData(0x27+0x80, MOVE_CLOSE_VELOCITY); //VMAX
       //sendData(0x21+0x80, 0);      // XACTUAL=0 to start motion
@@ -1138,7 +1138,7 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
     //Reverse direction to JOP
     sendData(0x20+0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
     sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-    sendData(0x10+0x80, open_current_high);
+    sendData(0x10+0x80, current_open_high);
     //Disable SG?
     sendData(0x6D+0x80, stall_open_high);
     sendData(0x27+0x80, MOVE_OPEN_VELOCITY); //VMAX
@@ -1160,7 +1160,7 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
     //Reverse direction
     sendData(0x20+0x80, 0); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
     sendData(0x26+0x80, MOVE_ACCEL); //AMAX
-    sendData(0x10+0x80, close_current_low);
+    sendData(0x10+0x80, current_close_low);
     sendData(0x6D+0x80, stall_close_low);
     sendData(0x21+0x80, max_steps); //XACTUAL
     sendData(0x27+0x80, MOVE_CLOSE_VELOCITY); //VMAX

@@ -85,9 +85,8 @@ void new_auto_calibrate_step_3(){ //AUTO CURRENT
   stepper.moveTo(max_steps);
   
   detachInterrupt(STALLGUARD);
-  attachInterrupt(STALLGUARD, current_calibration, RISING); 
-  
 
+  
 //  Set stallguard fixed value
   driver2.SGTHRS(open_stall_current_setup); //stall 0...255 / =20
     

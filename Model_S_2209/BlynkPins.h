@@ -93,6 +93,14 @@ BLYNK_CONNECTED() {
   
 }
 
+BLYNK_WRITE(V23) { // set position slider
+  Serial.print("Move to: ");
+  int q=(max_steps/100)*param.asInt();
+  stepper.moveTo(q);
+  command = CUSTOM_MOVE;
+  Serial.println(open_percent);
+}
+
 
 BLYNK_WRITE(V3) {
     switch (param.asInt()){
@@ -114,14 +122,11 @@ BLYNK_WRITE(V3) {
     case 3: // Item 5 //"STOP"
       Serial.println("STOPPING");
       command = STOP;
-
       stepper.setAcceleration(200000);
       stepper.setMaxSpeed(0);
       stepper.moveTo(stepper.currentPosition());
-
-      
-      break;
-      
+      stop_motor=true;
+      break; 
   }
 }
 
@@ -165,12 +170,8 @@ BLYNK_WRITE(V34) { // set global velocity
   Serial.println(MOVE_VELOCITY);
   preferences_local.putInt("move_velocity", MOVE_VELOCITY);
   stepper.setMaxSpeed(MOVE_VELOCITY);
-
-  
   TCOOLS = (3089838.00*pow(float(MOVE_VELOCITY),-1.00161534))*1.5; //Rsense = 0.12/ Recheck for 0.15
-
   Blynk.virtualWrite(V125, TCOOLS/10);
-  
   Serial.print("TCOOLS: ");
   Serial.println(TCOOLS);
 }
@@ -181,19 +182,35 @@ BLYNK_WRITE(V34) { // set global velocity
 A higher value gives a higher sensitivity. 
 A higher value makes StallGuard4 more sensitive and requires less torque to indicate a stall.
 */
+
+BLYNK_WRITE(V121) { // set stallguard OPEN value
+  Serial.print("set OPEN stall: ");
+  int q = param.asInt();
+  if(q > 255) q = 255;
+  if(q < 0) q = 0;
+  stall_open_high = q;
+  preferences_local.putInt("stall_open_hi", stall_open_high); 
+  Serial.println(stall_open_high);
+}
+
+BLYNK_WRITE(V122) { // set stallguard CLOSE value
+  Serial.print("set CLOSE stall: ");
+  int q=param.asInt();
+  if(q>255)q=255;
+  if(q<0)q=0;
+  stall_close_high = q;
+  preferences_local.putInt("stall_close_hi", stall_close_high); 
+  Serial.println(stall_close_high);
+}
+
 BLYNK_WRITE(V123) { // set stallguard OPEN value
   Serial.print("set OPEN stall: ");
   int q = param.asInt();
   if(q > 255) q = 255;
   if(q < 0) q = 0;
-  
-  open_stall_calibration_value = q;
-  preferences_local.putInt("2StallCalVal", q);
-  Serial.println(q);
-
-  stall_open = q;
-  preferences_local.putInt("stall_open", stall_open); 
-  Serial.println(stall_open);
+  stall_open_low = q;
+  preferences_local.putInt("stall_open_lo", stall_open_low); 
+  Serial.println(stall_open_low);
 }
 
 BLYNK_WRITE(V124) { // set stallguard CLOSE value
@@ -201,55 +218,53 @@ BLYNK_WRITE(V124) { // set stallguard CLOSE value
   int q=param.asInt();
   if(q>255)q=255;
   if(q<0)q=0;
-  
-  close_stall_calibration_value = q;
-  preferences_local.putInt("1StallCalVal", q);
-  Serial.println(q);
-
-  stall_close = q;
-  preferences_local.putInt("stall_close", stall_close); 
-  Serial.println(stall_close);
+  stall_close_low = q;
+  preferences_local.putInt("stall_close_lo", stall_close_low); 
+  Serial.println(stall_close_low);
 }
 
 //STALLGUARD
 
 
 
-BLYNK_WRITE(V25) { // set Current OPEN value
+BLYNK_WRITE(V25) { // set Current OPEN HIGH value
   Serial.print("set open current: ");
   int q=param.asInt();
-  open_current_calibration_value=q;
-  if(open_current_calibration_value>2000)open_current_calibration_value=2000;
-  preferences_local.putInt("2_cur_cal_val", q);
-  Serial.println(q);
-  Serial.print("Current: ");
-  Serial.print(q);
-  Serial.println(" Milli Amps");
-  Blynk.virtualWrite(V56, q);
-  current_open=q;
-  preferences_local.putInt("current_open", q);
-  driver2.rms_current(current_open);
-  Serial.println(current_open);
+  current_open_high=q;
+  preferences_local.putInt("cur_open_hi", current_open_high);
+  driver2.rms_current(current_open_high);
+  Serial.println(current_open_high);
 }
 
 
-BLYNK_WRITE(V26) { // set Current CLOSE value
+BLYNK_WRITE(V26) { // set Current CLOSE HIGH value
+  Serial.print("set close current: ");
+  int q=param.asInt(); 
+  current_close_high=q;
+  driver2.rms_current(current_close_high);
+  preferences_local.putInt("cur_close_hi", current_close_high);
+  Serial.println(current_close_high);
+}
+
+BLYNK_WRITE(V28) { // set Current OPEN value
+  Serial.print("set open current: ");
+  int q=param.asInt();
+  current_open_low=q;
+  preferences_local.putInt("cur_open_lo", current_open_low);
+  driver2.rms_current(current_open_low);
+  Serial.println(current_open_low);
+}
+
+BLYNK_WRITE(V29) { // set Current CLOSE value
   Serial.print("set close current: ");
   int q=param.asInt();
-  close_current_calibration_value=q;
-  if(close_current_calibration_value>2000)close_current_calibration_value=2000;
-  preferences_local.putInt("1_cur_cal_val", q);
-  Serial.println(q);
-  Serial.print("Current: ");
-  Serial.print(q);
-  Serial.println("Milli  Amps");
-  Blynk.virtualWrite(V55, q);
-  current_close=q;
-  driver2.rms_current(current_close);
-  preferences_local.putInt("current_close", q);
-  Serial.println(current_close);
-
+  current_close_low=q;
+  driver2.rms_current(current_close_low);
+  preferences_local.putInt("cur_close_lo", current_close_low);
+  Serial.println(current_close_low);
 }
+
+
 
 
 BLYNK_WRITE(V22) { // set distance value
@@ -261,21 +276,19 @@ BLYNK_WRITE(V22) { // set distance value
 }
 
 
-
-BLYNK_WRITE(V23) { // set position slider
-  Serial.print("Move to: ");
-  //preferences_local.putFloat("open_percent", (move_to_position/100)*param.asInt());
-  //Need to know max position first
-  int q=(max_steps/100)*param.asInt();
-  if(motor_running!=true){
-    stepper.moveTo(q);
-    command = CUSTOM_MOVE;
-    }
-    
-  Serial.println(open_percent);
+BLYNK_WRITE(V125) { // set TCOOLS
+  Serial.print("set TCOOLS: ");
+  int q=param.asFloat(); 
+  TCOOLS = q*10;
+  Serial.println(TCOOLS);
+  driver2.TCOOLTHRS(TCOOLS); // 
+  //preferences_local.putInt("tcools", TCOOLS);
 }
 
-BLYNK_WRITE(V24) { // set position slider
+
+
+
+BLYNK_WRITE(V24) { // time position slider
   Serial.print("Move to: ");
   //preferences_local.putFloat("open_percent", (move_to_position/100)*param.asInt());
   //Need to know max position first
@@ -414,6 +427,7 @@ BLYNK_WRITE(V10) {
 BLYNK_WRITE(V37) { 
   if(param.asInt()!=0){
     Blynk.email("{DEVICE_NAME} : Token", configStore.cloudToken);
+    Serial.println(configStore.cloudToken);
   }
 }
 
@@ -463,12 +477,20 @@ BLYNK_WRITE(V81) { //Set Zero
   }
 }
 
+BLYNK_WRITE(V110) { // Move to Open for setup
+  if(param.asInt()!=0){
+    command = POSITION_OPEN;
+    }
+}
 
-BLYNK_WRITE(V125) { // set TCOOLS
-  Serial.print("set TCOOLS: ");
-  int q=param.asFloat(); 
-  TCOOLS = q*10;
-  Serial.println(TCOOLS);
-  driver2.TCOOLTHRS(TCOOLS); // 
-  //preferences_local.putInt("tcools", TCOOLS);
+BLYNK_WRITE(V111) { // Move to Close for setup
+  if(param.asInt()!=0){
+    command = POSITION_CLOSE;
+    }
+}
+
+BLYNK_WRITE(V112) { // Move open for setup
+  if(param.asInt()!=0){
+    command = POSITION_ADJUST;
+    }
 }

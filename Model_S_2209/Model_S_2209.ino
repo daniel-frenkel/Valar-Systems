@@ -6,7 +6,7 @@
 
 
 //Comment out to use string
-//#define Model_W
+#define Model_W
 
 
 #include <Arduino.h>
@@ -37,8 +37,6 @@ AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
 
 TMC2209Stepper driver2(&SERIAL_PORT_2, R_SENSE , DRIVER_ADDRESS);
 
-
-
 #include "Functions.h"
 #include "MQTT.h"
 #include "BlynkPins.h"
@@ -49,7 +47,7 @@ TMC2209Stepper driver2(&SERIAL_PORT_2, R_SENSE , DRIVER_ADDRESS);
 #include "MotorControl.h"
 #endif
 
-#include "motor_calibration_new.h" //Not yet
+//#include "motor_calibration_new.h" //Not yet
 #include "OTA_S3.h"
 
 TaskHandle_t C0;
@@ -157,15 +155,14 @@ void loop() {
 
 // START BUTTONS
 // A press sets the command to open or close the motor.
-    
-    
+
     if(digitalRead(btn1)==LOW){
       stepper.moveTo(max_steps);
       command = CUSTOM_MOVE; 
       Serial.println(command);
     }
     
-    if(digitalRead(btn2)==LOW){
+    else if(digitalRead(btn2)==LOW){
       stepper.moveTo(0);
       command = CUSTOM_MOVE;
       Serial.println(command);
@@ -176,24 +173,14 @@ void loop() {
  
     if(command==STOP){
       stepper.setAcceleration(200000);
-      stepper.setMaxSpeed(0);
       stepper.moveTo(stepper.currentPosition());
       command = -1;
       
     }else if(command==CUSTOM_MOVE){
-      motor_running = true;
       move_motor();
       command = -1;
-    }else if(command==AUTO_CALIBRATE){
-      motor_running = true;
-      new_auto_calibrate_step_3();
-      command = -1;
-    }else if(command==STEP_1){
-      motor_running = true;
-      new_auto_calibrate_step_1();
-      command = -1;
     }
-    
+
     #ifdef Model_W
     
     else if(command==POSITION_CLOSE){
@@ -266,7 +253,7 @@ if(blynk_update==true){
   blynkUpdate();
   }
 
-}
+
 
 #ifdef Model_W
 
@@ -277,13 +264,14 @@ closeState = digitalRead(SENSOR1);
     // if the state has changed, increment the counter
     if (closeState == HIGH) {
       // if the current state is HIGH then the button went from off to on:
-      Blynk.virtualWrite(V46, "OPEN");;
+      Blynk.virtualWrite(V23, 100);
       Serial.println("DEVICE OPENED");
     } else {
       // if the current state is LOW then the button went from on to off:
       XACTUAL=0;
       preferences_local.putInt("XACTUAL", 0);
-      Blynk.virtualWrite(V46, "CLOSED");;
+      stepper.setCurrentPosition(XACTUAL);
+      Blynk.virtualWrite(V23, 0);
       Serial.println("DEVICE CLOSED");
       move_close_stall=false;
       move_open_stall=false;
@@ -359,7 +347,7 @@ if (stallOpenState != lastStallOpenState) {
   lastStallOpenState = stallOpenState;
 #endif
 
-
+}
 }
   
 
@@ -414,10 +402,10 @@ void blynkUpdate(){
   Blynk.virtualWrite(V20, disc_prefix);
   Blynk.virtualWrite(V24, timer_open_percent);
   
-  Blynk.virtualWrite(V25, open_current_calibration_value);
-  Blynk.virtualWrite(V26, close_current_calibration_value);
-  Blynk.virtualWrite(V121, open_stall_calibration_value);
-  Blynk.virtualWrite(V122, close_stall_calibration_value);
+  //Blynk.virtualWrite(V25, open_current_calibration_value);
+  //Blynk.virtualWrite(V26, close_current_calibration_value);
+  //Blynk.virtualWrite(V121, open_stall_calibration_value);
+  //Blynk.virtualWrite(V122, close_stall_calibration_value);
   
   Blynk.virtualWrite(V61, stepValue);
   Blynk.virtualWrite(V34, MOVE_VELOCITY/divider);

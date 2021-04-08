@@ -3,13 +3,13 @@
 
 #define ENABLE_PIN 27
 
-#define btn1 23//18
-#define btn2 34//21 
+#define btn1 23
+#define btn2 34
 
 #define RXD2 16
 #define TXD2 17
 
 #define STALLGUARD 2 
 
-#define SENSOR1 22//16
-#define SENSOR2 32//17
+#define SENSOR1 32
+#define SENSOR2 22

@@ -64,16 +64,24 @@ int step_5_close_stall_low = -5;
 int step_4_open_passes = 10;
 int step_4_close_passes = 10;
 
+
+#ifdef Model_W
+float gear_ratio = 5.18;
+float inches_mm = 25.4;
+int motor_microsteps = 64; //
+int full_steps_mm = 100;
+float one_inch = gear_ratio * (full_steps_mm * 16) * inches_mm;
+#else
+
 float gear_ratio = 1; // Allow user to change
 float pulley_diameter = 12.22; //mm // Allow user to change
-
 float inches_mm = 25.4;
 int motor_microsteps = 64; //
 int full_steps_mm = 0.1508;//30.16;
 float circumferance = 2 * PI * (pulley_diameter/2);
 float inch_ratio = inches_mm/circumferance;
-
 float one_inch = (motor_microsteps * 200) * inch_ratio * gear_ratio; //3.8mm radius
+#endif
 
 int stall_close_high;
 int stall_open_high;
@@ -87,10 +95,10 @@ int current_close;
 int current_open;
 
 int current_setup = 2000;
-int close_current_high;
-int open_current_high;
-int close_current_low;
-int open_current_low;
+int current_close_high;
+int current_open_high;
+int current_open_low;
+int current_close_low;
 
 
 float move_to_position;
@@ -176,7 +184,8 @@ int lastStallOpenState = 0;
 int stallCloseState = 0;
 int lastStallCloseState = 0;
 
-
+bool sensor1_trip = false;
+bool sensor2_trip = false;
 
 int buzzerId;
 int dogBuzzerId;

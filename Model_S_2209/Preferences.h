@@ -14,6 +14,19 @@ void load_preferences(){
   stall_open = preferences_local.getLong("stall_open", 20);
   current_open = preferences_local.getInt("current_open", 500);
   current_close = preferences_local.getInt("current_close", 500);
+
+  stall_close_high = preferences_local.getLong("stall_close_hi", 20);
+  stall_open_high = preferences_local.getLong("stall_open_hi", 20);
+  current_open_high = preferences_local.getInt("cur_open_hi", 500);
+  current_close_high = preferences_local.getInt("cur_close_hi", 500);
+
+  stall_close_low = preferences_local.getLong("stall_close_lo", 20);
+  stall_open_low = preferences_local.getLong("stall_open_lo", 20);
+  current_open_low = preferences_local.getInt("cur_open_lo", 500);
+  current_close_low = preferences_local.getInt("cur_close_lo", 500);
+
+
+  
   open_stall_calibration = preferences_local.getInt("OStallCal", 4128768);
   open_stall_calibration_value = preferences_local.getInt("2StallCalVal", 63);
   close_stall_calibration = preferences_local.getInt("CStallCal", 4128768);

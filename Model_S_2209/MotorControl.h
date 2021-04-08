@@ -135,7 +135,7 @@ void force_close(){
      motor_running = true; 
      stepper.enableOutputs();
      stepper.setAcceleration(MOVE_ACCEL);
-     stepper.setSpeed(MOVE_CLOSE_VELOCITY);
+     stepper.setMaxSpeed(MOVE_CLOSE_VELOCITY);
      driver2.TCOOLTHRS(300); //  
      driver2.rms_current(current_close);          
      driver2.SGTHRS(stall_close);
@@ -199,8 +199,6 @@ void setup_motors(){
   stepper.disableOutputs();
   
   attachInterrupt(STALLGUARD, stalled_position, RISING);
-  attachInterrupt(SENSOR1, sensor_long, FALLING);
-  attachInterrupt(SENSOR2, sensor_short, FALLING);
   
   if(CLOSE_POSITION==1){
     driver2.shaft(true);
