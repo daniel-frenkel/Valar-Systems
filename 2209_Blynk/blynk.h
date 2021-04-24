@@ -124,7 +124,6 @@ BLYNK_WRITE(V25) { // set Current OPEN value
   Serial.print("set open current: ");
   int q=param.asInt();
   current_open=q;
-  if(current_open>2000)current_open=2000;
   preferences_local.putInt("current_open", current_open);
   driver2.rms_current(current_open);
   Serial.println(current_open);
@@ -135,7 +134,6 @@ BLYNK_WRITE(V26) { // set Current CLOSE value
   Serial.print("set close current: ");
   int q=param.asInt();
   current_close=q;
-  if(current_close>2000)current_close=2000;
   driver2.rms_current(current_close);
   preferences_local.putInt("current_close", current_close);
   Serial.println(current_close);
