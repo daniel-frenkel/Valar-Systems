@@ -6,7 +6,7 @@
 
 
 //Comment out to use string
-#define Model_W
+//#define Model_W
 
 
 #include <Arduino.h>
@@ -111,8 +111,12 @@ void setup() {
  
   preferences_local.begin("local", false);
 
-  pinMode(btn1,INPUT_PULLUP);
-  pinMode(btn2,INPUT_PULLUP);
+  pinMode(ENABLE_PIN, OUTPUT);
+  pinMode(DIR_PIN, OUTPUT);
+  pinMode(STEP_PIN, OUTPUT);
+  pinMode(STALLGUARD ,INPUT);
+  pinMode(btn1,INPUT);
+  pinMode(btn2,INPUT);
 
   disableCore0WDT();
    
@@ -156,16 +160,22 @@ void loop() {
 // START BUTTONS
 // A press sets the command to open or close the motor.
 
+    
+    
+    delay(10);
+    
     if(digitalRead(btn1)==LOW){
       stepper.moveTo(max_steps);
       command = CUSTOM_MOVE; 
+      Serial.print("btn1: ");
       Serial.println(command);
     }
     
     else if(digitalRead(btn2)==LOW){
       stepper.moveTo(0);
       command = CUSTOM_MOVE;
-      Serial.println(command);
+      Serial.println("btn2: ");
+      Serial.print(command);
     }
     
  //END BUTTTONS

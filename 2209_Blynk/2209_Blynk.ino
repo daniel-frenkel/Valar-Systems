@@ -117,7 +117,10 @@ void loop() { //MOTOR FUNCTIONS ONLY
 
 // START BUTTONS
 // A press sets the command to open or close the motor.
-    
+
+//REMOVE BUTTONS IF NOT IN USE
+//ALWAYS USE PULL-UP RESISTORS FOR BUTTONS
+
     if(digitalRead(BUTTON1)==LOW){
       stepper.moveTo(max_steps);
       command = MOVE; 

@@ -7,7 +7,12 @@
 
 #define BOARD_NAME                    "MorningRod"        // Name of your product. Should match App Export request info.
 #define BOARD_VENDOR                  "MorningRod"        // Name of your company. Should match App Export request info. 
+
+#ifdef Model_W
 #define BOARD_TEMPLATE_ID             "TMPL82292"            // ID of the Tile Template. Can be found in Tile Template Settings
+#else
+#define BOARD_TEMPLATE_ID             "TMPL20925"            // ID of the Tile Template. Can be found in Tile Template Settings
+#endif
 
 #define PRODUCT_WIFI_SSID             "Valar"         // Name of the device, to be displayed during configuration. Should match export request info.
 #define BOARD_CONFIG_AP_URL           "morningrod.com"     // Config page will be available in a browser at 'http://our-product.cc/'

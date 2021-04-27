@@ -138,7 +138,7 @@ Quick overview video of what we will do next
 <figure class="video_container">
 <iframe src="https://drive.google.com/file/d/1nO-vsE0Z4he6Ik7Eh6WGSttWqR89i2n2/preview" width="800" height="450" frameborder="0" allowfullscreen="true"></iframe>
 </figure>
-
+ 
 
 **ALLOW THE ADHESIVE TO SET FOR 24 HOURS BEFORE USING IT!!!!!!!!!**
 

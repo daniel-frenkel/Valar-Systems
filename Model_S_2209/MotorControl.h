@@ -38,18 +38,8 @@ else if(XACTUAL < move_to_position){
   int buttonTime = millis()+3000;
 
   while (stepper.currentPosition() != stepper.targetPosition()) { // wait for position_reached flag
-  
   stepper.run();
-
-  //Attach interrupt after 1 second to avoid accidental press
-  if(buttonInterrupt==false && buttonTime<millis()){
-  Serial.println("BUTTONS ATTACHED");
-  //attachInterrupt(btn1, button_stop, FALLING); //NEW
-  //attachInterrupt(btn2, button_stop, FALLING); //NEW
-  buttonInterrupt=true;
   }
-
-}
 
 }
 
@@ -67,14 +57,6 @@ else if(XACTUAL > move_to_position){
   while (stepper.currentPosition() != stepper.targetPosition()) { // wait for position_reached flag
 
   stepper.run();
-
-//  if(digitalRead(btn1==LOW) || digitalRead(btn2==LOW)){
-//  Serial.println("New Button Stop");
-//  stepper.setAcceleration(200000);
-//  stepper.setMaxSpeed(0);
-//  delay(100);
-//  stepper.moveTo(stepper.currentPosition());
-//  }
 
 }
   

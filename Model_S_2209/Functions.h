@@ -1,8 +1,6 @@
 void IRAM_ATTR stalled_position()
 {
-  Serial.println("Stalled INTERRUPT");
-  //stepper.setAcceleration(200000);
-  //stepper.moveTo(stepper.currentPosition());
+  stepper.moveTo(stepper.currentPosition());
   stalled_motor = true;
   stop_motor = true;
 }
