@@ -165,13 +165,16 @@ void setup_motors(){
   driver2.begin();
   driver2.toff(4);
   driver2.blank_time(24);
-  driver2.rms_current(300); 
+  driver2.I_scale_analog(false);
+  driver2.internal_Rsense(false);
+  driver2.mstep_reg_select(true);
+  driver2.rms_current(2000); 
   driver2.microsteps(motor_microsteps);
   driver2.TCOOLTHRS(300); // 
   driver2.TPWMTHRS(0);
   driver2.semin(0);
-  driver2.semax(2);
-  driver2.sedn(0b00);
+  //driver2.semax(2);
+  //driver2.sedn(0b00);
   
   driver2.en_spreadCycle(false);
   driver2.pdn_disable(true);
