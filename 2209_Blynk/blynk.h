@@ -125,7 +125,7 @@ BLYNK_WRITE(V25) { // set Current OPEN value
   int q=param.asInt();
   current_open=q;
   preferences_local.putInt("current_open", current_open);
-  driver2.rms_current(current_open);
+  driver.rms_current(current_open);
   Serial.println(current_open);
 }
 
@@ -134,7 +134,7 @@ BLYNK_WRITE(V26) { // set Current CLOSE value
   Serial.print("set close current: ");
   int q=param.asInt();
   current_close=q;
-  driver2.rms_current(current_close);
+  driver.rms_current(current_close);
   preferences_local.putInt("current_close", current_close);
   Serial.println(current_close);
 }
@@ -144,13 +144,13 @@ BLYNK_WRITE(V36) { // Reverse Motor Turn
   if(param.asInt()==1){
     Serial.println("Reverse Turn ON ");
     CLOSE_POSITION = 1; // tell control loop what to do
-    driver2.shaft(true);
+    driver.shaft(true);
     preferences_local.putInt("close_pos", CLOSE_POSITION);
   }
   else{
     Serial.println("Reverse Turn OFF ");
     CLOSE_POSITION = 2;
-    driver2.shaft(false);
+    driver.shaft(false);
     preferences_local.putInt("close_pos", CLOSE_POSITION);
   }
 }
@@ -177,6 +177,6 @@ BLYNK_WRITE(V125) {
   int q=param.asFloat(); 
   TCOOLS = q*10;
   Serial.println(TCOOLS);
-  driver2.TCOOLTHRS(TCOOLS); // 
+  driver.TCOOLTHRS(TCOOLS); // 
   preferences_local.putInt("tcools", TCOOLS);
 }
