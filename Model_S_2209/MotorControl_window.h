@@ -27,8 +27,8 @@ if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_po
   Serial.println("V1 Opening 2 Positions");
   move_direction=2;
 
-  driver2.SGTHRS(stall_open_high);
-  driver2.rms_current(current_open_high); 
+  driver.SGTHRS(stall_open_high);
+  driver.rms_current(current_open_high); 
   stepper.moveTo(just_open_position); 
   stepper.setMaxSpeed(MOVE_VELOCITY);
       
@@ -42,8 +42,8 @@ if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_po
     
     if ((stepper.currentPosition() == stepper.targetPosition()) && number_stop == 0) { //JOP reached
       Serial.println("JOP REACHED");
-      driver2.SGTHRS(stall_open_low);
-      driver2.rms_current(current_open_low); 
+      driver.SGTHRS(stall_open_low);
+      driver.rms_current(current_open_low); 
       Serial.println("STALL LOW SET");
       stepper.moveTo(move_to_position); 
       number_stop = 1;     
@@ -61,8 +61,8 @@ if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_po
   Serial.println("V2 Closing 2 Positions");
   move_direction=1;
   run_section = 2;
-  driver2.SGTHRS(stall_close_low);
-  driver2.rms_current(current_close_low); 
+  driver.SGTHRS(stall_close_low);
+  driver.rms_current(current_close_low); 
   stepper.moveTo(just_open_position); 
   stepper.setMaxSpeed(MOVE_VELOCITY);
       
@@ -76,8 +76,8 @@ if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_po
     
     if ((stepper.currentPosition() == stepper.targetPosition()) && number_stop == 0) { //JOP reached
       Serial.println("JOP REACHED");
-      driver2.SGTHRS(stall_close_high);
-      driver2.rms_current(current_close_high); 
+      driver.SGTHRS(stall_close_high);
+      driver.rms_current(current_close_high); 
       Serial.println("STALL HIGH SET");
       stepper.moveTo(move_to_position); 
       number_stop = 1;
@@ -95,8 +95,8 @@ if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_po
   Serial.println("V3");
   move_direction=2;
 
-  driver2.SGTHRS(stall_open_low);
-  driver2.rms_current(current_open_low); 
+  driver.SGTHRS(stall_open_low);
+  driver.rms_current(current_open_low); 
   stepper.moveTo(move_to_position); 
   stepper.setMaxSpeed(MOVE_VELOCITY);
 
@@ -119,8 +119,8 @@ if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_po
   Serial.println("V4");
   move_direction=1;
 
-  driver2.SGTHRS(stall_close_low);
-  driver2.rms_current(current_close_low); 
+  driver.SGTHRS(stall_close_low);
+  driver.rms_current(current_close_low); 
   stepper.moveTo(move_to_position); 
   stepper.setMaxSpeed(MOVE_VELOCITY);
   
@@ -143,8 +143,8 @@ if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_po
   Serial.println("V5");
   move_direction=1;
 
-  driver2.SGTHRS(stall_close_high);
-  driver2.rms_current(current_close_high); 
+  driver.SGTHRS(stall_close_high);
+  driver.rms_current(current_close_high); 
   stepper.moveTo(move_to_position); 
   stepper.setMaxSpeed(MOVE_VELOCITY);
 
@@ -167,8 +167,8 @@ if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_po
   Serial.println("V6");
   move_direction=2;
 
-  driver2.SGTHRS(stall_open_high);
-  driver2.rms_current(current_open_high); 
+  driver.SGTHRS(stall_open_high);
+  driver.rms_current(current_open_high); 
   stepper.moveTo(move_to_position); 
   stepper.setMaxSpeed(MOVE_VELOCITY);
   
@@ -226,8 +226,8 @@ void position_close(){
      stepper.enableOutputs();
      stepper.setAcceleration(MOVE_ACCEL);
      stepper.setMaxSpeed(MOVE_VELOCITY);
-     driver2.rms_current(current_close_high);          
-     driver2.SGTHRS(stall_close_high);
+     driver.rms_current(current_close_high);          
+     driver.SGTHRS(stall_close_high);
 
      stepper.setCurrentPosition(XACTUAL);
      stepper.moveTo(-one_inch*40);
@@ -265,8 +265,8 @@ void position_open(){
      stepper.enableOutputs();
      stepper.setAcceleration(MOVE_ACCEL);
      stepper.setMaxSpeed(MOVE_VELOCITY);
-     driver2.rms_current(current_open_high);          
-     driver2.SGTHRS(stall_open_high);
+     driver.rms_current(current_open_high);          
+     driver.SGTHRS(stall_open_high);
 
      stepper.setCurrentPosition(XACTUAL);
      stepper.moveTo(one_inch*40);
@@ -301,8 +301,8 @@ void position_adjust(){
      stepper.enableOutputs();
      stepper.setAcceleration(MOVE_ACCEL);
      stepper.setMaxSpeed(MOVE_VELOCITY);
-     driver2.rms_current(current_open_high);          
-     driver2.SGTHRS(stall_open_high);
+     driver.rms_current(current_open_high);          
+     driver.SGTHRS(stall_open_high);
 
      stepper.setCurrentPosition(XACTUAL);
      stepper.moveTo(one_inch*2);
@@ -345,19 +345,19 @@ void setup_motors(){
   pinMode(SENSOR2, INPUT);
   SERIAL_PORT_2.begin(115200);
 
-  driver2.begin();
-  driver2.toff(4);
-  driver2.blank_time(24);
-  driver2.rms_current(300); 
-  driver2.microsteps(motor_microsteps);
-  driver2.TCOOLTHRS(300); // 
-  driver2.TPWMTHRS(0);
-  driver2.semin(0);
-  driver2.semax(2);
-  driver2.sedn(0b00);
+  driver.begin();
+  driver.toff(4);
+  driver.blank_time(24);
+  driver.rms_current(300); 
+  driver.microsteps(motor_microsteps);
+  driver.TCOOLTHRS(300); // 
+  driver.TPWMTHRS(0);
+  driver.semin(0);
+  driver.semax(2);
+  driver.sedn(0b00);
   
-  driver2.en_spreadCycle(false);
-  driver2.pdn_disable(true);
+  driver.en_spreadCycle(false);
+  driver.pdn_disable(true);
 
   stepper.setEnablePin(ENABLE_PIN);
   stepper.setPinsInverted(false, false, true);
@@ -368,8 +368,8 @@ void setup_motors(){
   attachInterrupt(SENSOR2, sensor_short, FALLING);
   
   if(CLOSE_POSITION==1){
-    driver2.shaft(true);
+    driver.shaft(true);
   }else{
-    driver2.shaft(false);
+    driver.shaft(false);
     }
 }

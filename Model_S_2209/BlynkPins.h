@@ -232,7 +232,7 @@ BLYNK_WRITE(V25) { // set Current OPEN HIGH value
   int q=param.asInt();
   current_open_high=q;
   preferences_local.putInt("cur_open_hi", current_open_high);
-  driver2.rms_current(current_open_high);
+  driver.rms_current(current_open_high);
   Serial.println(current_open_high);
 }
 
@@ -241,7 +241,7 @@ BLYNK_WRITE(V26) { // set Current CLOSE HIGH value
   Serial.print("set close current: ");
   int q=param.asInt(); 
   current_close_high=q;
-  driver2.rms_current(current_close_high);
+  driver.rms_current(current_close_high);
   preferences_local.putInt("cur_close_hi", current_close_high);
   Serial.println(current_close_high);
 }
@@ -251,7 +251,7 @@ BLYNK_WRITE(V28) { // set Current OPEN value
   int q=param.asInt();
   current_open_low=q;
   preferences_local.putInt("cur_open_lo", current_open_low);
-  driver2.rms_current(current_open_low);
+  driver.rms_current(current_open_low);
   Serial.println(current_open_low);
 }
 
@@ -259,7 +259,7 @@ BLYNK_WRITE(V29) { // set Current CLOSE value
   Serial.print("set close current: ");
   int q=param.asInt();
   current_close_low=q;
-  driver2.rms_current(current_close_low);
+  driver.rms_current(current_close_low);
   preferences_local.putInt("cur_close_lo", current_close_low);
   Serial.println(current_close_low);
 }
@@ -281,7 +281,7 @@ BLYNK_WRITE(V125) { // set TCOOLS
   int q=param.asFloat(); 
   TCOOLS = q*10;
   Serial.println(TCOOLS);
-  driver2.TCOOLTHRS(TCOOLS); // 
+  driver.TCOOLTHRS(TCOOLS); // 
   //preferences_local.putInt("tcools", TCOOLS);
 }
 
@@ -435,13 +435,13 @@ BLYNK_WRITE(V36) { // Reverse Motor Turn
   if(param.asInt()==1){
     Serial.println("Reverse Turn ON ");
     CLOSE_POSITION = 1; // tell control loop what to do
-    driver2.shaft(true);
+    driver.shaft(true);
     preferences_local.putInt("close_pos", CLOSE_POSITION);
   }
   else{
     Serial.println("Reverse Turn OFF ");
     CLOSE_POSITION = 2;
-    driver2.shaft(false);
+    driver.shaft(false);
     preferences_local.putInt("close_pos", CLOSE_POSITION);
   }
 }

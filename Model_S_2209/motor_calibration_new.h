@@ -8,7 +8,7 @@ void new_auto_calibrate_step_1(){  //STEP 1 - Set Max distance
    
   stepper.setAcceleration(MOVE_ACCEL);
   stepper.setMaxSpeed(MOVE_VELOCITY/4);//quarter speed
-  driver2.rms_current(2000); //current = 2000
+  driver.rms_current(2000); //current = 2000
 
   stepper.setCurrentPosition(0);
   stepper.moveTo(-one_inch*20);
@@ -88,10 +88,10 @@ void new_auto_calibrate_step_3(){ //AUTO CURRENT
 
   
 //  Set stallguard fixed value
-  driver2.SGTHRS(open_stall_current_setup); //stall 0...255 / =20
+  driver.SGTHRS(open_stall_current_setup); //stall 0...255 / =20
     
 //  Set highest current value
-  driver2.rms_current(open_current_setup_value); //current = 2000
+  driver.rms_current(open_current_setup_value); //current = 2000
 
   int number = 0; 
   
@@ -104,7 +104,7 @@ void new_auto_calibrate_step_3(){ //AUTO CURRENT
   if (number >= 10000){ //  Decrease current quickly. Once every 100000 cycles
   open_current_setup_value = open_current_setup_value-20;
   if(open_current_setup_value < 200)open_current_setup_value = 200;
-  driver2.rms_current(open_current_setup_value);
+  driver.rms_current(open_current_setup_value);
   //Serial.println(open_current_setup_value-1);
   number = 0; 
   }

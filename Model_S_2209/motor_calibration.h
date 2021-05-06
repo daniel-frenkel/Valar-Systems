@@ -6,7 +6,7 @@ void new_auto_calibrate_step_1(){  //STEP 1 - Set Max distance
 
   //Warn user to leave window unlocked
    
-  driver2.rms_current(setup_current);
+  driver.rms_current(setup_current);
 
   
   //Use directional motor to move toward sensor. No positioning
