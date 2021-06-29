@@ -29,32 +29,14 @@ void load_preferences(){
   Serial.println("LOADING PREFERENCES");
 
   wifi_set = preferences.getInt("wifi_set", 0);
-  Serial.print("wifi_set: ");
-  Serial.println(wifi_set);
-  
   ssid = preferences.getString ("ssid", "NO_SSID");
-  Serial.println(ssid);
-  
   pass = preferences.getString ("pass", "NO_PASSWORD");
-  Serial.println(pass);
-  
-  max_steps = preferences.getLong("max_steps", 2000);
-  Serial.println(max_steps);
-  
-  current = preferences.getLong("current", 800);
-  Serial.println(current);
-  
-  stall = preferences.getInt("stall", 20);
-  Serial.println(stall);
-  
-  accel = preferences.getInt("accel", 1000);
-  Serial.println(accel);
-  
-  max_speed = preferences.getInt("max_speed", 1000);
-  Serial.println(max_speed);
-  
+  max_steps = preferences.getInt("max_steps", 2000);
+  current = preferences.getLong("current", 400);
+  stall = preferences.getInt("stall", 10);
+  accel = preferences.getInt("accel", 100);
+  max_speed = preferences.getInt("max_speed", 100);
   tcools = (3089838.00*pow(float(max_speed),-1.00161534))*1.5;
-  Serial.println(tcools);
 
   Serial.println("FINISHED LOADING PREFERENCES");
   }
