@@ -91,7 +91,7 @@ void API()
       Serial.println(pass);
       Serial.println(preferences.getString ("pass", "NO_PASSWORD"));
       
-      request->send(200, "text/html", "WiFi Credentials Set. Connect to your home WiFi network, find the IP address of this device, and go to http://NEW-IP-ADDRESS/settings");
+      request->send(200, "text/html", "WiFi Credentials Set. Connect to your home WiFi network, find the IP address of this device, and go to http://NEW-IP-ADDRESS");
       WiFi.softAPdisconnect(true);
       delay(500);
       WiFi.begin(ssid.c_str(), pass.c_str());  
