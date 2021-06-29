@@ -15,7 +15,7 @@
 #define SENSOR2 32
 
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
-TMC2209Stepper driver2(&Serial2, 0.15f , 0b00);
+TMC2209Stepper driver(&Serial2, 0.15f , 0b00);
 TaskHandle_t C0; //Dual Core Setup
 Preferences preferences_local;
 
@@ -85,29 +85,30 @@ void setup() {
 
 //DRIVER SETUP
   Serial2.begin(115200);
-  driver2.pdn_disable(true);
-  driver2.begin();
-  driver2.TPWMTHRS(0);
-  driver2.semin(0);
-  driver2.semax(2);
-  driver2.sedn(0b00);
-  driver2.toff(4);
-  driver2.blank_time(24);
-  driver2.microsteps(motor_microsteps);
-  
-  driver2.en_spreadCycle(false);
-  
+  driver.begin();
+  driver.toff(4);
+  driver.blank_time(24);
+  driver.I_scale_analog(false);
+  driver.internal_Rsense(false);
+  driver.mstep_reg_select(true);
+  driver.rms_current(2000);
+  driver.microsteps(motor_microsteps);
+  driver.TCOOLTHRS(300); // 
+  driver.TPWMTHRS(0);
+  driver.semin(0);
+  driver.en_spreadCycle(false);
+  driver.pdn_disable(true);
 
-  //MOTOR SETUP
+//MOTOR SETUP
   stepper.setEnablePin(ENABLE_PIN);
   stepper.setPinsInverted(false, false, true);
   stepper.setCurrentPosition(XACTUAL);
   stepper.disableOutputs();
   
   if(CLOSE_POSITION==1){
-    driver2.shaft(true);
+    driver.shaft(true);
   }else{
-    driver2.shaft(false);
+    driver.shaft(false);
   }
     
   Serial.println("SETUP COMPLETE");

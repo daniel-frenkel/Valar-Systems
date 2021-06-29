@@ -9,15 +9,15 @@ XACTUAL = stepper.currentPosition();
 stepper.enableOutputs();
 stepper.setAcceleration(MOVE_ACCEL);
 stepper.setMaxSpeed(MOVE_VELOCITY);
-driver2.TCOOLTHRS(TCOOLS);
+driver.TCOOLTHRS(TCOOLS);
  
 //V3
 if(move_to_position > XACTUAL){
 
   Serial.println("V3");
   
-  driver2.SGTHRS(stall_open);
-  driver2.rms_current(current_open); 
+  driver.SGTHRS(stall_open);
+  driver.rms_current(current_open); 
 
   while (stepper.currentPosition() != stepper.targetPosition()) { // wait for position_reached flag
   stepper.run();
@@ -30,8 +30,8 @@ else if(move_to_position < XACTUAL){
 
   Serial.println("V4");
 
-  driver2.SGTHRS(stall_close);
-  driver2.rms_current(current_close); 
+  driver.SGTHRS(stall_close);
+  driver.rms_current(current_close); 
  
   while (stepper.currentPosition() != stepper.targetPosition()) { // wait for position_reached flag
   stepper.run();

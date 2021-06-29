@@ -29,9 +29,9 @@ else if(XACTUAL < move_to_position){
   Serial.println("V3");
   stepper.enableOutputs();
   move_direction=2;
-  driver2.TCOOLTHRS(TCOOLS); // 
-  driver2.SGTHRS(stall_open);
-  driver2.rms_current(current_open); 
+  driver.TCOOLTHRS(TCOOLS); // 
+  driver.SGTHRS(stall_open);
+  driver.rms_current(current_open); 
   stepper.moveTo(move_to_position); 
 
   bool buttonInterrupt=false;
@@ -49,9 +49,9 @@ else if(XACTUAL > move_to_position){
   Serial.println("V4");
   stepper.enableOutputs();
   move_direction=1;
-  driver2.TCOOLTHRS(TCOOLS); // 
-  driver2.SGTHRS(stall_close);
-  driver2.rms_current(current_close); 
+  driver.TCOOLTHRS(TCOOLS); // 
+  driver.SGTHRS(stall_close);
+  driver.rms_current(current_close); 
   stepper.moveTo(move_to_position); 
  
   while (stepper.currentPosition() != stepper.targetPosition()) { // wait for position_reached flag
@@ -118,9 +118,9 @@ void force_close(){
      stepper.enableOutputs();
      stepper.setAcceleration(MOVE_ACCEL);
      stepper.setMaxSpeed(MOVE_CLOSE_VELOCITY);
-     driver2.TCOOLTHRS(300); //  
-     driver2.rms_current(current_close);          
-     driver2.SGTHRS(stall_close);
+     driver.TCOOLTHRS(300); //  
+     driver.rms_current(current_close);          
+     driver.SGTHRS(stall_close);
 
 
      attachInterrupt(btn1, button_stop, FALLING); //NEW
@@ -162,22 +162,21 @@ void setup_motors(){
   pinMode(STALLGUARD ,INPUT);
   SERIAL_PORT_2.begin(115200);
 
-  driver2.begin();
-  driver2.toff(4);
-  driver2.blank_time(24);
-  driver2.I_scale_analog(false);
-  driver2.internal_Rsense(false);
-  driver2.mstep_reg_select(true);
-  driver2.rms_current(2000); 
-  driver2.microsteps(motor_microsteps);
-  driver2.TCOOLTHRS(300); // 
-  driver2.TPWMTHRS(0);
-  driver2.semin(0);
-  //driver2.semax(2);
-  //driver2.sedn(0b00);
+  driver.begin();
+  driver.toff(4);
+  driver.blank_time(24);
+  driver.I_scale_analog(false);
+  driver.internal_Rsense(false);
+  driver.mstep_reg_select(true);
+  driver.rms_current(2000); 
+  driver.microsteps(motor_microsteps);
+  driver.TCOOLTHRS(300); // 
+  driver.TPWMTHRS(0);
+  driver.semin(0);
+
   
-  driver2.en_spreadCycle(false);
-  driver2.pdn_disable(true);
+  driver.en_spreadCycle(false);
+  driver.pdn_disable(true);
 
   stepper.setEnablePin(ENABLE_PIN);
   stepper.setPinsInverted(false, false, true);
@@ -186,8 +185,8 @@ void setup_motors(){
   attachInterrupt(STALLGUARD, stalled_position, RISING);
   
   if(CLOSE_POSITION==1){
-    driver2.shaft(true);
+    driver.shaft(true);
   }else{
-    driver2.shaft(false);
+    driver.shaft(false);
     }
 }
