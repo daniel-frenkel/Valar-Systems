@@ -31,7 +31,7 @@ void setup() {
   xTaskCreatePinnedToCore(
     MotorTask //Motor Task
     ,  "MotorTask"   // A name just for humans
-    ,  1024  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  1024*4  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  3  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL 
@@ -72,6 +72,7 @@ void MotorTask(void *pvParameters)  // Motor Task
     {
       //button_action();
       button_change();
+      wifi_button = false;
     }
     else
     {
