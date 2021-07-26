@@ -10,43 +10,36 @@ This firmware will get you started with spinning the VAL-1000 WiFi stepper board
 If you need to move something heavy, over 50 lbs, consider using a geared motor [like this](https://amzn.to/3c9xmI0)
 
 ## Step 2 - Download and open the Arduino code
+Using Arduino, open the VAL-1000.ino file
+
 You will need to install the ESP32 core, as well as several libraries:
 
-Install the ESP32 core by following the instructions here
+Install the ESP32 core by following the instructions [here](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
 
 Install the following libriaires inside Arduino
-1. TMC Stepper
-2. AccelStepper
+1. [TMC Stepper](https://www.arduino.cc/reference/en/libraries/tmcstepper/)
+2. [AccelStepper](https://www.arduino.cc/reference/en/libraries/accelstepper/)
 
-Install the following libraries outside Arduino
-1)
-2) 
+Install the following libraries outside Arduino. These cannot be installed using the Arduino library manager.
+1)[ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
+2)[AsyncTCP](https://github.com/me-no-dev/AsyncTCP)  
 
-https://reacoda.gitbook.io/molemi-iot/introducing-the-nodemcu/display-the-dht11-sensor-reading-on-a-web-server-using-nodemcu./installing-dht-library-on-the-esp8266/installing-the-asynchronous-web-server-library
+a) Installing the ESPAsyncWebServer library
 
-Installing the ESPAsyncWebServer library
+-[Click here](https://github.com/me-no-dev/ESPAsyncWebServer/archive/refs/heads/master.zip) to download the ESPAsyncWebServer library. You should have a .zip folder in your Downloads folder
+-Unzip the .zip folder and you should get ESPAsyncWebServer-master folder
+-Rename your folder from ESPAsyncWebServer-master to ESPAsyncWebServer
+-Move the ESPAsyncWebServer folder to your Arduino IDE installation libraries folder
 
-Click here to download the ESPAsyncWebServer library. You should have a .zip folder in your Downloads folder
-Unzip the .zip folder and you should get ESPAsyncWebServer-master folder
-Rename your folder from ESPAsyncWebServer-master to ESPAsyncWebServer
-Move the ESPAsyncWebServer folder to your Arduino IDE installation libraries folder
+b) Installing the AsyncTCP Library
 
-Installing the ESPAsync TCP Library
-
-The ESPAsyncWebServer library requires the ESPAsyncTCP library to work. Follow the next steps to install that library:
-Click here to download the ESPAsyncTCP library. You should have a .zip folder in your Downloads folder
-Unzip the .zip folder and you should get ESPAsyncTCP-master folder
-Rename your folder from ESPAsyncTCP-master to ESPAsyncTCP
-Move the ESPAsyncTCP folder to your Arduino IDE installation libraries folder
+-The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the next steps to install that library:
+-[Click here](https://github.com/me-no-dev/AsyncTCP/archive/refs/heads/master.zip) to download the ESPAsyncTCP library. You should have a .zip folder in your Downloads folder
+-Unzip the .zip folder and you should get ESPAsyncTCP-master folder
+-Rename your folder from AsyncTCP-master to AsyncTCP
+-Move the ESPAsyncTCP folder to your Arduino IDE installation libraries folder
 
 Finally, re-open your Arduino IDE.
-
-
-
-https://github.com/me-no-dev/ESPAsyncWebServer/archive/refs/heads/master.zip
-https://github.com/me-no-dev/AsyncTCP/archive/refs/heads/master.zip
-
-
 
 ## Step 3 - Download phone app
 Download the Blynk app for iOS and Android
