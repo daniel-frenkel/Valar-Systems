@@ -26,18 +26,18 @@ Install the following libraries outside Arduino. These cannot be installed using
 
 a. Installing the ESPAsyncWebServer library
 
--[Click here](https://github.com/me-no-dev/ESPAsyncWebServer/archive/refs/heads/master.zip) to download the ESPAsyncWebServer library. You should have a .zip folder in your Downloads folder
--Unzip the .zip folder and you should get ESPAsyncWebServer-master folder
--Rename your folder from ESPAsyncWebServer-master to ESPAsyncWebServer
--Move the ESPAsyncWebServer folder to your Arduino IDE installation libraries folder
+- [Click here](https://github.com/me-no-dev/ESPAsyncWebServer/archive/refs/heads/master.zip) to download the ESPAsyncWebServer library. You should have a .zip folder in your Downloads folder
+- Unzip the .zip folder and you should get ESPAsyncWebServer-master folder
+- Rename your folder from ESPAsyncWebServer-master to ESPAsyncWebServer
+- Move the ESPAsyncWebServer folder to your Arduino IDE installation libraries folder
 
 b. Installing the AsyncTCP Library
 
--The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the next steps to install that library:
--[Click here](https://github.com/me-no-dev/AsyncTCP/archive/refs/heads/master.zip) to download the ESPAsyncTCP library. You should have a .zip folder in your Downloads folder
--Unzip the .zip folder and you should get ESPAsyncTCP-master folder
--Rename your folder from AsyncTCP-master to AsyncTCP
--Move the ESPAsyncTCP folder to your Arduino IDE installation libraries folder
+- The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the next steps to install that library:
+- [Click here](https://github.com/me-no-dev/AsyncTCP/archive/refs/heads/master.zip) to download the ESPAsyncTCP library. You should have a .zip folder in your Downloads folder
+- Unzip the .zip folder and you should get ESPAsyncTCP-master folder
+- Rename your folder from AsyncTCP-master to AsyncTCP
+- Move the ESPAsyncTCP folder to your Arduino IDE installation libraries folder
 
 Finally, re-open your Arduino IDE. Compile the sketch and everything should compile.
 
