@@ -21,17 +21,17 @@ Install the following libriaires inside Arduino
 2. [AccelStepper](https://www.arduino.cc/reference/en/libraries/accelstepper/)
 
 Install the following libraries outside Arduino. These cannot be installed using the Arduino library manager.
-1)[ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
-2)[AsyncTCP](https://github.com/me-no-dev/AsyncTCP)  
+1. [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
+2. [AsyncTCP](https://github.com/me-no-dev/AsyncTCP)  
 
-a) Installing the ESPAsyncWebServer library
+a. Installing the ESPAsyncWebServer library
 
 -[Click here](https://github.com/me-no-dev/ESPAsyncWebServer/archive/refs/heads/master.zip) to download the ESPAsyncWebServer library. You should have a .zip folder in your Downloads folder
 -Unzip the .zip folder and you should get ESPAsyncWebServer-master folder
 -Rename your folder from ESPAsyncWebServer-master to ESPAsyncWebServer
 -Move the ESPAsyncWebServer folder to your Arduino IDE installation libraries folder
 
-b) Installing the AsyncTCP Library
+b. Installing the AsyncTCP Library
 
 -The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the next steps to install that library:
 -[Click here](https://github.com/me-no-dev/AsyncTCP/archive/refs/heads/master.zip) to download the ESPAsyncTCP library. You should have a .zip folder in your Downloads folder
@@ -39,106 +39,22 @@ b) Installing the AsyncTCP Library
 -Rename your folder from AsyncTCP-master to AsyncTCP
 -Move the ESPAsyncTCP folder to your Arduino IDE installation libraries folder
 
-Finally, re-open your Arduino IDE.
+Finally, re-open your Arduino IDE. Compile the sketch and everything should compile.
 
-## Step 3 - Download phone app
-Download the Blynk app for iOS and Android
+## Step 3 - Upload the sketch
+You do not need to change anything in the code.
 
-Create a new project with the ESP32.
-
-You will receice an AUTH token in your email. Paste this token into blynk.h, replacing AUTH_TOKEN_HERE (keep the quotation marks).
-
-Update your wifi SSID and password below the auto token (keep the quotes).
-
-**NOTE:** Be sure 12V power is connected when uploading firmware.
-
-Upload the firmware to the VAL-1000
+Upload the firmware to your board.
 
 
+## Step 4 - Connect to board
 
+Using your smart phone or laptop (or any device with wifi), look for the wifi network name VALAR-AP
 
-## Step 4 - Set up app pins
+Connect to VALAR-AP
 
-Blynk works by sending values to the ESP32. These values are received by the ESP32 in the blynk.h file where you can see all of the different functions. 
-For example, if you set up a button in Blynk and place it on Virtual pin 36, and tell it to go 0 to 1. 
+This is an access point which means you will connect directly to the device and will lose you internet connection.
 
-Once the button is pressed in Blynk, it sends a "1" to V36, the function BLYNK_WRITE(V36) will execute. 
+When prompted, enter the wifi password "password". If you want to change this, you can modify the code in the API.h file for the variable ap_password.
 
-Set up the following pins to match those in the blynk.h file
-
-Segment Switch 
-  - Name: V1
-  - Option 1: Close
-  - Option 2: Open
-  - Option 3: Stop
-
-Horizonal Slider
-  - Percent Open
-  - V2
-  - 0-100
-
-Numeric Input
-  - Max Distance
-  - V22
-  - 0-100
-  - Step: 0.25
-
-Numeric Input
-  - Acceleration
-  - V21
-  - 0-9000
-  - Step: 1
-
-Numeric Input
-  - Velocity
-  - V34
-  - 0-9000
-  - Step: 1
-
-Numeric Input
-  - Current Close
-  - V26
-  - 0-2000
-  - Step: 1
-  
-Numeric Input
-  - Current Open
-  - V25
-  - 0-2000
-  - Step: 1
-
-Numeric Input
-  - Stall Close
-  - V124
-  - 0-255
-  - Step: 1
-
-Numeric Input
-  - Stall Open
-  - V123
-  - 0-255
-  - Step: 1
-
-Button
-  - Reverse Motor Direction
-  - V36
-  - 0-1
-  - MODE: SWITCH
-  - OFF LABEL: 0
-  - ON LABEL: 1
-
-Button
-  - Set Zero
-  - V50
-  - 0-1
-  - MODE: PUSH
-  - OFF LABEL: SET ZERO
-  - ON LABEL: SET ZERO
-
-Numeric Input
-  - Stall Open
-  - V125
-  - 0-9000
-  - Step: 1
-  
-  Press the play button up top, you should now be able to control the motor. 
+You are now connected to the device and can begin to control the motor directly.
