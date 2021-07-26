@@ -76,3 +76,31 @@ You now need to find the IP address that your router assigned to the VAL-1000 de
 The hostname should be "esp32-arduino". Find the IP address of this device and enter the IP address into your browser.
 
 You should now be connected to the device.
+
+## Step 6 - Control your motor
+
+Under the "Position" section, enter a value of 50 and click "Set Position". The motor should begin spinning to the 50 percent position.
+
+Set motor parameters by modifiying the following values:
+
+### max_steps
+This value is used to set the maximum number of steps to move the motor to 100 percent. If you have a curtain or window, set the number of steps that will be required to move the motor to open/close the curtain all the way. 
+
+There are 200 steps per revolution so use some math to figure out how many steps you need.
+
+### current
+This value (400-2000) sets the amount of current in milliamps that will run through the motor. The higher the current, the stronger the motor will be. However, it will also run hotter as well as make setting the stall value more difficult. It is recommended to set the current to the minimum required to move your motor. Start at a small value and move up until the motor moves how you want. The maximum value is 2000 mA. 
+
+### stall
+This value (0-255) sets the stall value of the motor. Stallgaurd is fairly complex and I recommend taking my [Udemy course](https://www.udemy.com/course/trinamic/?referralCode=F21BCEB4F4C3C664D13A) to learn more. Set this value to 0 to disable it if you do not understand how it works.
+
+### accel
+This value sets the acceleration of the motor. It is recommened you keep this the same as max_speed when using stallGuard.
+
+### max_speed
+This value (0-500) sets the speed of the motor. The driver will use the acceleration value to speed up to this value.
+
+Press the "Set Parameters" button to set the values.
+
+### Set Zero
+Pressing this button will set the position of the device back to 0. 
