@@ -47,7 +47,7 @@ You do not need to change anything in the code.
 Upload the firmware to your board.
 
 
-## Step 4 - Connect to board
+## Step 4 - Connect to board as Access Point
 
 Using your smart phone or laptop (or any device with wifi), look for the wifi network name VALAR-AP
 
@@ -57,4 +57,22 @@ This is an access point which means you will connect directly to the device and 
 
 When prompted, enter the wifi password "password". If you want to change this, you can modify the code in the API.h file for the variable ap_password.
 
+In your browser, enter http://192.168.4.1/
+
 You are now connected to the device and can begin to control the motor directly.
+
+## Step 5 - Add board to your network
+
+It's best to add this device to your network so you do not need to connect to it directly. 
+
+To do so, go to http://192.168.4.1/wifi
+
+Enter in the name and password of your wifi router. Your device will now connect to your router.
+
+Change your wifi network back to your router because you will get disconnected from the VALAR-AP network.
+
+You now need to find the IP address that your router assigned to the VAL-1000 device. To do this, use a network scanning tool like [angryip](https://angryip.org/)
+
+The hostname should be "esp32-arduino". Find the IP address of this device and enter the IP address into your browser.
+
+You should now be connected to the device.
