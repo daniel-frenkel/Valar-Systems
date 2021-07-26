@@ -110,6 +110,8 @@ Pressing this button will set the position of the device back to 0.
 
 You may want to set up some automations to control your device. To trigger the motor to move, simply send this HTTP command via your browser or preferred method:
 
-http:///<YOUR-IP/>/position?move_percent=0
+http://YOUR-IP-ADDRESS/position?move_percent=0
+
+Replace YOUR-IP-ADDRESSS with your actual IP address such as 192.168.0.56
 
 Replace the "0" with a value of 0-100 to set the position.
