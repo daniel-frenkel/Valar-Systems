@@ -9,10 +9,32 @@ This firmware will get you started with spinning the VAL-1000 WiFi stepper board
 
 If you need to move something heavy, over 50 lbs, consider using a geared motor [like this](https://amzn.to/3c9xmI0)
 
-## Step 2 - Download and open the Arduino code
-You will need to install the ESP32 core, as well as several libraries:
+## Step 2 - Open Browser on device with Wi-Fi
+Use your phone, laptop, or other device with Wifi and open up a browser such as Chrome or Firefox.
 
-Install the ESP32 core by following the instructions here
+Go to http://192.168.4.1
+
+## Step 3 - Test
+
+In the top box, enter a value from 0-100, the motor should spin.
+
+
+## Step 3 - Setup
+
+The position value is a percentage vate from 0-100. If you enter 100, it will move 100 percent of the way. If you enter 0, it will move to the home position.
+
+The position percentage value is based on the max steps value. The max steps is the number of steps you want it to move to open 100 percent of the way. 
+
+For example, if you have a curtain opener, and need it to move 20000 steps to open and close, you will enter 20000 here. 
+
+There are 200 steps per revolution. To figure out how many steps to set, first measure the distance you want your device to travel. Let's say it's 20 inches, which is 508 mm.
+
+Next, measure the diameter of the pulley you are using. In the case of the S1 curtain opener, it is 12mm.
+
+Next, convert 12mm diameter to circumferance which is 37.7 mm.
+
+Next, divide the total travel by cicumferance 
+
 
 Install the following libriaires inside Arduino
 1. TMC Stepper

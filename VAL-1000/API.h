@@ -190,6 +190,8 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
         move_to = (max_steps/100)*move_percent;
         Serial.print("move_percent: ");
         Serial.println(move_percent); 
+        Serial.print("move_to: ");
+        Serial.println(move_to); 
         run_motor=true;
 
     }  
