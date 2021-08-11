@@ -1,7 +1,7 @@
 bool stalled_motor = false;
 bool stop_motor = false;
-bool sensor1_trip = false;
-bool sensor2_trip = false;
+volatile bool sensor1_trip = false;
+volatile bool sensor2_trip = false;
 int XACTUAL;
 int max_steps;
 int current;
@@ -9,8 +9,8 @@ int stall;
 int accel;
 int max_speed;
 int tcools;
-volatile uint32_t move_to = 0;
-volatile uint32_t move_percent = 0;
+int move_to = 0;
+int move_percent = 0;
 int set_zero = 0; // Set to 1 to set home position
 bool run_motor = false;
 int wifi_set;

@@ -80,6 +80,8 @@ void move_motor() {
   stepper.moveTo(move_to);
   
   stalled_motor = false;
+  sensor1_trip = false;
+  sensor2_trip = false;
   
   stepper.setAcceleration(accel);
   stepper.setMaxSpeed(max_speed);
@@ -99,7 +101,7 @@ else if(move_to > XACTUAL) // Open
     
       while (stepper.currentPosition() != stepper.targetPosition()) {
 
-      if ((sensor2_trip == true) || (digitalRead(SENSOR2) == 0))
+      if ((digitalRead(SENSOR2) == LOW))//(sensor2_trip == true) || 
       {
         printf("TRIPPED ON 2\n");
         stepper.setCurrentPosition(max_steps);
@@ -122,13 +124,13 @@ else if(move_to > XACTUAL) // Open
 else if(move_to < XACTUAL)
 {
   
-      Serial.println("Opening");
+      Serial.println("Closing");
       stepper.enableOutputs();
     
       while (stepper.currentPosition() != stepper.targetPosition()) 
       {
         
-          if ((sensor1_trip == true) || (digitalRead(SENSOR1) == 0))
+          if ((digitalRead(SENSOR1) == LOW)) //(sensor1_trip == true) || 
           {
             printf("TRIPPED ON 1\n");
             stepper.setCurrentPosition(0);
@@ -153,6 +155,7 @@ else if(move_to < XACTUAL)
 
       XACTUAL = stepper.currentPosition();
       stepper.disableOutputs();
+      printf("Motor Function Complete\n");
 }
 
 // put your setup code here, to run once:
@@ -165,6 +168,8 @@ void setup_motors(){
   pinMode(WIFI_PIN ,INPUT);
   pinMode(BUTTON1,INPUT);
   pinMode(BUTTON2,INPUT);
+  pinMode(SENSOR1,INPUT);
+  pinMode(SENSOR2,INPUT);
   SERIAL_PORT_2.begin(115200);
 
   driver.begin();
@@ -179,7 +184,7 @@ void setup_motors(){
   driver.TCOOLTHRS(tcools); // 
   driver.TPWMTHRS(0);
   driver.semin(0);
-  driver.shaft(false);  
+  driver.shaft(true);  
   driver.en_spreadCycle(false);
   driver.pdn_disable(true);
 
@@ -191,7 +196,7 @@ void setup_motors(){
   attachInterrupt(WIFI_PIN, wifi_button_press, FALLING);
   attachInterrupt(BUTTON1, button1pressed, FALLING);
   attachInterrupt(BUTTON2, button2pressed, FALLING);
-  attachInterrupt(BUTTON1, button1pressed, FALLING);
-  attachInterrupt(BUTTON2, button2pressed, FALLING);
+  attachInterrupt(SENSOR1, sensor_long, FALLING);
+  attachInterrupt(SENSOR2, sensor_short, FALLING);
 
 }
