@@ -35,139 +35,109 @@ Next, convert 12mm diameter to circumferance which is 37.7 mm.
 
 Next, divide the total travel by cicumferance 
 
+## Step 2 - Download and open the Arduino code
+Using Arduino, open the VAL-1000.ino file
+
+You will need to install the ESP32 core, as well as several libraries:
+
+Install the ESP32 core by following the instructions [here](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
 
 Install the following libriaires inside Arduino
-1. TMC Stepper
-2. AccelStepper
+1. [TMC Stepper](https://www.arduino.cc/reference/en/libraries/tmcstepper/)
+2. [AccelStepper](https://www.arduino.cc/reference/en/libraries/accelstepper/)
 
-Install the following libraries outside Arduino
-1)
-2) 
+Install the following libraries outside Arduino. These cannot be installed using the Arduino library manager.
+1. [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
+2. [AsyncTCP](https://github.com/me-no-dev/AsyncTCP)  
 
-https://reacoda.gitbook.io/molemi-iot/introducing-the-nodemcu/display-the-dht11-sensor-reading-on-a-web-server-using-nodemcu./installing-dht-library-on-the-esp8266/installing-the-asynchronous-web-server-library
+a. Installing the ESPAsyncWebServer library
 
-Installing the ESPAsyncWebServer library
+- [Click here](https://github.com/me-no-dev/ESPAsyncWebServer/archive/refs/heads/master.zip) to download the ESPAsyncWebServer library. You should have a .zip folder in your Downloads folder
+- Unzip the .zip folder and you should get ESPAsyncWebServer-master folder
+- Rename your folder from ESPAsyncWebServer-master to ESPAsyncWebServer
+- Move the ESPAsyncWebServer folder to your Arduino IDE installation libraries folder
 
-Click here to download the ESPAsyncWebServer library. You should have a .zip folder in your Downloads folder
-Unzip the .zip folder and you should get ESPAsyncWebServer-master folder
-Rename your folder from ESPAsyncWebServer-master to ESPAsyncWebServer
-Move the ESPAsyncWebServer folder to your Arduino IDE installation libraries folder
+b. Installing the AsyncTCP Library
 
-Installing the ESPAsync TCP Library
+- The ESPAsyncWebServer library requires the AsyncTCP library to work. Follow the next steps to install that library:
+- [Click here](https://github.com/me-no-dev/AsyncTCP/archive/refs/heads/master.zip) to download the ESPAsyncTCP library. You should have a .zip folder in your Downloads folder
+- Unzip the .zip folder and you should get ESPAsyncTCP-master folder
+- Rename your folder from AsyncTCP-master to AsyncTCP
+- Move the ESPAsyncTCP folder to your Arduino IDE installation libraries folder
 
-The ESPAsyncWebServer library requires the ESPAsyncTCP library to work. Follow the next steps to install that library:
-Click here to download the ESPAsyncTCP library. You should have a .zip folder in your Downloads folder
-Unzip the .zip folder and you should get ESPAsyncTCP-master folder
-Rename your folder from ESPAsyncTCP-master to ESPAsyncTCP
-Move the ESPAsyncTCP folder to your Arduino IDE installation libraries folder
+Finally, re-open your Arduino IDE. Compile the sketch and everything should compile.
 
-Finally, re-open your Arduino IDE.
+## Step 3 - Upload the sketch
+You do not need to change anything in the code.
 
-
-
-https://github.com/me-no-dev/ESPAsyncWebServer/archive/refs/heads/master.zip
-https://github.com/me-no-dev/AsyncTCP/archive/refs/heads/master.zip
+Upload the firmware to your board.
 
 
+## Step 4 - Connect to board as Access Point
 
-## Step 3 - Download phone app
-Download the Blynk app for iOS and Android
+Using your smart phone or laptop (or any device with wifi), look for the wifi network name VALAR-AP
 
-Create a new project with the ESP32.
+Connect to VALAR-AP
 
-You will receice an AUTH token in your email. Paste this token into blynk.h, replacing AUTH_TOKEN_HERE (keep the quotation marks).
+This is an access point which means you will connect directly to the device and will lose you internet connection.
 
-Update your wifi SSID and password below the auto token (keep the quotes).
+When prompted, enter the wifi password "password". If you want to change this, you can modify the code in the API.h file for the variable ap_password.
 
-**NOTE:** Be sure 12V power is connected when uploading firmware.
+In your browser, enter http://192.168.4.1/
 
-Upload the firmware to the VAL-1000
+You are now connected to the device and can begin to control the motor directly.
+
+## Step 5 - Add board to your network
+
+It's best to add this device to your network so you do not need to connect to it directly. 
+
+To do so, go to http://192.168.4.1/wifi
+
+Enter in the name and password of your wifi router. Your device will now connect to your router.
+
+Change your wifi network back to your router because you will get disconnected from the VALAR-AP network.
+
+You now need to find the IP address that your router assigned to the VAL-1000 device. To do this, use a network scanning tool like [angryip](https://angryip.org/)
+
+The hostname should be "esp32-arduino". Find the IP address of this device and enter the IP address into your browser.
+
+You should now be connected to the device.
+
+## Step 6 - Control your motor
+
+Under the "Position" section, enter a value of 50 and click "Set Position". The motor should begin spinning to the 50 percent position.
+
+Set motor parameters by modifiying the following values:
+
+### max_steps
+This value is used to set the maximum number of steps to move the motor to 100 percent. If you have a curtain or window, set the number of steps that will be required to move the motor to open/close the curtain all the way. 
+
+There are 200 steps per revolution so use some math to figure out how many steps you need.
+
+### current
+This value (400-2000) sets the amount of current in milliamps that will run through the motor. The higher the current, the stronger the motor will be. However, it will also run hotter as well as make setting the stall value more difficult. It is recommended to set the current to the minimum required to move your motor. Start at a small value and move up until the motor moves how you want. The maximum value is 2000 mA. 
+
+### stall
+This value (0-255) sets the stall value of the motor. Stallgaurd is fairly complex and I recommend taking my [Udemy course](https://www.udemy.com/course/trinamic/?referralCode=F21BCEB4F4C3C664D13A) to learn more. Set this value to 0 to disable it if you do not understand how it works.
+
+### accel
+This value sets the acceleration of the motor. It is recommened you keep this the same as max_speed when using stallGuard.
+
+### max_speed
+This value (0-500) sets the speed of the motor. The driver will use the acceleration value to speed up to this value.
+
+Press the "Set Parameters" button to set the values.
+
+### Set Zero
+Pressing this button will set the position of the device back to 0. 
 
 
+## Step 7 - Control via API
 
+You may want to set up some automations to control your device. To trigger the motor to move, simply send this HTTP command via your browser or preferred method:
 
-## Step 4 - Set up app pins
+http://YOUR-IP-ADDRESS/position?move_percent=0
 
-Blynk works by sending values to the ESP32. These values are received by the ESP32 in the blynk.h file where you can see all of the different functions. 
-For example, if you set up a button in Blynk and place it on Virtual pin 36, and tell it to go 0 to 1. 
+Replace YOUR-IP-ADDRESSS with your actual IP address such as 192.168.0.56
 
-Once the button is pressed in Blynk, it sends a "1" to V36, the function BLYNK_WRITE(V36) will execute. 
-
-Set up the following pins to match those in the blynk.h file
-
-Segment Switch 
-  - Name: V1
-  - Option 1: Close
-  - Option 2: Open
-  - Option 3: Stop
-
-Horizonal Slider
-  - Percent Open
-  - V2
-  - 0-100
-
-Numeric Input
-  - Max Distance
-  - V22
-  - 0-100
-  - Step: 0.25
-
-Numeric Input
-  - Acceleration
-  - V21
-  - 0-9000
-  - Step: 1
-
-Numeric Input
-  - Velocity
-  - V34
-  - 0-9000
-  - Step: 1
-
-Numeric Input
-  - Current Close
-  - V26
-  - 0-2000
-  - Step: 1
-  
-Numeric Input
-  - Current Open
-  - V25
-  - 0-2000
-  - Step: 1
-
-Numeric Input
-  - Stall Close
-  - V124
-  - 0-255
-  - Step: 1
-
-Numeric Input
-  - Stall Open
-  - V123
-  - 0-255
-  - Step: 1
-
-Button
-  - Reverse Motor Direction
-  - V36
-  - 0-1
-  - MODE: SWITCH
-  - OFF LABEL: 0
-  - ON LABEL: 1
-
-Button
-  - Set Zero
-  - V50
-  - 0-1
-  - MODE: PUSH
-  - OFF LABEL: SET ZERO
-  - ON LABEL: SET ZERO
-
-Numeric Input
-  - Stall Open
-  - V125
-  - 0-9000
-  - Step: 1
-  
-  Press the play button up top, you should now be able to control the motor. 
+Replace the "0" with a value of 0-100 to set the position.
