@@ -43,7 +43,7 @@ void IRAM_ATTR button2pressed()
 void IRAM_ATTR stalled_position()
 {
   stalled_motor = true;
-  stop_motor = true;
+
 }
 
 void IRAM_ATTR sensor_short()
@@ -61,20 +61,6 @@ void IRAM_ATTR wifi_button_press()
   wifi_button = true;
 }
 
-void setZero()
-{
-      XACTUAL=0;
-      stepper.setCurrentPosition(0);
-      Serial.print("XACTUAL: ");
-      Serial.println(XACTUAL);
-}
-
-void goHome()
-{
-      XACTUAL = 0;
-      move_to = -10000;
-      run_motor = true;
-}
 
 void move_motor() {
   Serial.print("Current Position: ");
@@ -96,19 +82,42 @@ void move_motor() {
   driver.SGTHRS(stall);
   driver.TCOOLTHRS(tcools);
 
-if(XACTUAL == move_to)
+if(move_to == 0)
 {
-  Serial.println("ALREADY THERE!");
-}
-else if(move_to > XACTUAL) // Open
-{
+  
+  Serial.println("Closing until Trip");
+  stepper.moveTo(-10000);
+  stepper.enableOutputs();
+    
+      while (stepper.currentPosition() != stepper.targetPosition()) 
+      {
+          if ((digitalRead(SENSOR1) == LOW)) 
+          {
+            printf("TRIPPED ON 1\n");
+            stepper.setCurrentPosition(0);
+            stepper.moveTo(0);
+          }
+          
+          if (digitalRead(STALLGUARD) == HIGH)
+          {
+            printf("Stalled\n");
+            stepper.moveTo(stepper.currentPosition());
+          }
+
+      stepper.run();
+      feedTheDog();
+
+      }
+  }
+  else if(move_to > XACTUAL) // Open
+  {
 
       Serial.println("Opening"); 
       stepper.enableOutputs();
     
       while (stepper.currentPosition() != stepper.targetPosition()) {
 
-      if ((digitalRead(SENSOR2) == LOW))//(sensor2_trip == true) || 
+      if (sensor2_trip == true)
       {
         printf("TRIPPED ON 2\n");
         stepper.setCurrentPosition(max_steps);
@@ -118,18 +127,15 @@ else if(move_to > XACTUAL) // Open
       if (stalled_motor == true)
       {
         printf("Stalled\n");
-        stepper.setCurrentPosition(0);
-        stepper.moveTo(0);
+        stepper.moveTo(stepper.currentPosition());
       }
 
       stepper.run();
       feedTheDog();
       }
-
-}
-
-else if(move_to < XACTUAL)
-{
+  }
+  else if(move_to < XACTUAL)
+  {
   
       Serial.println("Closing");
       stepper.enableOutputs();
@@ -147,15 +153,19 @@ else if(move_to < XACTUAL)
           if (stalled_motor == true)
           {
             printf("Stalled\n");
-            stepper.setCurrentPosition(0);
-            stepper.moveTo(0);
+            stepper.moveTo(stepper.currentPosition());
           }
 
       stepper.run();
       feedTheDog();
 
       }
-}else
+}
+else if(XACTUAL == move_to)
+{
+  Serial.println("ALREADY THERE!");
+}
+else
 {
   Serial.println("DO NOTHING!");
 }
