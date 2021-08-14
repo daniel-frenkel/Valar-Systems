@@ -207,8 +207,12 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
 
 server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request){
 
-DynamicJsonDocument doc(2048);
-doc["position"] = stepper.currentPosition();
+DynamicJsonDocument doc(100);
+doc["percent_position"] = int(((float)stepper.currentPosition()/(float)max_steps)*100);
+doc["steps_position"] = stepper.currentPosition();
+doc["max_steps"] = max_steps;
+doc["current"] = current;
+doc["stall"] = stall;
 
 String json;
 serializeJson(doc, json);
