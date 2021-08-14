@@ -203,5 +203,16 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
   
   });
 
+server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request){
+
+DynamicJsonDocument doc(2048);
+doc["position"] = stepper.currentPosition();
+
+String json;
+serializeJson(doc, json);
+
+request->send(200, "application/json", json);
+});
+
   server.begin();
 }

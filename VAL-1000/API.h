@@ -1,6 +1,8 @@
 #include <WiFi.h>
 #include <AsyncTCP.h>
 #include "ESPAsyncWebServer.h"
+#include "AsyncJson.h"
+#include "ArduinoJson.h"
 
 const char *ap_ssid = "VALAR-AP";
 const char *ap_password = "password";
@@ -188,20 +190,28 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
     {
         move_percent = request->getParam("move_percent")->value().toInt();
         move_to = (max_steps/100)*move_percent;
-        
-        Serial.print("max_steps: ");
-        Serial.println(max_steps); 
         Serial.print("move_percent: ");
         Serial.println(move_percent); 
         Serial.print("move_to: ");
         Serial.println(move_to); 
         run_motor=true;
-
     }  
+    request->redirect("/");  
+});
 
-    request->redirect("/");
-  
-  });
+
+server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request){
+
+DynamicJsonDocument doc(2048);
+doc["position"] = stepper.currentPosition();
+
+String json;
+serializeJson(doc, json);
+
+request->send(200, "application/json", json);
+});
+
+
 
   server.begin();
 }
