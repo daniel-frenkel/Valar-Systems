@@ -12,6 +12,8 @@
 #define SENSOR1 32
 #define SENSOR2 22
 
+#define SHAFT false
+
 #define SERIAL_PORT_2    Serial2    // TMC2208/TMC2224 HardwareSerial port
 #define DRIVER_ADDRESS   0b00       // TMC2209 Driver address according to MS1 and MS2
 #define R_SENSE          0.10f      // E_SENSE for current calc.  
@@ -91,7 +93,7 @@ if(move_to == 0)
     
       while (stepper.currentPosition() != stepper.targetPosition()) 
       {
-          if ((digitalRead(SENSOR1) == LOW)) 
+          if (sensor1_trip == true || (digitalRead(SENSOR1) == LOW)) 
           {
             printf("TRIPPED ON 1\n");
             stepper.setCurrentPosition(0);
@@ -117,7 +119,7 @@ if(move_to == 0)
     
       while (stepper.currentPosition() != stepper.targetPosition()) {
 
-      if (sensor2_trip == true)
+      if (sensor2_trip == true || digitalRead(SENSOR2) == LOW)
       {
         printf("TRIPPED ON 2\n");
         stepper.setCurrentPosition(max_steps);
@@ -143,7 +145,7 @@ if(move_to == 0)
       while (stepper.currentPosition() != stepper.targetPosition()) 
       {
         
-          if ((digitalRead(SENSOR1) == LOW)) //(sensor1_trip == true) || 
+          if (sensor1_trip == true ||(digitalRead(SENSOR1) == LOW)) //(sensor1_trip == true) || 
           {
             printf("TRIPPED ON 1\n");
             stepper.setCurrentPosition(0);
@@ -201,7 +203,7 @@ void setup_motors(){
   driver.TCOOLTHRS(tcools); // 
   driver.TPWMTHRS(0);
   driver.semin(0);
-  driver.shaft(true);  
+  driver.shaft(SHAFT);  
   driver.en_spreadCycle(false);
   driver.pdn_disable(true);
 
