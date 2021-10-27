@@ -9,22 +9,11 @@
 #include "MotorControl.h"
 #include "API.h"
 
-
-// define three tasks
-void TaskOne( void *pvParameters );
-void TaskTwo( void *pvParameters );
-void TaskThree( void *pvParameters );
-
-int x = constrain(20, 2, x);
-
-// the setup function runs once when you press reset or power the board
 void setup() {
   
   Serial.begin(115200);
   delay(1000);
-  
   preferences.begin("local", false);
-  
   load_preferences();
   setup_motors();
   API();
@@ -38,9 +27,6 @@ void setup() {
     ,  3  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL 
     ,  1);
-
-
-
 }
 
 void loop()
