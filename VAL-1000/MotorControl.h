@@ -14,7 +14,7 @@
 
 #define SERIAL_PORT_2    Serial2    // TMC2208/TMC2224 HardwareSerial port
 #define DRIVER_ADDRESS   0b00       // TMC2209 Driver address according to MS1 and MS2
-#define R_SENSE          0.10f      // E_SENSE for current calc.  
+#define R_SENSE          0.10f      // R_SENSE for current calc.  
 
 
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
