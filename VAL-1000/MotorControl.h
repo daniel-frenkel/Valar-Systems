@@ -30,13 +30,13 @@ void feedTheDog()
 
 void IRAM_ATTR button1pressed() 
 {
-    move_to = 0;
+    move_to_position = 0;
     run_motor = true;
 }
 
 void IRAM_ATTR button2pressed() 
 {
-    move_to = max_steps;
+    move_to_position = max_steps;
     run_motor = true;
 }
 
@@ -63,28 +63,28 @@ void IRAM_ATTR wifi_button_press()
 
 void setZero()
 {
-      XACTUAL=0;
+      current_position=0;
       stepper.setCurrentPosition(0);
-      Serial.print("XACTUAL: ");
-      Serial.println(XACTUAL);
+      Serial.print("current_position: ");
+      Serial.println(current_position);
 }
 
 void goHome()
 {
-      XACTUAL = 0;
-      move_to = -10000;
+      current_position = 0;
+      move_to_position = -10000;
       run_motor = true;
 }
 
 void move_motor() {
   Serial.print("Current Position: ");
-  Serial.println(XACTUAL);
+  Serial.println(current_position);
   
   Serial.print("Moving to Position: ");
-  Serial.println(move_to);
+  Serial.println(move_to_position);
 
-  stepper.setCurrentPosition(XACTUAL);
-  stepper.moveTo(move_to);
+  stepper.setCurrentPosition(current_position);
+  stepper.moveTo(move_to_position);
   
   stalled_motor = false;
   sensor1_trip = false;
@@ -96,11 +96,11 @@ void move_motor() {
   driver.SGTHRS(stall);
   driver.TCOOLTHRS(tcools);
 
-if(XACTUAL == move_to)
+if(current_position == move_to_position)
 {
   Serial.println("ALREADY THERE!");
 }
-else if(move_to > XACTUAL) // Open
+else if(move_to_position > current_position) // Open
 {
 
       Serial.println("Opening"); 
@@ -128,7 +128,7 @@ else if(move_to > XACTUAL) // Open
 
 }
 
-else if(move_to < XACTUAL)
+else if(move_to_position < current_position)
 {
   
       Serial.println("Closing");
@@ -160,7 +160,7 @@ else if(move_to < XACTUAL)
   Serial.println("DO NOTHING!");
 }
 
-      XACTUAL = stepper.currentPosition();
+      current_position = stepper.currentPosition();
       stepper.disableOutputs();
       printf("Motor Function Complete\n");
 }
