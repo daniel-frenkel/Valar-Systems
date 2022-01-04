@@ -3,6 +3,7 @@
 #include "ESPAsyncWebServer.h"
 #include "AsyncJson.h"
 #include "ArduinoJson.h"
+#include "HTML.h"
 
 const char *ap_ssid = "VALAR-AP";
 const char *ap_password = "password";
@@ -11,8 +12,6 @@ String ip_address;
 
 AsyncWebServer server(80);
 
-const char WIFI_HTML[] = "Enter your home Wifi Name and Password <br> <br> <form action=\"/set_wifi\">\n    <label class=\"label\">Network Name</label>\n    <input type = \"text\" name = \"ssid\"/>\n    <br/>\n    <label>Network Password</label>\n    <input type = \"text\" name = \"pass\"/>\n    <br/>\n    <input type=\"submit\" value=\"Set Values\">\n</form>";
-const char SETTINGS_HTML[] = "<h2>Valar Systems</h2>\n<h3>Motion Control</h3>\n<p>To learn more, please visit <a href=\"https://help.valarsystems.com/docs/VAL-1000/VAL-1000\">https://help.valarsystems.com</a></p>\n<p>To add this device to your network <a href=\"http://192.168.4.1/wifi\">go to http://192.168.4.1/wifi</a></p>\n<p>To remove this device from your network, press and hold the wifi reset button for 3+ seconds.</p>\n<br> \n<h2>Position</h2>\n<form action=\"/position\">\n    <p>Enter a value from 0-100. This is the percent of the max_steps value to move the motor.</p>\n    <label><b>move_to :</b></label>\n    <input value = \"%PLACEHOLDER_PERCENT%\" type = \"text\" name = \"move_percent\"/>\n    <br/>\n    <input type=\"submit\" value=\"Set Position\">\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/position?move_percent=%PLACEHOLDER_PERCENT%</p>\n</form>\n<br>\n<h2>Motor Parameters</h2>\n<form action=\"/set_motor\">\n    <p>Enter a value from 400-2000. This is the amount of RMS current the motor will draw.</p>\n    <label><b>current</b></label>\n    <input value = \"%PLACEHOLDER_CURRENT%\" type = \"text\" name = \"current\"/>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?current=%PLACEHOLDER_MAX_STEPS%</p>\n    <br/>\n    <p>Enter a stall value from 0-255. The higher the value, the easier it will stall.</p>\n    <label><b>stall</b></label>\n    <input value = \"%PLACEHOLDER_STALL%\" type = \"text\" name = \"stall\"/>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?stall=%PLACEHOLDER_STALL%</p>\n    <br/>\n        <input type=\"submit\" value=\"Set Parameters\">\n<p>To set all values at once, send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?max_steps=%PLACEHOLDER_MAX_STEPS%&amp;current=%PLACEHOLDER_CURRENT%&stall=%PLACEHOLDER_STALL%&accel=%PLACEHOLDER_ACCEL%&max_speed=%PLACEHOLDER_MAX_SPEED%</p>\n</form>\n<br>\n<br>\n<p>Press this button to set the home position of your motor to zero</p>\n<form action=\"/set_zero\">\n<input type=\"hidden\" name=\"set_zero\" value=\"1\" />\n<input type=\"submit\" value=\"set_zero\">\n</form>";
 String processor(const String& var)
 {
  
@@ -32,7 +31,7 @@ String processor(const String& var)
     return String(accel);
   }
   else if(var == "PLACEHOLDER_MAX_SPEED"){
-    return String(max_speed);
+    return String(max_speed/1000);
   }
   else if(var == "PLACEHOLDER_IP_ADDRESS"){
     return String(ip_address);
@@ -129,7 +128,8 @@ void API()
         {
           current = request->getParam("current")->value().toInt();
           //driver.rms_current(current);
-          sendData(0x10+0x80, current);     // 7 = 0.52A current for open function
+          //sendData(0x10+0x80, current);     // 7 = 0.52A current for open function
+          driver.rms_current(current);
           preferences.putInt ("current", current);
           Serial.print("current: ");
           Serial.println(current);
@@ -154,7 +154,8 @@ void API()
         }
     if(request->hasParam("max_speed"))
         {
-          max_speed = request->getParam("max_speed")->value().toInt();
+          int receive_max_speed = request->getParam("max_speed")->value().toInt();
+          max_speed = receive_max_speed * 1000;
           //stepper.setMaxSpeed(max_speed);
           sendData(0x27+0x80, max_speed); //VMAX
           preferences.putInt ("max_speed", max_speed);

@@ -40,9 +40,8 @@ void load_preferences(){
   pass = preferences.getString ("pass", "NO_PASSWORD");
   max_steps = preferences.getInt("max_steps", 2000);
   current = preferences.getLong("current", 400);
-  accel = preferences.getInt("accel", 100);
-  max_speed = preferences.getInt("max_speed", 100);
-  stall = preferences.getInt("stall", 10);
+  max_speed = preferences.getInt("max_speed", 120000);
+  stall = preferences.getInt("stall", 4128768);
   tcools = (3089838.00*pow(float(max_speed*64),-1.00161534))*1.5;
 
   Serial.println("FINISHED LOADING PREFERENCES");

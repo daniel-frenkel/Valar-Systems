@@ -1,6 +1,16 @@
 #include <Arduino.h>
 #include <SPI.h>
 
+#define chipCS 27
+#define SCLK 26
+#define MISO_PIN 33
+#define MOSI_PIN 25
+#define CLOCKOUT 15
+#define ENABLE_PIN 32
+#define R_SENSE 0.075f
+
+TMC5130Stepper driver (chipCS, R_SENSE, MOSI_PIN, MISO_PIN, SCLK);
+
 unsigned long sendData(unsigned long address, unsigned long datagram);
 void stopMotor(); // track motor is motor two
 void delayStall(long timeout);
@@ -65,7 +75,7 @@ while (((sendData(0x35, 0) & 0x200) == 0)) { // wait for position_reached flag
   sendData(0x27+0x80, 0); //Set velocity to 0
   delay(300);
   digitalWrite(ENABLE_PIN, HIGH);
-  Serial.print("CLOSE COMPLETE");
+  Serial.println("CLOSE COMPLETE");
 }
 
 void setZero()

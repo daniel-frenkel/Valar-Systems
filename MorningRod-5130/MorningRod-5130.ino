@@ -17,6 +17,7 @@
 #define MOVE_OPEN 5
 #define MOVE_CLOSE 6
 
+#include <TMCStepper.h>
 #include "driver/ledc.h"
 #include <Arduino.h>
 #include <AccelStepper.h>
