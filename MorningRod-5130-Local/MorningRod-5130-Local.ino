@@ -9,6 +9,7 @@
 #define MOSI_PIN 25
 #define CLOCKOUT 15
 #define ENABLE_PIN 32
+#define R_SENSE 0.075f
 
 #define btn1 12//17//12
 #define btn2 13//16//13
@@ -20,9 +21,7 @@
 #include <TMCStepper.h>
 #include "driver/ledc.h"
 #include <Arduino.h>
-#include <AccelStepper.h>
 #include <HardwareSerial.h>
-#include <TMCStepper.h>
 #include <SPI.h>
 #include <Preferences.h>
 #include "Memory.h"
@@ -37,15 +36,12 @@ void TaskThree( void *pvParameters );
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-  
-  Serial.begin(115200);
-  delay(1000);
-  
+ 
   preferences.begin("local", false);
   
   load_preferences();
   clockout_setup();
-  setup_motors();
+  setup_motor();
   API();
   
   // Now set up tasks to run independently.

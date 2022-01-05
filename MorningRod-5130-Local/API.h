@@ -27,9 +27,6 @@ String processor(const String& var)
   else if(var == "PLACEHOLDER_STALL"){
     return String(stall);
   }
-  else if(var == "PLACEHOLDER_ACCEL"){
-    return String(accel);
-  }
   else if(var == "PLACEHOLDER_MAX_SPEED"){
     return String(max_speed/1000);
   }
@@ -127,7 +124,6 @@ void API()
     if(request->hasParam("current"))
         {
           current = request->getParam("current")->value().toInt();
-          //driver.rms_current(current);
           //sendData(0x10+0x80, current);     // 7 = 0.52A current for open function
           driver.rms_current(current);
           preferences.putInt ("current", current);
@@ -137,27 +133,18 @@ void API()
     if(request->hasParam("stall"))
         {
           stall = request->getParam("stall")->value().toInt();
-          //driver.SGTHRS(stall);
-          sendData(0x6D+0x80, stall);     // STALLGUARD_OPEN
+          //sendData(0x6D+0x80, stall);     // STALLGUARD_OPEN
+          driver.sgt(stall);
           preferences.putInt ("stall", stall);
           Serial.print("stall: ");
           Serial.println(stall);
-        }
-    if(request->hasParam("accel"))
-        {
-          accel = request->getParam("accel")->value().toInt();
-          //stepper.setAcceleration(accel);
-         
-          preferences.putInt ("accel", accel);
-          Serial.print("accel: ");
-          Serial.println(accel);
         }
     if(request->hasParam("max_speed"))
         {
           int receive_max_speed = request->getParam("max_speed")->value().toInt();
           max_speed = receive_max_speed * 1000;
-          //stepper.setMaxSpeed(max_speed);
-          sendData(0x27+0x80, max_speed); //VMAX
+          //sendData(0x27+0x80, max_speed); //VMAX
+          driver.VMAX(max_speed);
           preferences.putInt ("max_speed", max_speed);
           Serial.print("max_speed: ");
           Serial.println(max_speed);
@@ -194,8 +181,8 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
     {
         move_percent = request->getParam("move_percent")->value().toInt();
         move_to = (max_steps/100)*move_percent;
-        //stepper.moveTo(move_to);
-        sendData(0xAD, move_to); //XTARGET:
+        //sendData(0xAD, move_to); //XTARGET:
+        driver.XTARGET(move_to);
         Serial.print("max_steps: ");
         Serial.println(max_steps); 
         Serial.print("move_percent: ");
