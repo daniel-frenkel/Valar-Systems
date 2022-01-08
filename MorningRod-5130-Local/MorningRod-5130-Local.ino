@@ -29,19 +29,15 @@
 #include "MotorControl.h"
 #include "API.h"
 
-// define three tasks
-void TaskOne( void *pvParameters );
-void TaskTwo( void *pvParameters );
-void TaskThree( void *pvParameters );
-
-// the setup function runs once when you press reset or power the board
 void setup() {
- 
+
+  Serial.begin(115200);
+  delay(1000);
   preferences.begin("local", false);
   
   load_preferences();
+  setup_motors();
   clockout_setup();
-  setup_motor();
   API();
   
   // Now set up tasks to run independently.
