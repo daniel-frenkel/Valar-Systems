@@ -42,13 +42,99 @@ Enter the following text into https://tomeko.net/online_tools/cpp_text_escape.ph
 
 //REMOVE THIS
 //TEMPLATE FOR OTHER SINGLE ACTIONS
+
+//SINGLE BUTTONS
+
+position_open
+position_close
+position_adjust
+
+step_1
+step_3
+step_4
+step_5
+step_6
+
+
 <br>
 <br>
-<h2>Set Zero Position</h2>
+<h2>Auto Tune Motor</h2>
 <p>Press this button to set the home position of your motor to zero</p>
-<form action="set_zero">
-<input type="hidden" name="set_zero" value="1">
-<input type="submit" value="Set Zero">
+<form action="auto_tune">
+<input type="hidden" name="auto_tune" value="1">
+<input type="submit" value="Auto Tune">
+</form>
+
+<br>
+<br>
+<h2>Position Open</h2>
+<p>Press this button to set the home position of your motor to zero</p>
+<form action="position_open">
+<input type="hidden" name="position_open" value="1">
+<input type="submit" value="Start">
+</form>
+
+<br>
+<br>
+<h2>Position Close</h2>
+<p>Press this button to set the home position of your motor to zero</p>
+<form action="position_close">
+<input type="hidden" name="position_close" value="1">
+<input type="submit" value="Start">
+</form>
+
+<br>
+<br>
+<h2>Position Adjust</h2>
+<p>Press this button to set the home position of your motor to zero</p>
+<form action="position_adjust">
+<input type="hidden" name="position_adjust" value="1">
+<input type="submit" value="Start">
+</form>
+
+<br>
+<br>
+<h2>Step 1 Calibration</h2>
+<p>Press this button to set the home position of your motor to zero</p>
+<form action="step_1">
+<input type="hidden" name="step_1" value="1">
+<input type="submit" value="Start">
+</form>
+
+<br>
+<br>
+<h2>Step 3 Calibration</h2>
+<p>Press this button to set the home position of your motor to zero</p>
+<form action="step_3">
+<input type="hidden" name="step_3" value="1">
+<input type="submit" value="Start">
+</form>
+
+<br>
+<br>
+<h2>Step 4 Calibration</h2>
+<p>Press this button to set the home position of your motor to zero</p>
+<form action="step_4">
+<input type="hidden" name="step_4" value="1">
+<input type="submit" value="Start">
+</form>
+
+<br>
+<br>
+<h2>Step 5 Calibration</h2>
+<p>Press this button to set the home position of your motor to zero</p>
+<form action="step_5">
+<input type="hidden" name="step_5" value="1">
+<input type="submit" value="Start">
+</form>
+
+<br>
+<br>
+<h2>Step 6 Calibration</h2>
+<p>Press this button to set the home position of your motor to zero</p>
+<form action="step_6">
+<input type="hidden" name="step_6" value="1">
+<input type="submit" value="Start">
 </form>
 
 

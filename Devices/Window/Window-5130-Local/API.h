@@ -62,21 +62,7 @@ String processor(const String& var)
 }
 
 
-//SINGLE BUTTONS
-/*
-position_open
-position_close
-position_adjust
 
-STEP_1
-STEP_3
-STEP_4
-STEP_5
-STEP_6
-
-AUTO_TUNE
-
-*/
 
 
 void API()

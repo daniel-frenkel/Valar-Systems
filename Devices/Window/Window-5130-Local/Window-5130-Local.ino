@@ -193,26 +193,24 @@ void loop() {
 closeState = digitalRead(position_1_sensor);
 
   // compare the buttonState to its previous state
-  if (closeState != lastcloseState) {
-    // if the state has changed, increment the counter
-    if (closeState == HIGH) {
-      // if the current state is HIGH then the button went from off to on:
+  if (closeState != lastcloseState) 
+  {
+    if (closeState == HIGH) 
+    {
       Serial.println("DEVICE OPENED");
-        }
-    } else {
-      // if the current state is LOW then the button went from on to off:
+    }
+    else 
+    {
+      Serial.println("DEVICE CLOSED");
       XACTUAL=0;
       sendData(0x21+0x80, 0);      // XACTUAL=0
       sendData(0x2D+0x80, 0);      // XTARGET=0
-      Serial.println("DEVICE CLOSED");
       move_close_stall=false;
       move_open_stall=false;
-
     }
-  }
+   }
 
 lastcloseState = closeState;
-
 
 openState = digitalRead(position_2_sensor);
 
