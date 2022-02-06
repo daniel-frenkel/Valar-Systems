@@ -1,40 +1,25 @@
-#define chipCS 27
-#define SCLK 26
-#define MISO_PIN 33
-#define MOSI_PIN 25
-#define CLOCKOUT 15
-#define ENABLE_PIN 32
-#define R_SENSE 0.15f
-
-#define btn1 12//17//12
-#define btn2 13//16//13
-
-#include <TMCStepper.h>
 #include "driver/ledc.h"
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <SPI.h>
 #include <Preferences.h>
-#include "Memory.h"
+#include "pins.h"
 #include "Variables.h"
-#include "ResetButton.h"
-#include "MotorControl.h"
+//#include "HTML.h"
 #include "API.h"
+#include "ResetButton.h"
+#include "motor_control.h"
+#include "motor_calibration.h"
 
-#include <SimpleTimer.h>
-
-SimpleTimer timer;
-SimpleTimer blynkTimer;
 
 TaskHandle_t TaskA;
 
 void setup() {
 
   Serial.begin(115200);
-  preferences_local.begin("local", false);
+  preferences.begin("local", false);
   pinMode(position_2_sensor, INPUT);
   pinMode(position_1_sensor, INPUT);
-  pinMode(buzzer_pin, OUTPUT);
 
   xTaskCreatePinnedToCore(
    IndependentTask,        /* pvTaskCode */
@@ -44,65 +29,68 @@ void setup() {
    1,                      /* uxPriority */
    &TaskA,                 /* pxCreatedTask */
    0);                     /* xCoreID */  
+
+  wifi_set = preferences.getInt("wifi_set", 0);
+  ssid = preferences.getString ("ssid", "NO_SSID");
+  pass = preferences.getString ("pass", "NO_PASSWORD");
   
-  
-  open_stall_calibration_high = preferences_local.getInt("OStallCalHi", 4128768);
-  open_stall_calibration_value_high = preferences_local.getInt("2StallCalValHi", 63);
-  close_stall_calibration_high = preferences_local.getInt("CStallCalHi", 4128768);
-  close_stall_calibration_value_high = preferences_local.getInt("1StallCalValHi", 63);
+  open_stall_calibration_high = preferences.getInt("OStallCalHi", 4128768);
+  open_stall_calibration_value_high = preferences.getInt("2StallCalValHi", 63);
+  close_stall_calibration_high = preferences.getInt("CStallCalHi", 4128768);
+  close_stall_calibration_value_high = preferences.getInt("1StallCalValHi", 63);
 
-  open_stall_calibration_low = preferences_local.getInt("OStallCalLo", 4128768);
-  open_stall_calibration_value_low = preferences_local.getInt("2StallCalValLo", 63);
-  close_stall_calibration_low = preferences_local.getInt("CStallCalLo", 4128768);
-  close_stall_calibration_value_low = preferences_local.getInt("1StallCalValLo", 63);
+  open_stall_calibration_low = preferences.getInt("OStallCalLo", 4128768);
+  open_stall_calibration_value_low = preferences.getInt("2StallCalValLo", 63);
+  close_stall_calibration_low = preferences.getInt("CStallCalLo", 4128768);
+  close_stall_calibration_value_low = preferences.getInt("1StallCalValLo", 63);
 
-  open_current_calibration_high = preferences_local.getInt("O_cur_cal_h", 512);
-  open_current_calibration_value_high = preferences_local.getInt("2_cur_cal_val_h", 4);
-  close_current_calibration_high = preferences_local.getInt("C_cur_cal_h", 512);
-  close_current_calibration_value_high = preferences_local.getInt("1_cur_cal_val_h", 4);
+  open_current_calibration_high = preferences.getInt("O_cur_cal_h", 512);
+  open_current_calibration_value_high = preferences.getInt("2_cur_cal_val_h", 4);
+  close_current_calibration_high = preferences.getInt("C_cur_cal_h", 512);
+  close_current_calibration_value_high = preferences.getInt("1_cur_cal_val_h", 4);
 
-  open_current_calibration_low = preferences_local.getInt("O_cur_cal_val_l", 512);
-  open_current_calibration_value_low = preferences_local.getInt("O_cur_cal_val_l", 4);
-  close_current_calibration_low = preferences_local.getInt("C_cur_cal_val_l", 512);
-  close_current_calibration_value_low = preferences_local.getInt("C_cur_cal_val_l", 4);
+  open_current_calibration_low = preferences.getInt("O_cur_cal_val_l", 512);
+  open_current_calibration_value_low = preferences.getInt("O_cur_cal_val_l", 4);
+  close_current_calibration_low = preferences.getInt("C_cur_cal_val_l", 512);
+  close_current_calibration_value_low = preferences.getInt("C_cur_cal_val_l", 4);
 
-  stall_close_high = preferences_local.getInt("stall_close_hi", 4128768);
+  stall_close_high = preferences.getInt("stall_close_hi", 4128768);
   Serial.print("Preferences stall_close: ");
   Serial.println(stall_close_high);
   
-  stall_open_high = preferences_local.getInt("stall_open_hi", 4128768);
+  stall_open_high = preferences.getInt("stall_open_hi", 4128768);
   Serial.print("Preferences stall_open: ");
   Serial.println(stall_open_high);
 
-  stall_close_low = preferences_local.getInt("stall_close_lo", 4128768);
+  stall_close_low = preferences.getInt("stall_close_lo", 4128768);
   Serial.print("Preferences stall_close: ");
   Serial.println(stall_close_low);
   
-  stall_open_low = preferences_local.getInt("stall_open_lo", 4128768);
+  stall_open_low = preferences.getInt("stall_open_lo", 4128768);
   Serial.print("Preferences stall_open: ");
   Serial.println(stall_open_low);
   
-  open_current_high = preferences_local.getInt("open_current_h", current_setup);
+  open_current_high = preferences.getInt("open_current_h", current_setup);
   Serial.print("Preferences open_current: ");
   Serial.println(open_current_high);
 
-  close_current_high = preferences_local.getInt("close_current_h", current_setup);
+  close_current_high = preferences.getInt("close_current_h", current_setup);
   Serial.print("Preferences close_current: ");
   Serial.println(close_current_high);
 
-  open_current_low = preferences_local.getInt("open_current_l", current_setup);
+  open_current_low = preferences.getInt("open_current_l", current_setup);
   Serial.print("Preferences open_current: ");
   Serial.println(open_current_low);
 
-  close_current_low = preferences_local.getInt("close_current_l", current_setup);
+  close_current_low = preferences.getInt("close_current_l", current_setup);
   Serial.print("Preferences close_current: ");
   Serial.println(close_current_low);
 
-  move_to_position = preferences_local.getInt("move_to_position", 0); //3102236
+  move_to_position = preferences.getInt("move_to_position", 0); //3102236
   Serial.print("Preferences move_to_position: ");
   Serial.println(move_to_position);
 
-  max_steps = preferences_local.getInt("max_steps", 0);
+  max_steps = preferences.getInt("max_steps", 0);
   Serial.print("Preferences max_steps: ");
   Serial.println(max_steps);
 
@@ -110,7 +98,7 @@ void setup() {
   Serial.print("XACTUAL Position: ");
   Serial.println(XACTUAL);
 
-  CLOSE_POSITION = preferences_local.getInt("close_pos", 1);
+  CLOSE_POSITION = preferences.getInt("close_pos", 1);
   Serial.print("Preferences Close Position: ");
   Serial.println(CLOSE_POSITION);
 
@@ -118,7 +106,7 @@ void setup() {
   Serial.print("just_open_position: ");
   Serial.println(just_open_position);
 
-  fast_loud = preferences_local.getBool("fast_loud", true);
+  fast_loud = preferences.getBool("fast_loud", true);
 
   clockout_setup();
   setup_motors();
@@ -153,7 +141,6 @@ while(true) {
     }if(command==STOP){
       delay(100);
     }else if(command==CUSTOM_MOVE){
-      buzzer_flag = false;
       motor_running = true;
       if(CLOSE_POSITION==1){
       move_motor_position_1();
@@ -170,44 +157,30 @@ while(true) {
       Serial.println("Starting POSITION_OPEN");
       position_open();
     }else if (command==STEP_1){
-      AUTO_OPEN=false;
       Serial.println("Step 1 Cal");
       new_auto_calibrate_step_1();
       position_close();
-      AUTO_OPEN=AUTO_OPEN_BLYNK;
     }else if (command==STEP_3){
-      AUTO_OPEN=false;
       new_auto_calibrate_step_3();
       position_close();
-      AUTO_OPEN=AUTO_OPEN_BLYNK;
     }else if(command==STEP_4){
-      AUTO_OPEN=false;
       new_auto_calibrate_step_4();
       position_close();
-      AUTO_OPEN=AUTO_OPEN_BLYNK;
     }else if(command==STEP_5){
-      AUTO_OPEN=false;
       new_auto_calibrate_step_5();
       position_close();
-      AUTO_OPEN=AUTO_OPEN_BLYNK;
     }else if(command==STEP_6){
-      AUTO_OPEN=false;
       new_auto_calibrate_step_6();
       position_close();
-      AUTO_OPEN=AUTO_OPEN_BLYNK;
     }else if(command==AUTO_TUNE){
-      AUTO_OPEN=false;
       new_auto_calibrate_step_1();
-      new_auto_calibrate_step_3(); //High Current
-      new_auto_calibrate_step_4(); //Low Current
-      new_auto_calibrate_step_5(); //High Stall
-      new_auto_calibrate_step_6(); //Low Stall
+      new_auto_calibrate_step_3(); 
+      new_auto_calibrate_step_4(); 
+      new_auto_calibrate_step_5(); 
+      new_auto_calibrate_step_6(); 
       position_close();
-      AUTO_OPEN=AUTO_OPEN_BLYNK;
     } 
 
-    
-    
     if(command!=-1)Serial.println("[ready for next movement]");
     command = -1;
     delay(16);
@@ -217,8 +190,6 @@ while(true) {
 
 void loop() {
 
-blynkTimer.run();
-
 closeState = digitalRead(position_1_sensor);
 
   // compare the buttonState to its previous state
@@ -226,24 +197,16 @@ closeState = digitalRead(position_1_sensor);
     // if the state has changed, increment the counter
     if (closeState == HIGH) {
       // if the current state is HIGH then the button went from off to on:
-      //Blynk.virtualWrite(V46, "OPEN");;
       Serial.println("DEVICE OPENED");
-        if(AUTO_OPEN==true){
-        command = OPEN_CLOSE;
         }
     } else {
       // if the current state is LOW then the button went from on to off:
       XACTUAL=0;
       sendData(0x21+0x80, 0);      // XACTUAL=0
       sendData(0x2D+0x80, 0);      // XTARGET=0
-      //preferences_local.putInt("XACTUAL", 0);
-      //Blynk.virtualWrite(V46, "CLOSED");;
       Serial.println("DEVICE CLOSED");
-      buzzer_flag = false;
-      AUTO_OPEN = AUTO_OPEN_BLYNK;
       move_close_stall=false;
       move_open_stall=false;
-      //blynkTimer.disable(buzzerId); 
 
     }
   }
@@ -261,7 +224,6 @@ openState = digitalRead(position_2_sensor);
       XACTUAL=max_steps;
       sendData(0x21+0x80, max_steps);      // XACTUAL=0
       sendData(0x2D+0x80, max_steps);      // XTARGET=0
-      //preferences_local.putInt("XACTUAL", max_steps);
       }
     }
   }
@@ -269,8 +231,6 @@ openState = digitalRead(position_2_sensor);
   
   // save the current state as the last state, for next time through the loop
   lastopenState = openState;
-
-
 
   // read the pushbutton input pin:
   stallCloseState = move_close_stall;
@@ -281,15 +241,10 @@ openState = digitalRead(position_2_sensor);
     if (stallCloseState == true) {
       // if the current state is HIGH then the button went from off to on:
       //Blynk.virtualWrite(V46, "STALLED");
-      //Blynk.virtualWrite(V3 , 5);
       Serial.println("STALLED CLOSED");
-      if(stall_buzzer_blynk == true){
-        //blynkTimer.enable(buzzerId);
-        }
-    } else {
+    }else {
       // if the current state is LOW then the button went from on to off:
       Serial.println("CLEARED STALL");
-      //blynkTimer.disable(buzzerId); 
       if (closeState == HIGH) {
       //Blynk.virtualWrite(V46, "OPENED");
      }
@@ -307,16 +262,10 @@ if (stallOpenState != lastStallOpenState) {
     // if the state has changed, increment the counter
     if (stallOpenState == true) {
       // if the current state is HIGH then the button went from off to on:
-      //Blynk.virtualWrite(V46, "STALLED");
-      //Blynk.virtualWrite(V3 , 5);
       Serial.println("STALLED OPEN");
-      if(stall_buzzer_blynk == true){
-      //blynkTimer.enable(buzzerId);
-      }
     } else {
       // if the current state is LOW then the button went from on to off:
       Serial.println("STALL CLEARED");
-      //blynkTimer.disable(buzzerId);
       if (closeState == HIGH) {
       //Blynk.virtualWrite(V46, "OPENED");
       }

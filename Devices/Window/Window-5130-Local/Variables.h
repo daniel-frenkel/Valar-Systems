@@ -19,13 +19,10 @@
 #define OPEN_CLOSE 20
 #define AUTO_TUNE 21
 
-
-
 int waitTime;
 int lowTime;
 int maxCloseTime;
 
-#ifdef Model_W
 int MOVE_OPEN_VELOCITY = 400000;
 int MOVE_CLOSE_VELOCITY = 400000;
 int MOVE_ACCEL = 3000;
@@ -72,60 +69,6 @@ int full_steps_mm = 100;
 
 float one_inch = gear_ratio * inches_mm * motor_microsteps * full_steps_mm;
 
-#endif
-
-#ifdef Model_D
-int MOVE_OPEN_VELOCITY = 130000; // 150000 good
-int MOVE_CLOSE_VELOCITY = 30000; // 25000 good
-int CALIBRATION_VELOCITY = 20000;
-int MOVE_ACCEL = 1000;
-int MOVE_DECEL = 3000;
-int MOVE_DECEL_CLOSED = 130000;
-
-int setup_current = 6400;
-
-
-//High Current
-int current_high_open_initial_value = 8;
-int current_high_close_initial_value = 8;
-
-int stall_high_current_setup = 15;
-
-int stall_high_open_initial_value = 5;
-int stall_high_close_initial_value = 5;
-
-int current_high_open_passes = 10;
-int current_high_close_passes = 10;
-
-int stall_high_open_passes = 10;
-int stall_high_close_passes = 10;
-
-
-//Low Current
-int current_low_open_initial_value = 8;
-int current_low_close_initial_value = 8;
-
-int stall_low_current_setup = 15;
-
-int stall_low_open_initial_value = 5;
-int stall_low_close_initial_value = 5;
-
-int current_low_open_passes = 5;
-int current_low_close_passes = 5;
-
-int stall_low_open_passes = 5;
-int stall_low_close_passes = 5;
-
-
-float gear_ratio = 1;
-float inches_mm = 25.4;
-int motor_microsteps = 64; //For some reason 64 works/ Should be 256
-float full_steps_mm = 10.97620570866142;
-
-float one_inch = gear_ratio * inches_mm * motor_microsteps * full_steps_mm;
-
-#endif
-
 int stall_close_high;
 int stall_open_high;
 int stall_close_low;
@@ -146,20 +89,11 @@ bool move_close_stall;
 bool move_open_stall;
 bool restart_movement;
 
-bool blynk_update = false;
-
 bool Orientation_Right;
 
 unsigned long sendData(unsigned long address, unsigned long datagram);
 
 int XACTUAL;
-
-long check_timer = 0;
-long daylight_timer = 0;
-
-long last_timezone_offset=-1;
-
-void save_time(int i);
 
 int command = -1;
 
@@ -196,12 +130,7 @@ int close_current_calibration_value_low;
 
 bool motor_running = false;
 
-bool commandBuzzer;
-
 bool reverse_flag = false;
-
-bool buzzer_flag = false;
-int auto_close_time = 0;
 
 void delayStall(long timeout);
 void waitStall(long timeout);
@@ -226,14 +155,11 @@ int lastStallOpenState = 0;
 int stallCloseState = 0;
 int lastStallCloseState = 0;
 
-int schedulerId;
-int notifyId;
-bool door_status_opened;
-
 int just_open_position; 
 bool just_open_set_button = false;
 int stepValue;
 bool fast_loud;
+int speed_type;
 
 // State variables will change:
 int closeState = LOW;         // current state of the door
@@ -244,6 +170,5 @@ int lastopenState = LOW;     // previous state of the door
 int run_section;
 float slider_display;
 float slider_XACTUAL;
-bool stall_buzzer_blynk;
 int timer_open_percent;
 int distance_cal = false;

@@ -63,8 +63,6 @@ void new_auto_calibrate_step_1(){  //STEP 1 - Set Max distance
   trip = 3;
   }
 
-
-      #ifdef Model_W
       if(digitalRead(btn1)==LOW || digitalRead(btn2)==LOW){ // Button to stop
       Serial.println("Button Stopped");
       sendData(0x26+0x80, MOVE_DECEL); //Decelerate super fast
@@ -72,17 +70,16 @@ void new_auto_calibrate_step_1(){  //STEP 1 - Set Max distance
       delay(200);
       break;  // end loop and stop motor
       }
-      #endif
+
   }
          
       
   Serial.println("Finished Setting Max Steps");
   Serial.println(max_steps);     
-  preferences_local.putInt("max_steps", max_steps);
+  preferences.putInt("max_steps", max_steps);
   
   digitalWrite(ENABLE_PIN, HIGH);
    
-  blynk_update = true;
 
   Serial.print("max_steps/one_inch: ");
   Serial.println(max_steps/one_inch);
@@ -146,7 +143,6 @@ void new_auto_calibrate_step_3(){ //CURRENT HIGH FRICTION
   stall_close_high = close_stall_calibration_high;
   Serial.println(close_stall_calibration_high);
 
-  blynk_update=true;
   
   sendData(0x20+0x80, 2); // RAMPMODE=1 Velocity mode to open / RAMPMODE=2 Velocity mode to Negative
   sendData(0x26+0x80, MOVE_ACCEL); //AMAX
@@ -230,7 +226,6 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
       open_current_high=open_current_calibration_high;
       sendData(0x10 + 0x80, open_current_high);
       Serial.println(open_current_high);
-      blynk_update=true;
       
       sendData(0x26 + 0x80, MOVE_ACCEL); //AMAX
       sendData(0x27 + 0x80, MOVE_OPEN_VELOCITY); //VMAX
@@ -257,7 +252,6 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
         close_current_high=close_current_calibration_high;
         sendData(0x10 + 0x80, close_current_high);
         Serial.println(close_current_high);
-        blynk_update=true;
         
         //sendData(0x20 + 0x80, 2); // RAMPMODE=1 Velocity mode to positive / RAMPMODE=2 Velocity mode to negative
         
@@ -269,7 +263,6 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
         sendData(0x27 + 0x80, MOVE_CLOSE_VELOCITY); //VMAX
         }
 
-      #ifdef Model_W
       if(digitalRead(btn1)==LOW || digitalRead(btn2)==LOW){ // Button to stop
       Serial.println("Button Stopped");
       sendData(0x26+0x80, MOVE_DECEL); //Decelerate super fast
@@ -277,8 +270,7 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
       delay(200);
       break;  // end loop and stop motor
       }
-      #endif
-      
+
      delay(1);
   }
 
@@ -289,22 +281,19 @@ while (number_open_passes<=current_high_open_passes || number_close_passes<=curr
   Serial.print("Close Current: ");
   Serial.println(close_current_calibration_value_high);
 
-  preferences_local.putInt("O_cur_cal_h", open_current_calibration_high);
-  preferences_local.putInt("2_cur_cal_val_h",open_current_calibration_value_high);
+  preferences.putInt("O_cur_cal_h", open_current_calibration_high);
+  preferences.putInt("2_cur_cal_val_h",open_current_calibration_value_high);
 
-  preferences_local.putInt("C_cur_cal_h", close_current_calibration_high);
-  preferences_local.putInt("1_cur_cal_val_h", close_current_calibration_value_high);
+  preferences.putInt("C_cur_cal_h", close_current_calibration_high);
+  preferences.putInt("1_cur_cal_val_h", close_current_calibration_value_high);
   
-  preferences_local.putInt("close_current_h", close_current_high);
-  preferences_local.putInt("open_current_h", open_current_high);
+  preferences.putInt("close_current_h", close_current_high);
+  preferences.putInt("open_current_h", open_current_high);
 
   sendData(0x26+0x80, 0); //AMAX
   sendData(0x27+0x80, 0); //VMAX
   
   digitalWrite(ENABLE_PIN, HIGH);
-  
-  blynk_update=true;
-
 
 }
 
@@ -360,7 +349,6 @@ void new_auto_calibrate_step_4(){ //CURRENT LOW
   stall_close_low = close_stall_calibration_low;
   Serial.println(close_stall_calibration_low);
 
-  blynk_update=true;
    
    //Step 1 - Move to position 1 sensor
 
@@ -567,7 +555,7 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
       open_current_low=open_current_calibration_low;
       sendData(0x10 + 0x80, open_current_low);
       Serial.println(open_current_low);
-      blynk_update=true;
+
       //OPEN CURRENT LOW
 
       sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
@@ -603,7 +591,7 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
         close_current_low=close_current_calibration_low;
         sendData(0x10 + 0x80, close_current_low);
         Serial.println(close_current_low);
-        blynk_update=true;
+
       //CURRENT LOW
 
             
@@ -641,7 +629,6 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
         
       }
 
-      #ifdef Model_W
       if(digitalRead(btn1)==LOW || digitalRead(btn2)==LOW){ // Button to stop
       Serial.println("Button Stopped");
       sendData(0x26+0x80, MOVE_DECEL); //Decelerate super fast
@@ -649,7 +636,6 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
       delay(200);
       break;  // end loop and stop motor
       }
-      #endif
 
      delay(1);
   }
@@ -661,21 +647,20 @@ while (number_open_passes<=current_low_open_passes || number_close_passes<=curre
   Serial.print("Close Current: ");
   Serial.println(close_current_calibration_value_low);
 
-  preferences_local.putInt("O_cur_cal_l", open_current_calibration_low);
-  preferences_local.putInt("O_cur_cal_val_l",open_current_calibration_value_low);
+  preferences.putInt("O_cur_cal_l", open_current_calibration_low);
+  preferences.putInt("O_cur_cal_val_l",open_current_calibration_value_low);
 
-  preferences_local.putInt("C_cur_cal_l", close_current_calibration_low);
-  preferences_local.putInt("C_cur_cal_val_l", close_current_calibration_value_low);
+  preferences.putInt("C_cur_cal_l", close_current_calibration_low);
+  preferences.putInt("C_cur_cal_val_l", close_current_calibration_value_low);
   
-  preferences_local.putInt("close_current_l", close_current_low);
-  preferences_local.putInt("open_current_l", open_current_low);
+  preferences.putInt("close_current_l", close_current_low);
+  preferences.putInt("open_current_l", open_current_low);
 
   sendData(0x26+0x80, 0); //AMAX
   sendData(0x27+0x80, 0); //VMAX
   
   digitalWrite(ENABLE_PIN, HIGH);
   
-  blynk_update=true;
 
 }
 
@@ -711,7 +696,6 @@ void new_auto_calibrate_step_5(){
   stall_close_high = close_stall_calibration_high;
   Serial.println(stall_close_high);
   
-  blynk_update=true;
 
   sendData(0x14 + 0x80,  MOVE_CLOSE_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x20+0x80, 2); // Close door
@@ -801,7 +785,6 @@ while (number_open_passes<stall_high_open_passes && number_close_passes<stall_hi
 
       sendData(0x27+0x80, MOVE_OPEN_VELOCITY); //restart
 
-      blynk_update=true;
     
       }
 
@@ -829,11 +812,10 @@ while (number_open_passes<stall_high_open_passes && number_close_passes<stall_hi
         sendData(0x34 + 0x80, 0x400); // Enable stallguard /
 
         sendData(0x27 + 0x80, MOVE_CLOSE_VELOCITY); //VMAX
-        blynk_update=true;
+
         
         }
 
-      #ifdef Model_W
       if(digitalRead(btn1)==LOW || digitalRead(btn2)==LOW){ // Button to stop
       Serial.println("Button Stopped");
       sendData(0x26+0x80, MOVE_DECEL); //Decelerate super fast
@@ -841,7 +823,6 @@ while (number_open_passes<stall_high_open_passes && number_close_passes<stall_hi
       delay(200);
       break;  // end loop and stop motor
       }
-      #endif
       
      delay(1);
   }
@@ -870,23 +851,23 @@ while (number_open_passes<stall_high_open_passes && number_close_passes<stall_hi
   sendData(0x27+0x80, 0); //Set velocity to 0
   delay(1000);
 
-  preferences_local.putInt("OStallCalHi", open_stall_calibration_high);
-  preferences_local.putInt("2StallCalValHi", open_stall_calibration_value_high);
+  preferences.putInt("OStallCalHi", open_stall_calibration_high);
+  preferences.putInt("2StallCalValHi", open_stall_calibration_value_high);
 
-  preferences_local.putInt("CStallCalHi", close_stall_calibration_high);
-  preferences_local.putInt("1StallCalValHi", close_stall_calibration_value_high);
+  preferences.putInt("CStallCalHi", close_stall_calibration_high);
+  preferences.putInt("1StallCalValHi", close_stall_calibration_value_high);
 
-  preferences_local.putInt("stall_close_hi", stall_close_high); 
-  Serial.println(preferences_local.getInt("stall_close_hi", 404));
+  preferences.putInt("stall_close_hi", stall_close_high); 
+  Serial.println(preferences.getInt("stall_close_hi", 404));
   
-  preferences_local.putInt("stall_open_hi", stall_open_high);
-  Serial.println(preferences_local.getInt("stall_open_hi", 404));
+  preferences.putInt("stall_open_hi", stall_open_high);
+  Serial.println(preferences.getInt("stall_open_hi", 404));
   
   Serial.println("STALL SETUP COMPLETE!");
   
   //Final Steps Overall
   digitalWrite(ENABLE_PIN, HIGH);
-  blynk_update=true;
+
 }
 
 
@@ -920,8 +901,7 @@ void new_auto_calibrate_step_6(){
   stall_close_low = close_stall_calibration_low;
   Serial.println(stall_close_low);
 
-  blynk_update=true;
-  
+ 
   //Step 1 - Move to position 1 sensor
 
   Serial.print("Moving to Position 1");
@@ -1130,8 +1110,6 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
 
       sendData(0x27 + 0x80, MOVE_OPEN_VELOCITY); //VMAX
 
-      blynk_update=true;
-
       }
 
   sendData(0x35, 0) & 0x40;
@@ -1165,7 +1143,6 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
       Serial.print("XTARGET: ");
       Serial.println(just_open_position);
 
-      blynk_update=true;
       
       }
 
@@ -1193,7 +1170,6 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
         
       }
 
-      #ifdef Model_W
       if(digitalRead(btn1)==LOW || digitalRead(btn2)==LOW){ // Button to stop
       Serial.println("Button Stopped");
       sendData(0x26+0x80, MOVE_DECEL); //Decelerate super fast
@@ -1201,7 +1177,6 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
       delay(200);
       break;  // end loop and stop motor
       }
-      #endif
 
      delay(1);
     
@@ -1232,23 +1207,21 @@ while (number_open_passes<stall_low_open_passes || number_close_passes<stall_low
   sendData(0x27+0x80, 0); //Set velocity to 0
   delay(1000);
 
-  preferences_local.putInt("OStallCalLo", open_stall_calibration_low);
-  preferences_local.putInt("2StallCalValLo",open_stall_calibration_value_low);
+  preferences.putInt("OStallCalLo", open_stall_calibration_low);
+  preferences.putInt("2StallCalValLo",open_stall_calibration_value_low);
 
-  preferences_local.putInt("CStallCalLo", close_stall_calibration_low);
-  preferences_local.putInt("1StallCalValLo", close_stall_calibration_value_low);
+  preferences.putInt("CStallCalLo", close_stall_calibration_low);
+  preferences.putInt("1StallCalValLo", close_stall_calibration_value_low);
 
-  preferences_local.putInt("stall_close_lo", stall_close_low); 
-  Serial.println(preferences_local.getInt("stall_close_lo", 404));
+  preferences.putInt("stall_close_lo", stall_close_low); 
+  Serial.println(preferences.getInt("stall_close_lo", 404));
   
-  preferences_local.putInt("stall_open_lo", stall_open_low);
-  Serial.println(preferences_local.getInt("stall_open_lo", 404));
+  preferences.putInt("stall_open_lo", stall_open_low);
+  Serial.println(preferences.getInt("stall_open_lo", 404));
   
   Serial.println("STALL SETUP COMPLETE!");
 
   digitalWrite(ENABLE_PIN, HIGH);
-  
-  blynk_update=true;
   
 }
 

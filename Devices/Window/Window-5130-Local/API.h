@@ -5,9 +5,15 @@
 #include "ArduinoJson.h"
 #include "HTML.h"
 
+Preferences preferences;
+
 const char *ap_ssid = "VALAR-AP";
 const char *ap_password = "password";
 
+int wifi_set;
+bool wifi_button = false;;
+String ssid;
+String pass;
 String ip_address;
 
 AsyncWebServer server(80);
@@ -16,19 +22,37 @@ String processor(const String& var)
 {
  
   if(var == "PLACEHOLDER_PERCENT"){
-    return String(move_percent);
+    return String(move_to_position);
   }
   else if(var == "PLACEHOLDER_MAX_STEPS"){
     return String(max_steps);
   }
-  else if(var == "PLACEHOLDER_CURRENT"){
-    return String(current_value);
+  else if(var == "PLACEHOLDER_OPEN_CURRENT_HIGH"){
+    return String(open_current_high);
   }
-  else if(var == "PLACEHOLDER_STALL"){
-    return String(stall_value);
+  else if(var == "PLACEHOLDER_OPEN_CURRENT_LOW"){
+    return String(open_current_low);
+  }
+  else if(var == "PLACEHOLDER_CLOSE_CURRENT_HIGH"){
+    return String(close_current_high);
+  }
+  else if(var == "PLACEHOLDER_CLOSE_CURRENT_LOW"){
+    return String(close_current_low);
+  }
+  else if(var == "PLACEHOLDER_STALL_OPEN_HIGH"){
+    return String(stall_open_high);
+  }
+  else if(var == "PLACEHOLDER_STALL_OPEN_LOW"){
+    return String(stall_open_low);
+  }
+  else if(var == "PLACEHOLDER_STALL_CLOSE_HIGH"){
+    return String(stall_close_high);
+  }
+  else if(var == "PLACEHOLDER_STALL_CLOSE_LOW"){
+    return String(stall_close_low);
   }
   else if(var == "PLACEHOLDER_MAX_SPEED"){
-    return String(max_speed/1000);
+    return String(speed_type);
   }
   else if(var == "PLACEHOLDER_IP_ADDRESS"){
     return String(ip_address);
@@ -36,6 +60,24 @@ String processor(const String& var)
  
   return String();
 }
+
+
+//SINGLE BUTTONS
+/*
+position_open
+position_close
+position_adjust
+
+STEP_1
+STEP_3
+STEP_4
+STEP_5
+STEP_6
+
+AUTO_TUNE
+
+*/
+
 
 void API()
 {
@@ -133,21 +175,21 @@ void API()
         case 1: // Item 1 
           Serial.println("Position 1 Close");
           CLOSE_POSITION = 1;
-          preferences_local.putInt("close_pos", 1);
+          preferences.putInt("close_pos", 1);
           sendData(0x00+0x80, 0x14);
           break;
           
         case 2: // Item 2
           Serial.println("Position 2 Close");
           CLOSE_POSITION = 2;
-          preferences_local.putInt("close_pos", 2);
+          preferences.putInt("close_pos", 2);
           sendData(0x00+0x80, 0x04);
           break;
     
       }
     }
     
-     if(request->hasParam("speed"))
+     if(request->hasParam("speed_type"))
         {
           int q = request->getParam("speed")->value().toInt();
           switch (q)
@@ -157,9 +199,9 @@ void API()
           fast_loud = false;
           MOVE_CLOSE_VELOCITY = 100000;
           MOVE_OPEN_VELOCITY = 100000;
-          preferences_local.putBool("fast_loud", false);
-          preferences_local.putInt("MOVE_CLOSE_VEL", MOVE_CLOSE_VELOCITY);
-          preferences_local.putInt("MOVE_OPEN_VEL", MOVE_OPEN_VELOCITY);
+          preferences.putBool("fast_loud", false);
+          preferences.putInt("MOVE_CLOSE_VEL", MOVE_CLOSE_VELOCITY);
+          preferences.putInt("MOVE_OPEN_VEL", MOVE_OPEN_VELOCITY);
           sendData(0x70 + 0x80, 0x000504C8);
              if(CLOSE_POSITION==2){
              sendData(0x00+0x80, 0x04);     // General settings /GCONF
@@ -174,9 +216,9 @@ void API()
           fast_loud = true;
           MOVE_OPEN_VELOCITY = 400000;
           MOVE_CLOSE_VELOCITY = 400000;
-          preferences_local.putBool("fast_loud", true);
-          preferences_local.putInt("MOVE_CLOSE_VEL", MOVE_CLOSE_VELOCITY);
-          preferences_local.putInt("MOVE_OPEN_VEL", MOVE_OPEN_VELOCITY);
+          preferences.putBool("fast_loud", true);
+          preferences.putInt("MOVE_CLOSE_VEL", MOVE_CLOSE_VELOCITY);
+          preferences.putInt("MOVE_OPEN_VEL", MOVE_OPEN_VELOCITY);
           sendData(0x70 + 0x80 , 0);
              if(CLOSE_POSITION==2){
              sendData(0x00+0x80, 0x00);     // General settings /GCONF
@@ -193,7 +235,7 @@ void API()
           int q = request->getParam("open_high_current")->value().toInt();
           open_current_calibration_value_high=q;
           if(open_current_calibration_value_high>26)open_current_calibration_value_high=26;
-          preferences_local.putInt("2_cur_cal_val_h", q);
+          preferences.putInt("2_cur_cal_val_h", q);
           Serial.println(q);
           double current =((q+1)/(float)32)*(0.325/(0.15+0.02))*(1/sqrt(2));
           Serial.print("Current: ");
@@ -202,7 +244,7 @@ void API()
           q&=0x1F;
           q=q<<8;
           open_current_high=q;
-          preferences_local.putInt("open_current_h", q);
+          preferences.putInt("open_current_h", q);
           Serial.println(open_current_high);
           }
         
@@ -212,7 +254,7 @@ void API()
           int q = request->getParam("close_high_current")->value().toInt();
           close_current_calibration_value_high=q;
           if(close_current_calibration_value_high>26)close_current_calibration_value_high=26;
-          preferences_local.putInt("1_cur_cal_val_h", q);
+          preferences.putInt("1_cur_cal_val_h", q);
           Serial.println(q);
           double current =((q+1)/(float)32)*(0.325/(0.15+0.02))*(1/sqrt(2));
           Serial.print("Current: ");
@@ -221,7 +263,7 @@ void API()
           q&=0x1F;
           q=q<<8;
           close_current_high=q;
-          preferences_local.putInt("close_current_h", q);
+          preferences.putInt("close_current_h", q);
           Serial.println(close_current_high);
         }
 
@@ -231,17 +273,17 @@ void API()
           int q = request->getParam("open_low_current")->value().toInt();
           open_current_calibration_value_low=q;
           if(open_current_calibration_value_low>26)open_current_calibration_value_low=26;
-          preferences_local.putInt("O_cur_cal_val_l", q);
+          preferences.putInt("O_cur_cal_val_l", q);
           Serial.println(q);
           double current =((q+1)/(float)32)*(0.325/(0.15+0.02))*(1/sqrt(2));
           Serial.print("Current: ");
           Serial.print(current);
           Serial.println(" Amps");
-          Blynk.virtualWrite(V58, current);
+          //Blynk.virtualWrite(V58, current);
           q&=0x1F;
           q=q<<8;
           open_current_low=q;
-          preferences_local.putInt("open_current_l", q);
+          preferences.putInt("open_current_l", q);
           Serial.println(open_current_low);
         }
         
@@ -251,17 +293,17 @@ void API()
           int q = request->getParam("close_low_current")->value().toInt();
           close_current_calibration_value_low=q;
           if(close_current_calibration_value_low>26)close_current_calibration_value_low=26;
-          preferences_local.putInt("C_cur_cal_val_l", q);
+          preferences.putInt("C_cur_cal_val_l", q);
           Serial.println(q);
           double current =((q+1)/(float)32)*(0.325/(0.15+0.02))*(1/sqrt(2));
           Serial.print("Current: ");
           Serial.print(current);
           Serial.println(" Amps");
-          Blynk.virtualWrite(V57, current);
+          //Blynk.virtualWrite(V57, current);
           q&=0x1F;
           q=q<<8;
           close_current_low=q;
-          preferences_local.putInt("close_current_l", q);
+          preferences.putInt("close_current_l", q);
           Serial.println(close_current_low);
         }
         
@@ -270,14 +312,14 @@ void API()
           int q = request->getParam("stall_open_low")->value().toInt();
           Serial.print("set OPEN LOW stall: ");
           open_stall_calibration_value_low = q;
-          preferences_local.putInt("2StallCalValLo", q);
+          preferences.putInt("2StallCalValLo", q);
           Serial.println(q);
           if(q>63)q=63;
           if(q<-64)q=-64;
           q&=0x7F;
           q=q<<16;
           stall_open_low = q;
-          preferences_local.putInt("stall_open_lo", stall_open_low); 
+          preferences.putInt("stall_open_lo", stall_open_low); 
           Serial.println(stall_open_low);
         }
 
@@ -286,14 +328,14 @@ void API()
           int q = request->getParam("stall_close_low")->value().toInt();
           Serial.print("set CLOSE stall: ");
           close_stall_calibration_value_low = q;
-          preferences_local.putInt("1StallCalValLo", q);
+          preferences.putInt("1StallCalValLo", q);
           Serial.println(q);
           if(q>63)q=63;
           if(q<-64)q=-64;
           q&=0x7F;
           q=q<<16;
           stall_close_low = q;
-          preferences_local.putInt("stall_close_lo", stall_close_low); 
+          preferences.putInt("stall_close_lo", stall_close_low); 
           Serial.println(stall_close_low);
         }
      
@@ -302,14 +344,14 @@ void API()
           int q = request->getParam("stall_open_high")->value().toInt();
           Serial.print("set OPEN stall: ");
           open_stall_calibration_value_high = q;
-          preferences_local.putInt("2StallCalValHi", q);
+          preferences.putInt("2StallCalValHi", q);
           Serial.println(q);
           if(q>63)q=63;
           if(q<-64)q=-64;
           q&=0x7F;
           q=q<<16;
           stall_open_high = q;
-          preferences_local.putInt("stall_open_hi", stall_open_high); 
+          preferences.putInt("stall_open_hi", stall_open_high); 
           Serial.println(stall_open_high);
         }
 
@@ -318,51 +360,64 @@ void API()
           int q = request->getParam("stall_close_high")->value().toInt();
           Serial.print("set CLOSE stall: ");
           close_stall_calibration_value_high = q;
-          preferences_local.putInt("1StallCalValHi", q);
+          preferences.putInt("1StallCalValHi", q);
           Serial.println(q);
           if(q>63)q=63;
           if(q<-64)q=-64;
           q&=0x7F;
           q=q<<16;
           stall_close_high = q;
-          preferences_local.putInt("stall_close_hi", stall_close_high); 
+          preferences.putInt("stall_close_hi", stall_close_high); 
           Serial.println(stall_close_high);
         }
 
-
-
-
-
     
-    if(request->hasParam("max_speed"))
+    if(request->hasParam("speed")) //Either 1 or 2
         {
-          int q = request->getParam("max_speed")->value().toInt();
-          max_speed = q * 1000;
-          sendData(0x27+0x80, max_speed); //VMAX
-          preferences.putInt ("max_speed", max_speed);
-          Serial.print("max_speed: ");
-          Serial.println(max_speed);
-        }
+        int q = request->getParam("max_speed")->value().toInt();
 
+        switch(q)
+        {  
+        case 1: // SLOW SILENT
+        Serial.println("SLOW/SILENT");
+        fast_loud = false;
+        MOVE_CLOSE_VELOCITY = 100000;          
+        MOVE_OPEN_VELOCITY = 100000;
+        preferences.putBool("fast_loud", false);
+        preferences.putInt("MOVE_CLOSE_VEL", MOVE_CLOSE_VELOCITY);
+        preferences.putInt("MOVE_OPEN_VEL", MOVE_OPEN_VELOCITY);
+        sendData(0x70 + 0x80, 0x000504C8);
+      
+        if(CLOSE_POSITION==2){
+        sendData(0x00+0x80, 0x04);     // General settings /GCONF
+        }else{
+        sendData(0x00+0x80, 0x14);     // General settings /GCONF
+        }
+    
+        break;
+    
+        case 2: //FAST LOUD
+        Serial.println("FAST/LOUD");
+        fast_loud = true;
+        MOVE_OPEN_VELOCITY = 400000;
+        MOVE_CLOSE_VELOCITY = 400000;
+        preferences.putBool("fast_loud", true);
+        preferences.putInt("MOVE_CLOSE_VEL", MOVE_CLOSE_VELOCITY);
+        preferences.putInt("MOVE_OPEN_VEL", MOVE_OPEN_VELOCITY);
+        sendData(0x70 + 0x80 , 0);
+        
+        if(CLOSE_POSITION==2){
+        sendData(0x00+0x80, 0x00);     // General settings /GCONF
+        }else{
+        sendData(0x00+0x80, 0x10);     // General settings /GCONF
+        }
+       
+        break;
+        }
+     }  
     request->redirect("/");
     
   });
-
-server.on("/set_zero", HTTP_GET, [](AsyncWebServerRequest *request){
-
-    int paramsNr = request->params();
- 
-    for(int i=0;i<paramsNr;i++){
-        AsyncWebParameter* p = request->getParam(i);
-    }
-
-    set_zero = 1;
-    Serial.print("set_zero: ");
-    Serial.println(set_zero);   
-    request->redirect("/");
-  
-  });
-
 
 
 server.on("/position_open", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -381,7 +436,6 @@ server.on("/position_open", HTTP_GET, [](AsyncWebServerRequest *request){
   });
 
 
- 
 
 server.on("/position_close", HTTP_GET, [](AsyncWebServerRequest *request){
 
@@ -412,58 +466,7 @@ server.on("/position_adjust", HTTP_GET, [](AsyncWebServerRequest *request){
     request->redirect("/");
   
   });
-
-
-BLYNK_WRITE(V81){ // 
-  if(param.asInt()!=0){
-  command = STEP_1;
-  }
-}
-
-BLYNK_WRITE(V83){ // 
-  if(param.asInt()!=0){
-  command = STEP_3;
-  }
-}
-
-BLYNK_WRITE(V84){ // 
-  if(param.asInt()!=0){
-  command = STEP_4;
-  }
-}
-
-BLYNK_WRITE(V85){ // 
-  if(param.asInt()!=0){
-  //AUTO_OPEN = false;
-  command = STEP_5;
-  }
-}
-
-
-BLYNK_WRITE(V86){ // 
-  if(param.asInt()!=0){
-  //AUTO_OPEN = false;
-  command = STEP_6;
-  }
-}
-
-
-
-
-server.on("/auto_tune", HTTP_GET, [](AsyncWebServerRequest *request){
-
-    int paramsNr = request->params();
- 
-    for(int i=0;i<paramsNr;i++){
-        AsyncWebParameter* p = request->getParam(i);
-    }
-    
-    command = AUTO_TUNE;
-    Serial.print("command: ");
-    Serial.println(command);   
-    request->redirect("/");
   
-  });
 
 server.on("/step_1", HTTP_GET, [](AsyncWebServerRequest *request){
 
@@ -479,6 +482,7 @@ server.on("/step_1", HTTP_GET, [](AsyncWebServerRequest *request){
     request->redirect("/");
   
   });
+  
 
 server.on("/step_3", HTTP_GET, [](AsyncWebServerRequest *request){
 
@@ -495,7 +499,8 @@ server.on("/step_3", HTTP_GET, [](AsyncWebServerRequest *request){
   
   });
 
-  server.on("/step_4", HTTP_GET, [](AsyncWebServerRequest *request){
+
+server.on("/step_4", HTTP_GET, [](AsyncWebServerRequest *request){
 
     int paramsNr = request->params();
  
@@ -510,7 +515,8 @@ server.on("/step_3", HTTP_GET, [](AsyncWebServerRequest *request){
   
   });
 
-  server.on("/step_5", HTTP_GET, [](AsyncWebServerRequest *request){
+
+server.on("/step_5", HTTP_GET, [](AsyncWebServerRequest *request){
 
     int paramsNr = request->params();
  
@@ -525,7 +531,7 @@ server.on("/step_3", HTTP_GET, [](AsyncWebServerRequest *request){
   
   });
 
-    server.on("/step_6", HTTP_GET, [](AsyncWebServerRequest *request){
+server.on("/step_6", HTTP_GET, [](AsyncWebServerRequest *request){
 
     int paramsNr = request->params();
  
@@ -540,8 +546,22 @@ server.on("/step_3", HTTP_GET, [](AsyncWebServerRequest *request){
   
   });
 
-  
 
+server.on("/auto_tune", HTTP_GET, [](AsyncWebServerRequest *request){
+
+    int paramsNr = request->params();
+ 
+    for(int i=0;i<paramsNr;i++){
+        AsyncWebParameter* p = request->getParam(i);
+    }
+    
+    command = AUTO_TUNE;
+    Serial.print("command: ");
+    Serial.println(command);   
+    request->redirect("/");
+  
+  });
+  
 
 server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
     
@@ -551,9 +571,9 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
         AsyncWebParameter* p = request->getParam(i);
     }
 
-    if(request->hasParam("move_percent"))
+    if(request->hasParam("move_to_position"))
     {
-        int i = request->getParam("move_percent")->value().toInt();
+        int i = request->getParam("move_to_position")->value().toInt();
         int q=(max_steps/100)*i;
         
       if(motor_running==false){
@@ -574,8 +594,14 @@ DynamicJsonDocument doc(100);
 doc["percent_position"] = int(((float)sendData(0x21, 0)/(float)max_steps)*100);
 doc["steps_position"] = sendData(0x21, 0);
 doc["max_steps"] = max_steps;
-doc["current"] = current;
-doc["stall"] = stall;
+doc["current_high_open"] = open_current_high;
+doc["current_high_close"] = close_current_high;
+doc["current_low_open"] = open_current_low;
+doc["current_low_close"] = close_current_low;
+doc["stall_high_open"] = stall_open_high;
+doc["stall_high_close"] = stall_close_high;
+doc["stall_low_open"] = stall_open_low;
+doc["stall_low_close"] = stall_close_low;
 
 String json;
 serializeJson(doc, json);
