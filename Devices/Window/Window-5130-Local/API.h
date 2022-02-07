@@ -62,12 +62,9 @@ String processor(const String& var)
 }
 
 
-
-
-
 void API()
 {
-    //Preferences library create varaiable to save
+  //Preferences library create varaiable to save
   Serial.print("wifi_set: ");
   Serial.println(wifi_set);
   
@@ -420,7 +417,6 @@ server.on("/position_open", HTTP_GET, [](AsyncWebServerRequest *request){
     request->redirect("/");
   
   });
-
 
 
 server.on("/position_close", HTTP_GET, [](AsyncWebServerRequest *request){

@@ -112,6 +112,7 @@ void setup() {
 
   clockout_setup();
   setup_motors();
+  API();
 
 }
 
