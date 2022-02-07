@@ -51,7 +51,7 @@ String processor(const String& var)
   else if(var == "PLACEHOLDER_STALL_CLOSE_LOW"){
     return String(stall_close_low);
   }
-  else if(var == "PLACEHOLDER_MAX_SPEED"){
+  else if(var == "PLACEHOLDER_SPEED"){
     return String(speed_type);
   }
   else if(var == "PLACEHOLDER_IP_ADDRESS"){
@@ -358,9 +358,9 @@ void API()
         }
 
     
-    if(request->hasParam("speed")) //Either 1 or 2
+    if(request->hasParam("speed_type")) //Either 1 or 2
         {
-        int q = request->getParam("max_speed")->value().toInt();
+        int q = request->getParam("speed_type")->value().toInt();
 
         switch(q)
         {  
