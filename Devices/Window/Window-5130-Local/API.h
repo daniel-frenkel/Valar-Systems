@@ -28,31 +28,34 @@ String processor(const String& var)
     return String(max_steps);
   }
   else if(var == "PLACEHOLDER_OPEN_CURRENT_HIGH"){
-    return String(open_current_high);
+    return String(open_current_calibration_value_high);
   }
   else if(var == "PLACEHOLDER_OPEN_CURRENT_LOW"){
-    return String(open_current_low);
+    return String(open_current_calibration_value_low);
   }
   else if(var == "PLACEHOLDER_CLOSE_CURRENT_HIGH"){
-    return String(close_current_high);
+    return String(close_current_calibration_value_high);
   }
   else if(var == "PLACEHOLDER_CLOSE_CURRENT_LOW"){
-    return String(close_current_low);
+    return String(close_current_calibration_value_low);
   }
   else if(var == "PLACEHOLDER_STALL_OPEN_HIGH"){
-    return String(stall_open_high);
+    return String(open_stall_calibration_value_high);
   }
   else if(var == "PLACEHOLDER_STALL_OPEN_LOW"){
-    return String(stall_open_low);
+    return String(open_stall_calibration_value_low);
   }
   else if(var == "PLACEHOLDER_STALL_CLOSE_HIGH"){
-    return String(stall_close_high);
+    return String(close_stall_calibration_value_high);
   }
   else if(var == "PLACEHOLDER_STALL_CLOSE_LOW"){
-    return String(stall_close_low);
+    return String(close_stall_calibration_value_low);
   }
   else if(var == "PLACEHOLDER_SPEED"){
-    return String(speed_type);
+    return String(int(fast_loud));
+  }
+  else if(var == "PLACEHOLDER_CLOSE_POSITION"){
+    return String(CLOSE_POSITION);
   }
   else if(var == "PLACEHOLDER_IP_ADDRESS"){
     return String(ip_address);
@@ -147,8 +150,6 @@ void API()
           Serial.println(max_steps);
         }
 
-
-    
     if(request->hasParam("close_position"))
           {
         int q = request->getParam("close_position")->value().toInt();
@@ -172,12 +173,12 @@ void API()
       }
     }
     
-     if(request->hasParam("speed_type"))
+     if(request->hasParam("fast_loud"))
         {
-          int q = request->getParam("speed")->value().toInt();
+          int q = request->getParam("fast_loud")->value().toInt();
           switch (q)
           {
-          case 1: // SLOW SILENT
+          case 0: // SLOW SILENT
           Serial.println("SLOW/SILENT");
           fast_loud = false;
           MOVE_CLOSE_VELOCITY = 100000;
@@ -194,7 +195,7 @@ void API()
           
           break;
       
-          case 2: //FAST LOUD
+          case 1: //FAST LOUD
           Serial.println("FAST/LOUD");
           fast_loud = true;
           MOVE_OPEN_VELOCITY = 400000;
@@ -354,50 +355,6 @@ void API()
           Serial.println(stall_close_high);
         }
 
-    
-    if(request->hasParam("speed_type")) //Either 1 or 2
-        {
-        int q = request->getParam("speed_type")->value().toInt();
-
-        switch(q)
-        {  
-        case 1: // SLOW SILENT
-        Serial.println("SLOW/SILENT");
-        fast_loud = false;
-        MOVE_CLOSE_VELOCITY = 100000;          
-        MOVE_OPEN_VELOCITY = 100000;
-        preferences.putBool("fast_loud", false);
-        preferences.putInt("MOVE_CLOSE_VEL", MOVE_CLOSE_VELOCITY);
-        preferences.putInt("MOVE_OPEN_VEL", MOVE_OPEN_VELOCITY);
-        sendData(0x70 + 0x80, 0x000504C8);
-      
-        if(CLOSE_POSITION==2){
-        sendData(0x00+0x80, 0x04);     // General settings /GCONF
-        }else{
-        sendData(0x00+0x80, 0x14);     // General settings /GCONF
-        }
-    
-        break;
-    
-        case 2: //FAST LOUD
-        Serial.println("FAST/LOUD");
-        fast_loud = true;
-        MOVE_OPEN_VELOCITY = 400000;
-        MOVE_CLOSE_VELOCITY = 400000;
-        preferences.putBool("fast_loud", true);
-        preferences.putInt("MOVE_CLOSE_VEL", MOVE_CLOSE_VELOCITY);
-        preferences.putInt("MOVE_OPEN_VEL", MOVE_OPEN_VELOCITY);
-        sendData(0x70 + 0x80 , 0);
-        
-        if(CLOSE_POSITION==2){
-        sendData(0x00+0x80, 0x00);     // General settings /GCONF
-        }else{
-        sendData(0x00+0x80, 0x10);     // General settings /GCONF
-        }
-       
-        break;
-        }
-     }  
     request->redirect("/");
     
   });
