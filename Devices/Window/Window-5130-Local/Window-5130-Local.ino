@@ -20,6 +20,8 @@ void setup() {
   preferences.begin("local", false);
   pinMode(position_2_sensor, INPUT);
   pinMode(position_1_sensor, INPUT);
+  pinMode(btn1, INPUT_PULLUP);
+  pinMode(btn2, INPUT_PULLUP);
 
   xTaskCreatePinnedToCore(
    IndependentTask,        /* pvTaskCode */
@@ -125,28 +127,31 @@ while(true) {
     // A press sets the command to open or close the track motor.
     
     if(digitalRead(btn1)==LOW){
+      Serial.println("btn1 Pressed");
       move_to_position = max_steps-100000;
       command = CUSTOM_MOVE; 
       Serial.println(command);
     }
     if(digitalRead(btn2)==LOW){
+      Serial.println("btn2 Pressed");
       move_to_position = 0;
       command = CUSTOM_MOVE;
       Serial.println(command);
     }
-    if(command!=-1){
+    if(command != -1){
       Serial.print("Executing command ");
       Serial.println(command);
 
     }if(command==STOP){
       delay(100);
-    }else if(command==CUSTOM_MOVE){
+    }else if(command == CUSTOM_MOVE){
+      Serial.println("CUSTOM MOVE");
       motor_running = true;
-      if(CLOSE_POSITION==1){
-      move_motor_position_1();
-      }else if(CLOSE_POSITION==2){
-      move_motor_position_1(); //CHANGE BACK TO 2
-      }
+          if(CLOSE_POSITION==1){
+          move_motor_position_1();
+          }else if(CLOSE_POSITION==2){
+          move_motor_position_1(); //CHANGE BACK TO 2
+          }
     }else if (command==POSITION_ADJUST){
       Serial.println("Starting POSITION_ADJUST");
       position_adjust();
@@ -161,15 +166,19 @@ while(true) {
       new_auto_calibrate_step_1();
       position_close();
     }else if (command==STEP_3){
+      Serial.println("Step 3 Cal");
       new_auto_calibrate_step_3();
       position_close();
     }else if(command==STEP_4){
+      Serial.println("Step 4 Cal");
       new_auto_calibrate_step_4();
       position_close();
     }else if(command==STEP_5){
+      Serial.println("Step 5 Cal");
       new_auto_calibrate_step_5();
       position_close();
     }else if(command==STEP_6){
+      Serial.println("Step 6 Cal");
       new_auto_calibrate_step_6();
       position_close();
     }else if(command==AUTO_TUNE){
