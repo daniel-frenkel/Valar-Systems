@@ -18,8 +18,8 @@ void setup() {
 
   Serial.begin(115200);
   preferences.begin("local", false);
-  pinMode(position_2_sensor, INPUT);
-  pinMode(position_1_sensor, INPUT);
+  pinMode(position_2_sensor, INPUT_PULLUP);
+  pinMode(position_1_sensor, INPUT_PULLUP);
   pinMode(btn1, INPUT_PULLUP);
   pinMode(btn2, INPUT_PULLUP);
 

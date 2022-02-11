@@ -22,7 +22,7 @@ String processor(const String& var)
 {
  
   if(var == "PLACEHOLDER_PERCENT"){
-    return String(move_to_position);
+    return String((move_to_position/max_steps)*100);
   }
   else if(var == "PLACEHOLDER_MAX_STEPS"){
     return String(max_steps);
@@ -213,10 +213,10 @@ void API()
         }
       }
               
-    if(request->hasParam("open_high_current"))
+    if(request->hasParam("open_current_high"))
         {
           Serial.print("set open high current: ");
-          int q = request->getParam("open_high_current")->value().toInt();
+          int q = request->getParam("open_current_high")->value().toInt();
           open_current_calibration_value_high=q;
           if(open_current_calibration_value_high>26)open_current_calibration_value_high=26;
           preferences.putInt("2_cur_cal_val_h", q);
@@ -232,10 +232,10 @@ void API()
           Serial.println(open_current_high);
           }
         
-    if(request->hasParam("close_high_current"))
+    if(request->hasParam("close_current_high"))
         {
           Serial.print("set close high current: ");
-          int q = request->getParam("close_high_current")->value().toInt();
+          int q = request->getParam("close_current_high")->value().toInt();
           close_current_calibration_value_high=q;
           if(close_current_calibration_value_high>26)close_current_calibration_value_high=26;
           preferences.putInt("1_cur_cal_val_h", q);
@@ -251,10 +251,10 @@ void API()
           Serial.println(close_current_high);
         }
 
-    if(request->hasParam("open_low_current"))
+    if(request->hasParam("open_current_low"))
         {
           Serial.print("set open low current: ");
-          int q = request->getParam("open_low_current")->value().toInt();
+          int q = request->getParam("open_current_low")->value().toInt();
           open_current_calibration_value_low=q;
           if(open_current_calibration_value_low>26)open_current_calibration_value_low=26;
           preferences.putInt("O_cur_cal_val_l", q);
@@ -271,10 +271,10 @@ void API()
           Serial.println(open_current_low);
         }
         
-    if(request->hasParam("close_low_current"))
+    if(request->hasParam("close_current_low"))
         {
           Serial.print("set close low current: ");
-          int q = request->getParam("close_low_current")->value().toInt();
+          int q = request->getParam("close_current_low")->value().toInt();
           close_current_calibration_value_low=q;
           if(close_current_calibration_value_low>26)close_current_calibration_value_low=26;
           preferences.putInt("C_cur_cal_val_l", q);
