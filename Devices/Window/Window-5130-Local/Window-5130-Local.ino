@@ -5,12 +5,10 @@
 #include <Preferences.h>
 #include "pins.h"
 #include "Variables.h"
-//#include "HTML.h"
 #include "API.h"
 #include "ResetButton.h"
 #include "motor_control.h"
 #include "motor_calibration.h"
-
 
 TaskHandle_t TaskA;
 
