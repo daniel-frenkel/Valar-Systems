@@ -1,6 +1,6 @@
 //WIFI SETUP PAGE HTML
 
-const char WIFI_HTML[] = " ";
+const char WIFI_HTML[] = "<h1>Enter your home Wifi Name and Password</h1>\n <br> \n <br> \n <form action=/set_wifi>\n <label class=\"label\">Network Name</label>\n <input type = \"text\" name = \"ssid\">\n <br/>\n <label>Network Password</label>\n <input type = \"text\" name = \"pass\">\n <br/>\n <input type=\"submit\" value=\"Set Values\">\n </form>";
 
 /*
  <h1>Enter your home Wifi Name and Password</h1>
@@ -30,6 +30,21 @@ Enter the following text into https://tomeko.net/online_tools/cpp_text_escape.ph
 <p>To add this device to your network <a href=\"http://192.168.4.1/wifi\">go to http://192.168.4.1/wifi</a></p>
 <p>To remove this device from your network, press and hold the wifi reset button for 3+ seconds.</p>
 <br>
+<h2>How to set up the motor</h2>
+<ol>
+  <li>Set Close Position</li>
+  <li>Set Speed</li>
+  <li>Auto Tune Motor</li>
+</ol>
+
+<h3>Step 1</h3>
+<p>The window opener is able to close in either direction. This means that you can close your window away from the motor, or you can close it toward your motor</p>
+<p>To properly set the location of closing, find a magnet somewhere in your house. The stonger the better.</p>
+
+<h3>Step 2</h3>
+
+<h3>Step 3</h3>
+
 <h2>Position Percent</h2>
 <form action="/position">    
 <p>Enter a value from 0-100. This is the percent of the max_steps value to move the motor.</p>
@@ -92,7 +107,7 @@ Enter the following text into https://tomeko.net/online_tools/cpp_text_escape.ph
 <input type="submit" value="Save">
 <br>
 <br>
-<h3>Current Open High Setting</h3>
+<h3>Current Close High Setting</h3>
 <p>Enter a value from 1-26 to set this current.</p>
 <label><b>current: </b></label>
 <input value = "%PLACEHOLDER_CLOSE_CURRENT_HIGH%" type = "text" name = "close_current_high">
@@ -100,7 +115,7 @@ Enter the following text into https://tomeko.net/online_tools/cpp_text_escape.ph
 <input type="submit" value="Save">
 <br>
 <br>
-<h3>Current Open High Setting</h3>
+<h3>Current Close Low Setting</h3>
 <p>Enter a value from 1-26 to set this current.</p>
 <label><b>current: </b></label>
 <input value = "%PLACEHOLDER_CLOSE_CURRENT_LOW%" type = "text" name = "close_current_low">
