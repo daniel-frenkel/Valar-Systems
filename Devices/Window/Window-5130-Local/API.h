@@ -520,7 +520,7 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
          command = CUSTOM_MOVE;
     }
     
-    Serial.println(open_percent);
+    Serial.println(move_to_position);
     }  
 
     request->redirect("/");
@@ -531,16 +531,7 @@ server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request){
 
 DynamicJsonDocument doc(100);
 doc["percent_position"] = int(((float)sendData(0x21, 0)/(float)max_steps)*100);
-doc["steps_position"] = sendData(0x21, 0);
-doc["max_steps"] = max_steps;
-doc["current_high_open"] = open_current_high;
-doc["current_high_close"] = close_current_high;
-doc["current_low_open"] = open_current_low;
-doc["current_low_close"] = close_current_low;
-doc["stall_high_open"] = stall_open_high;
-doc["stall_high_close"] = stall_close_high;
-doc["stall_low_open"] = stall_open_low;
-doc["stall_low_close"] = stall_close_low;
+doc["status"] = device_status;
 
 String json;
 serializeJson(doc, json);

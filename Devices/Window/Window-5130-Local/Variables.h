@@ -19,6 +19,8 @@
 #define OPEN_CLOSE 20
 #define AUTO_TUNE 21
 
+String device_status;
+
 int waitTime;
 int lowTime;
 int maxCloseTime;
@@ -82,8 +84,7 @@ int open_current_high;
 int close_current_low;
 int open_current_low;
 
-float move_to_position;
-float open_percent;
+int move_to_position;
 
 bool move_close_stall;
 bool move_open_stall;
@@ -169,5 +170,4 @@ int lastopenState = LOW;     // previous state of the door
 int run_section;
 float slider_display;
 float slider_XACTUAL;
-int timer_open_percent;
 int distance_cal = false;
