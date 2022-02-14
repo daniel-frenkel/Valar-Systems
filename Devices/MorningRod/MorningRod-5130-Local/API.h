@@ -123,34 +123,20 @@ void API()
         }
     if(request->hasParam("current"))
         {
-          int mA = request->getParam("current")->value().toInt();
-          current_value = mA;
-          uint8_t CS = 32.0*1.41421*mA/1000.0*(R_SENSE+0.02)/0.325 - 1;
-          // If Current Scale is too low, turn on high sensitivity R_sense and calculate again
-          /*
-          if (CS < 16) {
-          sendData(0x6C+0x80, 0x301D5);     // CHOPCONF Vsense true
-          preferences.putInt ("chopconf", 0x301D5);
-          CS = 32.0*1.41421*mA/1000.0*(R_SENSE+0.02)/0.180 - 1;
-          } else { // If CS >= 16, turn off high_sense_r
-          sendData(0x6C+0x80, 0x101D5);     // CHOPCONF Vsense true
-          preferences.putInt ("chopconf", 0x101D5);
-          }
-          */
-          if (CS > 31) 
-          CS = 31;
-          Serial.print("New Current: ");
-          Serial.print(mA);
-          Serial.println(" mA"); 
-          Serial.print("CS Value: ");
-          Serial.println(CS);
-          int q = CS;
+          Serial.print("set current: ");
+          int q = request->getParam("current")->value().toInt();
+          if(q>31) q=31;
+          current_value=q;
+          preferences.putInt ("current_value", current_value);
+          Serial.println(q);
+          double current_calc =((q+1)/(float)32)*(0.325/(0.12+0.02))*(1/sqrt(2));
+          Serial.print("Open Current: ");
+          Serial.print(current_calc);
+          Serial.println(" Amps");
           q&=0x1F;
           q=q<<8;
-          current = q;
-          Serial.print("current Value: ");
-          Serial.println(current);
-          preferences.putInt ("current", current);
+          current=q;
+          preferences.putInt("current", current);
         }
     if(request->hasParam("stall"))
         {

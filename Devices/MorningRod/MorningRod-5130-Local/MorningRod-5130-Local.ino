@@ -7,48 +7,40 @@
  * Sorry
  */
 
-#define chipCS 27
-#define SCLK 26
-#define MISO_PIN 33
-#define MOSI_PIN 25
-#define CLOCKOUT 15
-#define ENABLE_PIN 32
-#define R_SENSE 0.15f
-
-#define btn1 12//17//12
-#define btn2 13//16//13
-
-#include <TMCStepper.h>
 #include "driver/ledc.h"
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <SPI.h>
 #include <Preferences.h>
+#include "pins.h"
 #include "Memory.h"
+#include "API.h"
 #include "ResetButton.h"
 #include "MotorControl.h"
-#include "API.h"
+
+TaskHandle_t TaskA;
 
 void setup() {
 
   Serial.begin(115200);
   delay(1000);
   preferences.begin("local", false);
-  
+
+  xTaskCreatePinnedToCore(
+   IndependentTask,        /* pvTaskCode */
+   "Motor_Functions",          /* pcName */
+   8192,                   /* usStackDepth */
+   NULL,                   /* pvParameters */
+   1,                      /* uxPriority */
+   &TaskA,                 /* pxCreatedTask */
+   0);                     /* xCoreID */ 
+    
   load_preferences();
-  setup_motors();
   clockout_setup();
+  setup_motors();
   API();
   
-  // Now set up tasks to run independently.
-  xTaskCreatePinnedToCore(
-    MotorTask //Motor Task
-    ,  "MotorTask"   // A name just for humans
-    ,  1024*4  // This stack size can be checked & adjusted by reading the Stack Highwater
-    ,  NULL
-    ,  3  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-    ,  NULL 
-    ,  0);
+
 }
 
 
@@ -62,12 +54,9 @@ void loop()
 /*---------------------- Tasks ---------------------*/
 /*--------------------------------------------------*/
 
-void MotorTask(void *pvParameters)  // Motor Task
-{
-  (void) pvParameters;
-
-  for (;;)
-  {
+void IndependentTask(void *pvParameters){
+while(true) {
+  
     if(run_motor == true)
     {
       Serial.println("Run Motor Function");

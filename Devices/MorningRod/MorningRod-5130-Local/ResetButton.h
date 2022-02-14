@@ -3,8 +3,6 @@
 volatile bool     g_buttonPressed = false;
 volatile uint32_t g_buttonPressTime = -1;
 
-
-
 void button_action(void)
 {
   preferences.putInt ("wifi_set", 0);

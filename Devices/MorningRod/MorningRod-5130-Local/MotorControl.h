@@ -1,16 +1,6 @@
-//TMC5130Stepper driver (chipCS, R_SENSE, MOSI_PIN, MISO_PIN, SCLK);
-
-unsigned long sendData(unsigned long address, unsigned long datagram);
-void stopMotor(); // track motor is motor two
-void delayStall(long timeout);
-void waitStall(long timeout);
-void turnMotor(int dir);
-bool motor_running = false;
-
 void move_motor(){
   
   digitalWrite(ENABLE_PIN, LOW);
-  sendData(0x6C+0x80, 0x000101D5);     // CHOPCONF
   
   delay(50);
   XACTUAL = sendData(0x21, 0);
@@ -30,23 +20,26 @@ void move_motor(){
   sendData(0x26 + 0x80, 300);       //AMAX
   sendData(0x28 + 0x80, 800);       // DMAX
   sendData(0x34 + 0x80, 0x000); // Disable stallguard /
-  //sendData(0x34 + 0x80, 0x400); // Enable stallguard /
+  sendData(0x34 + 0x80, 0x400); // Enable stallguard /
 
-  sendData(0x27 + 0x80, max_speed); //VMAX
-  sendData(0x14 + 0x80, max_speed - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
-  sendData(0x6D + 0x80, stall); // 
-  sendData(0x10 + 0x80, current);   // 0x00001400 = IHOLD_IRUN 1F00 = 3.05A 1400 = 2A
+  int maxOpenTime = millis() + 60000; //max amount of time to close in case of problem 
+
+  if(move_to == XACTUAL)
+  {
+  Serial.println("move_to == XACTUAL");
+  }
+  else
+  {
+
+  sendData(0x27 + 0x80, max_speed);
+  sendData(0x14 + 0x80, max_speed - 100);
+  sendData(0x6D + 0x80, stall);
+  sendData(0x10 + 0x80, current);
   sendData(0x2D + 0x80, move_to); //XTARGET
-
-  sendData(0x21 + 0x80, 0); //XACTUAL TEST
-
-  int maxOpenTime = millis() + 120000; //max amount of time to close in case of problem
-
+  
   while (millis()<maxOpenTime) { // wait for position_reached flag
     
-    Serial.println("MOVING");
-    
-    sendData(0x35, 0) & 0x200;
+     sendData(0x35, 0) & 0x200; 
 
     if (!(sendData(0x35, 0) & 0x200) == 0) { //Position reached
       Serial.println("move_to REACHED");
@@ -63,8 +56,9 @@ void move_motor(){
 
     delay(1);
     
+   }
   }
-
+  
   XACTUAL = sendData(0x21, 0);
   XACTUAL = sendData(0x21, 0);
   XACTUAL = sendData(0x21, 0);
@@ -74,7 +68,7 @@ void move_motor(){
   
   delay(300);
   digitalWrite(ENABLE_PIN, HIGH);
-  Serial.println("CLOSE COMPLETE");
+  Serial.println("MOVEMENT COMPLETE");
 }
 
 
@@ -128,21 +122,19 @@ void setup_motors(){
   SPI.setBitOrder(MSBFIRST);
   SPI.setClockDivider(SPI_CLOCK_DIV16);
   SPI.setDataMode(SPI_MODE3);
-  SPI.begin(SCLK,MISO_PIN,MOSI_PIN,chipCS); // Edit 'pins.h' to change pins
+  SPI.begin(SCLK, MISO, MOSI, chipCS);
 
   sendData(0x00+0x80, 0x0);     // General settings / en_pwm_mode OFF
   sendData(0x6C+0x80, 0x000101D5);     // CHOPCONF
   sendData(0x10+0x80, 0x00010D00);     // IHOLD_IRUN // 0x00011900 = 25 = 2 Amps // 0x00010D00 = 13 = 1 Amp
   sendData(0x20+0x80, 0x00000000);      // RAMPMODE=0
 
-  sendData(0x24+0x80, 100);       //A1
-  sendData(0x26+0x80, 300);       //AMAX
-  sendData(0x28+0x80, 800);       // DMAX
-  sendData(0x2A+0x80, 3000);      //D1
-  sendData(0x23+0x80, 0);         // VSTART
-  sendData(0x2B+0x80, 10);        //VSTOP
-  sendData(0x25+0x80, 2500);      //V1
-  sendData(0x27+0x80, max_speed); //VMAX
+  sendData(0x28 + 0x80, 800); 
+  sendData(0xA4, 30); //A1
+  sendData(0xAA, 3000);     //D1
+  sendData(0xA3, 0);         // VSTART
+  sendData(0xAB, 10);        //VSTOP
+  sendData(0xA5, 0);      //V1
   
   sendData(0x2D+0x80, 0); //XTARGET
   sendData(0x21+0x80, 0); // set XACTUAL to zero
@@ -157,4 +149,4 @@ void setup_motors(){
   sendData(0x67+0x80,  0x00404222);    // writing value 0x00404222 = 4211234 = 0.0 to address 32 = 0x67(MSLUT[7])
   sendData(0x68+0x80,  0xFFFF8056);    // writing value 0xFFFF8056 = 0 = 0.0 to address 33 = 0x68(MSLUTSEL)
   sendData(0x69+0x80,  0x00F70000);    // writing value 0x00F70000 = 16187392 = 0.0 to address 34 = 0x69(MSLUTSTART)
-}
+ }
