@@ -206,10 +206,12 @@ closeState = digitalRead(position_1_sensor);
     if (closeState == HIGH) 
     {
       Serial.println("DEVICE OPENED");
+      device_status="OPENED";
     }
     else 
     {
       Serial.println("DEVICE CLOSED");
+      device_status="CLOSED";
       XACTUAL=0;
       sendData(0x21+0x80, 0);      // XACTUAL=0
       sendData(0x2D+0x80, 0);      // XTARGET=0
