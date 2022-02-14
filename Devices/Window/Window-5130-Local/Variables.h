@@ -102,7 +102,6 @@ int current_position;
 int max_steps;
 int move_direction;
 int CLOSE_POSITION;
-float OPEN_CLOSE_position;
 
 int open_stall_calibration_low;
 int open_stall_calibration_value_low;
