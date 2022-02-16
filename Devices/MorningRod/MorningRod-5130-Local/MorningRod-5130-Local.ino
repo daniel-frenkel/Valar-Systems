@@ -9,6 +9,7 @@
 
 #include "driver/ledc.h"
 #include <Arduino.h>
+#include <ezTime.h>
 #include <HardwareSerial.h>
 #include <SPI.h>
 #include <Preferences.h>
@@ -19,6 +20,8 @@
 #include "MotorControl.h"
 
 TaskHandle_t TaskA;
+
+Timezone myTZ;
 
 void setup() {
 
@@ -39,6 +42,17 @@ void setup() {
   clockout_setup();
   setup_motors();
   API();
+
+  // EZ Time
+  setDebug(INFO);
+  waitForSync();
+
+  Serial.println();
+  Serial.println("UTC: " + UTC.dateTime());
+
+  myTZ.setLocation(MYTIMEZONE);
+  Serial.print("Time in your set timezone: ");
+  Serial.println(myTZ.dateTime());
   
 
 }

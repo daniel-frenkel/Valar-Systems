@@ -25,7 +25,15 @@ volatile int current_cal;
 
 int current_calibration_value;
 
-String timezone
+String MYTIMEZONE;
+int close_timer;
+int close_hour;
+int close_minute;
+int open_timer;
+int open_hour;
+int open_minute;
+
+
 
 unsigned long sendData(unsigned long address, unsigned long datagram);
 
@@ -51,6 +59,15 @@ void load_preferences(){
   stall = preferences.getInt("stall", 4128768);
   stall_value = preferences.getInt("stall_value", 0);
   tcools = (3089838.00*pow(float(max_speed*64),-1.00161534))*1.5;
+  MYTIMEZONE = preferences.getString ("MYTIMEZONE", "America/Los_Angeles");
+  open_timer = preferences.getInt("open_timer", 0);
+  open_hour = preferences.getInt("open_hour", 0);
+  open_minute = preferences.getInt("open_minute", 0);
+  close_timer = preferences.getInt("close_timer", 0);
+  close_hour = preferences.getInt("close_hour", 0);
+  close_minute = preferences.getInt("close_minute", 0);
+  
+  
   //chopconf = preferences.getInt("chopconf", 0x101D5);
   Serial.println("FINISHED LOADING PREFERENCES");
   }

@@ -12,6 +12,22 @@ String ip_address;
 
 AsyncWebServer server(80);
 
+String splitTime(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
 String processor(const String& var)
 {
  
@@ -192,51 +208,44 @@ server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
     for(int i=0;i<paramsNr;i++){
         AsyncWebParameter* p = request->getParam(i);
     }
-
     if(request->hasParam("timezone"))
         {
-          timezone = request->getParam("timezone")->value().c_str();
-          preferences.putString ("timezone", timezone);
+          MYTIMEZONE = request->getParam("timezone")->value().c_str();
+          preferences.putString ("timezone", MYTIMEZONE);
           Serial.print("timezone: ");
-          Serial.println(timezone);
+          Serial.println(MYTIMEZONE);
         }
-        
     if(request->hasParam("open_timer"))
         {
           open_timer = request->getParam("open_timer")->value().toInt();
-          Serial.print("open_timer: ");
-          Serial.println(open_timer);
+          preferences.putInt ("open_timer", open_timer);
         } 
-
-
     if(request->hasParam("open_time"))
         {
-          String open_time_string = request->getParam("timezone")->value().c_str();
-          
-          Serial.print("open_timer: ");
-          Serial.println(open_time_string);
+          String open_time_string = request->getParam("open_time")->value().c_str();
+          String open_hour_s = splitTime(open_time_string, ':', 0);
+          open_hour = open_hour_s.toInt();
+          preferences.putInt ("open_hour", open_hour);
+          String open_minute_s = splitTime(open_time_string, ':', 1);
+          open_minute = open_minute_s.toInt();
+          preferences.putInt ("open_minute", open_minute);
         } 
-
-
-
     if(request->hasParam("close_timer"))
         {
           close_timer = request->getParam("close_timer")->value().toInt();
-          Serial.print("close_timer: ");
-          Serial.println(close_timer);
+          preferences.putInt ("close_timer", close_timer);
         } 
-
-
     if(request->hasParam("close_time"))
         {
-          String close_time_string = request->getParam("timezone")->value().c_str();
-          
-          Serial.print("open_timer: ");
-          Serial.println(open_time_string);
-        } 
+          String close_time_string = request->getParam("close_time")->value().c_str();
+          String close_hour_s = splitTime(close_time_string, ':', 0);
+          close_hour = close_hour_s.toInt();
+          preferences.putInt ("close_hour", close_hour);
+          String close_minute_s = splitTime(close_time_string, ':', 1);
+          close_minute = close_minute_s.toInt();
+          preferences.putInt ("close_minute", close_minute);
 
-        
-    
+        } 
     request->redirect("/");
   
   });
