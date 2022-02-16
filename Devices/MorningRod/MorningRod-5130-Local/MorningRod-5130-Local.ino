@@ -36,15 +36,6 @@ void setup() {
    &TaskA,                 /* pxCreatedTask */
    0);                     /* xCoreID */ 
 
-  xTaskCreatePinnedToCore(
-   otherTask,        /* pvTaskCode */
-   "Time_Functions",          /* pcName */
-   1024,                   /* usStackDepth */
-   NULL,                   /* pvParameters */
-   1,                      /* uxPriority */
-   NULL,                 /* pxCreatedTask */
-   1);                     /* xCoreID */ 
-   
   load_preferences();
   clockout_setup();
   setup_motors();
@@ -65,8 +56,17 @@ void setup() {
   Serial.println(myTZ.dateTime());
   }
   
-}
+xTaskCreatePinnedToCore(
+   otherTask,        /* pvTaskCode */
+   "Time_Functions",          /* pcName */
+   1024,                   /* usStackDepth */
+   NULL,                   /* pvParameters */
+   1,                      /* uxPriority */
+   NULL,                 /* pxCreatedTask */
+   1);                     /* xCoreID */ 
 
+   
+}
 
 void loop()
 {
@@ -82,8 +82,7 @@ void otherTask(void *pvParameters){
 while(true) {
 
   if (WiFi.status() == WL_CONNECTED)
-  {
-  vTaskDelay(2000);  
+  { 
   events();
   }
   else {
