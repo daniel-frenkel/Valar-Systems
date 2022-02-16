@@ -25,6 +25,8 @@ volatile int current_cal;
 
 int current_calibration_value;
 
+String timezone
+
 unsigned long sendData(unsigned long address, unsigned long datagram);
 
 int gear_ratio = 1;

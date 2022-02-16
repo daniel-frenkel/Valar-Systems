@@ -179,7 +179,64 @@ server.on("/set_zero", HTTP_GET, [](AsyncWebServerRequest *request){
 
     set_zero = 1;
     Serial.print("set_zero: ");
-    Serial.println(set_zero);   
+    Serial.println(set_zero); 
+
+    request->redirect("/");
+  
+  });
+
+server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
+
+    int paramsNr = request->params();
+ 
+    for(int i=0;i<paramsNr;i++){
+        AsyncWebParameter* p = request->getParam(i);
+    }
+
+    if(request->hasParam("timezone"))
+        {
+          timezone = request->getParam("timezone")->value().c_str();
+          preferences.putString ("timezone", timezone);
+          Serial.print("timezone: ");
+          Serial.println(timezone);
+        }
+        
+    if(request->hasParam("open_timer"))
+        {
+          open_timer = request->getParam("open_timer")->value().toInt();
+          Serial.print("open_timer: ");
+          Serial.println(open_timer);
+        } 
+
+
+    if(request->hasParam("open_time"))
+        {
+          String open_time_string = request->getParam("timezone")->value().c_str();
+          
+          Serial.print("open_timer: ");
+          Serial.println(open_time_string);
+        } 
+
+
+
+    if(request->hasParam("close_timer"))
+        {
+          close_timer = request->getParam("close_timer")->value().toInt();
+          Serial.print("close_timer: ");
+          Serial.println(close_timer);
+        } 
+
+
+    if(request->hasParam("close_time"))
+        {
+          String close_time_string = request->getParam("timezone")->value().c_str();
+          
+          Serial.print("open_timer: ");
+          Serial.println(open_time_string);
+        } 
+
+        
+    
     request->redirect("/");
   
   });

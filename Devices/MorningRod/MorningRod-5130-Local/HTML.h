@@ -66,6 +66,54 @@ Enter the following text into https://tomeko.net/online_tools/cpp_text_escape.ph
 <p>To remove this device from your network, press and hold the wifi reset button for 3+ seconds.</p>
 </div>
 <br>
+
+
+
+<div class="card">
+<h2>Set Schedule</h2>
+<form action="/action_page.php">
+  <label for="timezone">Select Time Zone:</label>
+  <select id="timezone" name="timezone">
+  <option value="US_Pacific">US/Pacific</option>
+  <option value="US_Mountain">US/Mountain</option>
+  <option value="US_Central">US/Central</option>
+  <option value="US_Eastern">US/Eastern</option>
+  </select>
+  <br>
+  <br>
+  
+  <h3>Open Timer</h3>
+  <div class="switch-field">
+  <input type="radio" id="radio-one" name="open_timer" value="0" checked/>
+  <label for="radio-one">OFF</label>
+  <input type="radio" id="radio-two" name="open_timer" value="1"/>
+  <label for="radio-two">ON</label>
+  </div>
+    
+
+  <label for="open_time">Open Time: </label>
+  <input type="time" id="open_time" name="open_time"><br>
+  
+  <br>
+  
+  <h3>Close Timer</h3>
+  <div class="switch-field">
+  <input type="radio" id="radio-one" name="close_timer" value="0" checked/>
+  <label for="radio-one">OFF</label>
+  <input type="radio" id="radio-two" name="close_timer" value="1"/>
+  <label for="radio-two">ON</label>
+  </div>
+    
+  <label for="close_time">Close Time: </label>
+  <input type="time" id="close_time" name="close_time"><br>
+  <br>
+  
+  <input type="submit" value="Save">
+</form>
+</div>
+
+
+<br>
 <div class="card">
 <h2>Position Percent</h2>
 <form action="/position">    
