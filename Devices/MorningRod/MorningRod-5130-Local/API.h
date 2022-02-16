@@ -5,6 +5,8 @@
 #include "ArduinoJson.h"
 #include "HTML.h"
 
+Timezone myTZ;
+
 const char *ap_ssid = "VALAR-AP";
 const char *ap_password = "password";
 
@@ -214,6 +216,10 @@ server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
           preferences.putString ("timezone", MYTIMEZONE);
           Serial.print("timezone: ");
           Serial.println(MYTIMEZONE);
+          myTZ.setLocation(MYTIMEZONE);
+          Serial.print("Time in your set timezone: ");
+          Serial.println(myTZ.dateTime());
+  
         }
     if(request->hasParam("open_timer"))
         {

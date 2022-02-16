@@ -21,8 +21,6 @@
 
 TaskHandle_t TaskA;
 
-Timezone myTZ;
-
 void setup() {
 
   Serial.begin(115200);
@@ -30,20 +28,32 @@ void setup() {
   preferences.begin("local", false);
 
   xTaskCreatePinnedToCore(
-   IndependentTask,        /* pvTaskCode */
+   motorTask,        /* pvTaskCode */
    "Motor_Functions",          /* pcName */
    8192,                   /* usStackDepth */
    NULL,                   /* pvParameters */
-   1,                      /* uxPriority */
+   3,                      /* uxPriority */
    &TaskA,                 /* pxCreatedTask */
    0);                     /* xCoreID */ 
-    
+
+  xTaskCreatePinnedToCore(
+   otherTask,        /* pvTaskCode */
+   "Time_Functions",          /* pcName */
+   1024,                   /* usStackDepth */
+   NULL,                   /* pvParameters */
+   1,                      /* uxPriority */
+   NULL,                 /* pxCreatedTask */
+   1);                     /* xCoreID */ 
+   
   load_preferences();
   clockout_setup();
   setup_motors();
   API();
 
   // EZ Time
+  if (WiFi.status() == WL_CONNECTED)
+  {
+  vTaskDelay(2000);
   setDebug(INFO);
   waitForSync();
 
@@ -53,8 +63,8 @@ void setup() {
   myTZ.setLocation(MYTIMEZONE);
   Serial.print("Time in your set timezone: ");
   Serial.println(myTZ.dateTime());
+  }
   
-
 }
 
 
@@ -68,7 +78,22 @@ void loop()
 /*---------------------- Tasks ---------------------*/
 /*--------------------------------------------------*/
 
-void IndependentTask(void *pvParameters){
+void otherTask(void *pvParameters){
+while(true) {
+
+  if (WiFi.status() == WL_CONNECTED)
+  {
+  vTaskDelay(2000);  
+  events();
+  }
+  else {
+  vTaskDelay(1);
+  }
+  
+ }
+}
+
+void motorTask(void *pvParameters){
 while(true) {
 
     if(digitalRead(btn1)==LOW){
