@@ -115,6 +115,8 @@ void setup_motors(){
   pinMode(chipCS, OUTPUT);
   pinMode(CLOCKOUT, OUTPUT);
   pinMode(ENABLE_PIN, OUTPUT);
+  pinMode(btn1, INPUT_PULLUP);
+  pinMode(btn2, INPUT_PULLUP);
 
   digitalWrite(chipCS, HIGH);
   digitalWrite(ENABLE_PIN, HIGH);

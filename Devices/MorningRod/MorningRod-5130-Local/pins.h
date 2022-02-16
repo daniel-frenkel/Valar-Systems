@@ -8,5 +8,5 @@
 
 #define R_SENSE 0.15f
 
-#define btn1 12
+#define btn1 4
 #define btn2 13

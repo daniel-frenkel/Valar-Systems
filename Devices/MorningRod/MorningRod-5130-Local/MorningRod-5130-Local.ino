@@ -56,7 +56,19 @@ void loop()
 
 void IndependentTask(void *pvParameters){
 while(true) {
-  
+
+    if(digitalRead(btn1)==LOW){
+      Serial.println("btn1 Pressed");
+      move_to = max_steps;
+      run_motor = true;
+    }
+    
+    if(digitalRead(btn2)==LOW){
+      Serial.println("btn2 Pressed");
+      move_to = 0;
+      run_motor = true;
+    }
+    
     if(run_motor == true)
     {
       Serial.println("Run Motor Function");
