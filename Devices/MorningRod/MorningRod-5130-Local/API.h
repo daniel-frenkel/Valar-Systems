@@ -37,8 +37,6 @@ void scheduleOpen(){
   // determine today's open time
   time_t openTime = makeTime(open_hour,open_minute,0, myTZ.day(), myTZ.month(), myTZ.year());
 
-  
-  
   // is it time to do something?
   if(now()>=openTime) {
 
@@ -51,7 +49,7 @@ void scheduleOpen(){
   }
 
   // set next time to wakeup
-  openEvent = setEvent(scheduleOpen, openTime);
+  openEvent = myTZ.setEvent(scheduleOpen, openTime);
 
 }
 
@@ -74,7 +72,7 @@ void scheduleClose(){
   }
 
   // set next time to wakeup
-  closeEvent = setEvent(scheduleClose, closeTime);
+  closeEvent = myTZ.setEvent(scheduleClose, closeTime);
 
 }
 
@@ -310,7 +308,7 @@ server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
           Serial.println(newOpenTime);
           
           // set next time to wakeup
-          setEvent(scheduleOpen, newOpenTime);
+          myTZ.setEvent(scheduleOpen, newOpenTime);
           
           
           }else{
