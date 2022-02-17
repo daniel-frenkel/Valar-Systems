@@ -11,6 +11,7 @@ const char *ap_ssid = "VALAR-AP";
 const char *ap_password = "password";
 
 String ip_address;
+String hostname = "The-MorningRod";
 
 AsyncWebServer server(80);
 
@@ -51,6 +52,7 @@ void scheduleOpen(){
   // set next time to wakeup
   openEvent = myTZ.setEvent(scheduleOpen, openTime);
 
+  Serial.println("Schedule Open Complete");
 }
 
 void scheduleClose(){
@@ -68,12 +70,13 @@ void scheduleClose(){
   run_motor = true;
 
   // then wake up again tomorrow
-  closeTime = makeTime(0,0,0, myTZ.day(), myTZ.month(), year())+86400;
+  closeTime = makeTime(0,0,0, myTZ.day(), myTZ.month(), myTZ.year())+86400;
   }
 
   // set next time to wakeup
   closeEvent = myTZ.setEvent(scheduleClose, closeTime);
 
+  Serial.println("Schedule Close Complete");
 }
 
 String processor(const String& var)
@@ -129,6 +132,8 @@ void API()
   Serial.println(ssid);
   Serial.println(pass);
   WiFi.mode(WIFI_STA);
+  WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+  WiFi.setHostname(hostname.c_str()); 
   WiFi.begin(ssid.c_str(), pass.c_str());
 
       while (WiFi.status() != WL_CONNECTED) {
@@ -291,28 +296,17 @@ server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
         {
           open_timer = request->getParam("open_timer")->value().toInt();
           if (open_timer == 1){
-
-          Serial.print("open_hour: ");
-          Serial.println(open_hour);
-          Serial.print("open_minute: ");
-          Serial.println(open_minute);
-          
+            
           // determine open time
           time_t newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
-
-          
-          Serial.print("Time Now: ");
-          Serial.println(now());
-          
-          Serial.print("Scheduled Open: ");
-          Serial.println(newOpenTime);
           
           // set next time to wakeup
-          myTZ.setEvent(scheduleOpen, newOpenTime);
+          openEventNow = myTZ.setEvent(scheduleOpen, newOpenTime);
           
           
           }else{
             deleteEvent(openEvent); 
+            deleteEvent(openEventNow);
           }
           
           preferences.putInt ("open_timer", open_timer);
@@ -333,9 +327,17 @@ server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
         {
           close_timer = request->getParam("close_timer")->value().toInt();
           if(close_timer == 1){
-            //scheduleClose();
+
+          // determine open time
+          time_t newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+          // set next time to wakeup
+         closeEventNow = myTZ.setEvent(scheduleClose, newCloseTime);
+
+          
           }else{
-            deleteEvent(closeEvent); 
+            deleteEvent(closeEvent);
+            deleteEvent(closeEventNow); 
           }
           preferences.putInt ("close_timer", close_timer);
         } 

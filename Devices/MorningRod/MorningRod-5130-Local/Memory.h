@@ -36,6 +36,8 @@ String open_time_string;
 String close_time_string;
 int openEvent;
 int closeEvent;
+int openEventNow;
+int closeEventNow;
 
 unsigned long sendData(unsigned long address, unsigned long datagram);
 
