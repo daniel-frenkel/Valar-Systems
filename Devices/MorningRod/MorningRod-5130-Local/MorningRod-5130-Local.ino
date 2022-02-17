@@ -54,12 +54,15 @@ void setup() {
   myTZ.setLocation(MYTIMEZONE);
   Serial.print("Time in your set timezone: ");
   Serial.println(myTZ.dateTime());
+  Serial.println(myTZ.day());
+  Serial.println(myTZ.month());
+  Serial.println(myTZ.year());
   }
   
 xTaskCreatePinnedToCore(
    otherTask,        /* pvTaskCode */
-   "Time_Functions",          /* pcName */
-   1024,                   /* usStackDepth */
+   "Other_Functions",          /* pcName */
+   1024*4,                   /* usStackDepth */
    NULL,                   /* pvParameters */
    1,                      /* uxPriority */
    NULL,                 /* pxCreatedTask */

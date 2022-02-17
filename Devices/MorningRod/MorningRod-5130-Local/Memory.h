@@ -32,8 +32,10 @@ int close_minute;
 int open_timer;
 int open_hour;
 int open_minute;
-
-
+String open_time_string;
+String close_time_string;
+int openEvent;
+int closeEvent;
 
 unsigned long sendData(unsigned long address, unsigned long datagram);
 
@@ -66,7 +68,8 @@ void load_preferences(){
   close_timer = preferences.getInt("close_timer", 0);
   close_hour = preferences.getInt("close_hour", 0);
   close_minute = preferences.getInt("close_minute", 0);
-  
+  open_time_string = preferences.getString("open_string", "00:00");
+  close_time_string = preferences.getString("close_string", "00:00");
   
   //chopconf = preferences.getInt("chopconf", 0x101D5);
   Serial.println("FINISHED LOADING PREFERENCES");

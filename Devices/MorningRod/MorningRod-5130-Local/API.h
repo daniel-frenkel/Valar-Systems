@@ -30,6 +30,54 @@ String splitTime(String data, char separator, int index)
     return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
+void scheduleOpen(){
+
+  Serial.println("Schedule Open Executed");
+ 
+  // determine today's open time
+  time_t openTime = makeTime(open_hour,open_minute,0, myTZ.day(), myTZ.month(), myTZ.year());
+
+  
+  
+  // is it time to do something?
+  if(now()>=openTime) {
+
+  // do the alarm thing!
+  move_to = 100;
+  run_motor = true;
+  
+  // set tomorrows wake up time
+  openTime = makeTime(0,0,0, myTZ.day(), myTZ.month(), myTZ.year())+86400;
+  }
+
+  // set next time to wakeup
+  openEvent = setEvent(scheduleOpen, openTime);
+
+}
+
+void scheduleClose(){
+
+  Serial.println("Schedule Close Executed");
+  
+  // determine today's close time
+  time_t closeTime = makeTime(close_hour,close_minute,0, myTZ.day(), myTZ.month(), myTZ.year());
+
+  // is it time to do something?
+  if(now()>=closeTime) {
+
+  // do the alarm thing!
+  move_to = 0;
+  run_motor = true;
+
+  // then wake up again tomorrow
+  closeTime = makeTime(0,0,0, myTZ.day(), myTZ.month(), year())+86400;
+  }
+
+  // set next time to wakeup
+  closeEvent = setEvent(scheduleClose, closeTime);
+
+}
+
 String processor(const String& var)
 {
  
@@ -51,7 +99,16 @@ String processor(const String& var)
   else if(var == "PLACEHOLDER_IP_ADDRESS"){
     return String(ip_address);
   }
- 
+  else if(var == "PLACEHOLDER_TIMEZONE"){
+    return String(MYTIMEZONE);
+  }
+  else if(var == "PLACEHOLDER_OPEN_TIME"){
+    return String(open_time_string);
+  }
+  else if(var == "PLACEHOLDER_CLOSE_TIME"){
+    return String(close_time_string);
+  }
+
   return String();
 }
 
@@ -221,37 +278,70 @@ server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
           Serial.println(myTZ.dateTime());
   
         }
-    if(request->hasParam("open_timer"))
-        {
-          open_timer = request->getParam("open_timer")->value().toInt();
-          preferences.putInt ("open_timer", open_timer);
-        } 
     if(request->hasParam("open_time"))
         {
-          String open_time_string = request->getParam("open_time")->value().c_str();
+          open_time_string = request->getParam("open_time")->value().c_str();
+          preferences.putString ("open_string", open_time_string);
           String open_hour_s = splitTime(open_time_string, ':', 0);
           open_hour = open_hour_s.toInt();
           preferences.putInt ("open_hour", open_hour);
           String open_minute_s = splitTime(open_time_string, ':', 1);
           open_minute = open_minute_s.toInt();
           preferences.putInt ("open_minute", open_minute);
-        } 
-    if(request->hasParam("close_timer"))
+        }
+    if(request->hasParam("open_timer"))
         {
-          close_timer = request->getParam("close_timer")->value().toInt();
-          preferences.putInt ("close_timer", close_timer);
-        } 
+          open_timer = request->getParam("open_timer")->value().toInt();
+          if (open_timer == 1){
+
+          Serial.print("open_hour: ");
+          Serial.println(open_hour);
+          Serial.print("open_minute: ");
+          Serial.println(open_minute);
+          
+          // determine open time
+          time_t newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+
+          
+          Serial.print("Time Now: ");
+          Serial.println(now());
+          
+          Serial.print("Scheduled Open: ");
+          Serial.println(newOpenTime);
+          
+          // set next time to wakeup
+          setEvent(scheduleOpen, newOpenTime);
+          
+          
+          }else{
+            deleteEvent(openEvent); 
+          }
+          
+          preferences.putInt ("open_timer", open_timer);
+        }     
+
     if(request->hasParam("close_time"))
         {
-          String close_time_string = request->getParam("close_time")->value().c_str();
+          close_time_string = request->getParam("close_time")->value().c_str();
+          preferences.putString("close_string", close_time_string);
           String close_hour_s = splitTime(close_time_string, ':', 0);
           close_hour = close_hour_s.toInt();
           preferences.putInt ("close_hour", close_hour);
           String close_minute_s = splitTime(close_time_string, ':', 1);
           close_minute = close_minute_s.toInt();
           preferences.putInt ("close_minute", close_minute);
-
+        }
+    if(request->hasParam("close_timer"))
+        {
+          close_timer = request->getParam("close_timer")->value().toInt();
+          if(close_timer == 1){
+            //scheduleClose();
+          }else{
+            deleteEvent(closeEvent); 
+          }
+          preferences.putInt ("close_timer", close_timer);
         } 
+        
     request->redirect("/");
   
   });
