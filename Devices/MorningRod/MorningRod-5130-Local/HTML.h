@@ -638,7 +638,7 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 <h2>Position Percent</h2>
 <form action="/position">    
 <p>Enter a value from 0-100. This is the percent of the max_steps value to move the motor.</p>
-<label><b>move_to :</b></label>    
+<label><b>move_to_steps :</b></label>    
 <input value = %PLACEHOLDER_PERCENT% type = "text" name = "move_percent">
 <br/>
 <input type="submit" value="Set Position">

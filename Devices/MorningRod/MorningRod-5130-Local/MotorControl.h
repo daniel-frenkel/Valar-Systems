@@ -13,8 +13,8 @@ void move_motor(){
   Serial.println(XACTUAL);
   XACTUAL = sendData(0x21, 0);
   
-  Serial.print("move_to: ");
-  Serial.println(move_to);
+  Serial.print("move_to_steps: ");
+  Serial.println(move_to_steps);
 
   sendData(0xA0, 0);     // Positioning mode 0
   sendData(0x26 + 0x80, 300);       //AMAX
@@ -24,9 +24,9 @@ void move_motor(){
 
   int maxOpenTime = millis() + 60000; //max amount of time to close in case of problem 
 
-  if(move_to == XACTUAL)
+  if(move_to_steps == XACTUAL)
   {
-  Serial.println("move_to == XACTUAL");
+  Serial.println("move_to_steps == XACTUAL");
   }
   else
   {
@@ -35,14 +35,14 @@ void move_motor(){
   sendData(0x14 + 0x80, max_speed - 100);
   sendData(0x6D + 0x80, stall);
   sendData(0x10 + 0x80, current);
-  sendData(0x2D + 0x80, move_to); //XTARGET
+  sendData(0x2D + 0x80, move_to_steps); //XTARGET
   
   while (millis()<maxOpenTime) { // wait for position_reached flag
     
      sendData(0x35, 0) & 0x200; 
 
     if (!(sendData(0x35, 0) & 0x200) == 0) { //Position reached
-      Serial.println("move_to REACHED");
+      Serial.println("move_to_steps REACHED");
       break;    
       }
 

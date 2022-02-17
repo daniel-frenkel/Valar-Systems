@@ -98,13 +98,13 @@ while(true) {
 
     if(digitalRead(btn1)==LOW){
       Serial.println("btn1 Pressed");
-      move_to = max_steps;
+      move_to_steps = max_steps;
       run_motor = true;
     }
     
     if(digitalRead(btn2)==LOW){
       Serial.println("btn2 Pressed");
-      move_to = 0;
+      move_to_steps = 0;
       run_motor = true;
     }
     

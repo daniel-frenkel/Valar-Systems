@@ -41,8 +41,8 @@ void scheduleOpen(){
   // is it time to do something?
   if(now()>=openTime) {
 
-  // do the alarm thing!
-  move_to = 100;
+  // start motor!
+  move_to_steps = max_steps;
   run_motor = true;
   
   // set tomorrows wake up time
@@ -66,7 +66,7 @@ void scheduleClose(){
   if(now()>=closeTime) {
 
   // do the alarm thing!
-  move_to = 0;
+  move_to_steps = 0;
   run_motor = true;
 
   // then wake up again tomorrow
@@ -357,14 +357,14 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
     if(request->hasParam("move_percent"))
     {
         move_percent = request->getParam("move_percent")->value().toInt();
-        move_to = (max_steps/100)*move_percent;
-        sendData(0x2D+0x80, move_to); //XTARGET:
+        move_to_steps = (max_steps/100)*move_percent;
+        sendData(0x2D+0x80, move_to_steps); //XTARGET:
         Serial.print("max_steps: ");
         Serial.println(max_steps); 
         Serial.print("move_percent: ");
         Serial.println(move_percent); 
-        Serial.print("move_to: ");
-        Serial.println(move_to); 
+        Serial.print("move_to_steps: ");
+        Serial.println(move_to_steps); 
         run_motor=true;
     }  
 
