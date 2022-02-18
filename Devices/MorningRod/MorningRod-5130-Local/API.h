@@ -15,6 +15,23 @@ String hostname = "The-MorningRod";
 
 AsyncWebServer server(80);
 
+
+void startezTime(){
+
+  if (WiFi.status() == WL_CONNECTED && (open_timer==1 || close_timer==1))
+  {
+  vTaskDelay(2000);
+  setDebug(INFO);
+  waitForSync();
+
+  Serial.println();
+  Serial.println("UTC: " + UTC.dateTime());
+
+  myTZ.setLocation(MYTIMEZONE);
+  Serial.print("Time in your set timezone: ");
+  Serial.println(myTZ.dateTime());
+  }
+}
 String splitTime(String data, char separator, int index)
 {
     int found = 0;
@@ -129,8 +146,6 @@ void API()
   else if (wifi_set == 1)
   {
   WiFi.softAPdisconnect(true);
-  Serial.println(ssid);
-  Serial.println(pass);
   WiFi.mode(WIFI_STA);
   WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
   WiFi.setHostname(hostname.c_str()); 
@@ -176,6 +191,8 @@ void API()
       request->send(200, "text/html", "WiFi Credentials Set. Connect to your home WiFi network, find the IP address of this device, and go to http://NEW-IP-ADDRESS");
       WiFi.softAPdisconnect(true);
       delay(500);
+      WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+      WiFi.setHostname(hostname.c_str()); 
       WiFi.begin(ssid.c_str(), pass.c_str());  
 
     }
@@ -340,7 +357,9 @@ server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
             deleteEvent(closeEventNow); 
           }
           preferences.putInt ("close_timer", close_timer);
-        } 
+        }
+
+    startezTime();
         
     request->redirect("/");
   

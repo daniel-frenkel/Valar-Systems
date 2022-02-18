@@ -40,23 +40,8 @@ void setup() {
   clockout_setup();
   setup_motors();
   API();
+  startezTime();
 
-  // EZ Time
-  if (WiFi.status() == WL_CONNECTED)
-  {
-  vTaskDelay(2000);
-  setDebug(INFO);
-  waitForSync();
-
-  Serial.println();
-  Serial.println("UTC: " + UTC.dateTime());
-
-  myTZ.setLocation(MYTIMEZONE);
-  Serial.print("Time in your set timezone: ");
-  Serial.println(myTZ.dateTime());
-
-  }
-  
 xTaskCreatePinnedToCore(
    otherTask,        /* pvTaskCode */
    "Other_Functions",          /* pcName */
@@ -82,7 +67,7 @@ void loop()
 void otherTask(void *pvParameters){
 while(true) {
 
-  if (WiFi.status() == WL_CONNECTED)
+  if ((WiFi.status() == WL_CONNECTED) && (open_timer==1 || close_timer==1))
   { 
   events();
   }

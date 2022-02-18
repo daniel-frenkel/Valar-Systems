@@ -60,8 +60,9 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 
 <div class="card">
 <h2>Set Schedule</h2>
+<p>This feature requires an internet connection in order to automatically adjust for your timezone and daylight savings. Turning on either timer below will start an internet connection to an NTP time server in order to periodically update and sync your time.</p>
+<br>
 <form action="/schedule">
-
  <h3>Select Your Time Zone</h3>
 <select name="timezone" >
   <option disabled selected style='display:none;'>%PLACEHOLDER_TIMEZONE%</option>
@@ -594,14 +595,9 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
     <option value="UTC+13">UTC+13</option>
     <option value="UTC+14">UTC+14</option>
   </optgroup>
-  
 </select>
-
-
-  
   <br>
   <br>
-  
   <h3>Open Timer</h3>
   <div class="switch-field">
   <input type="radio" id="radio-one" name="open_timer" value="0" if(open_timer==0) checked/>
@@ -609,13 +605,9 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
   <input type="radio" id="radio-two" name="open_timer" value="1" if(open_timer==1) checked/>
   <label for="radio-two">ON</label>
   </div>
-    
-
   <label for="open_time">Open Time: </label>
   <input type="time" id="open_time" name="open_time" value="%PLACEHOLDER_OPEN_TIME%"><br>
-  
   <br>
-  
   <h3>Close Timer</h3>
   <div class="switch-field">
   <input type="radio" id="radio-one" name="close_timer" value="0" if(close_timer==0) checked/>
@@ -623,22 +615,18 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
   <input type="radio" id="radio-two" name="close_timer" value="1" if(close_timer==1) checked/>
   <label for="radio-two">ON</label>
   </div>
-    
   <label for="close_time">Close Time: </label>
   <input type="time" id="close_time" name="close_time" value="%PLACEHOLDER_CLOSE_TIME%"><br>
   <br>
-  
   <input type="submit" value="Save">
 </form>
 </div>
-
-
 <br>
 <div class="card">
 <h2>Position Percent</h2>
 <form action="/position">    
 <p>Enter a value from 0-100. This is the percent of the max_steps value to move the motor.</p>
-<label><b>move_to_steps :</b></label>    
+<label><b>Percent Open :</b></label>    
 <input value = %PLACEHOLDER_PERCENT% type = "text" name = "move_percent">
 <br/>
 <input type="submit" value="Set Position">
@@ -661,12 +649,21 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 <h2>Motor Parameters</h2>
 <form action="/set_motor">
 <h3>Max Steps</h3>
+<p>Your device simply counts steps in order to find the distance to move. In this section, we need to enter the number of steps for your device to move in order to fully open your curtain.</p>
 <p>Enter a value from 0-infinity. This is the maximum number of steps your motor will turn when set to 100 percent.</p>
-<p>A negative value (e.g. -51200) will cause the motor to spin in the opposite direction.</p>
+<p>A <b>negative value</b> (e.g. -51200) will cause the motor to spin in the <b>opposite</b> direction.</p>
+<br>
+<h3>Device Cheat Sheet</h3>
+<p>Measure the number of inches you need to move and multiply by the steps below. Enter your calculated value in the input below.</p>
+<ul>
+  <li>MorningRod = 27599 steps per inch</li>
+  <li>MorningRope = 37629 steps per inch</li>
+  <li>Custom Device = See calculation below</li>
+</ul>
 <p>One motor revolution has 200 full steps and 256 microsteps for a total of 51,200 steps per revolution.</p>
-<p>To calculate this value, first measure the diameter of your motor pulley to calculate the distance travelled per revolution.</p>
-<p>Example: If your GT2 pulley (20 teeth) diameter is 15mm, it has a circumfereance of 47.12mm. This means one revolution will cause your belt to move 47.12mm</p>
-<p>Example: To move 1 meter, we take 1000mm/47.12 which is 21.22. This means we need 21.22 revolutions to move 1 meter. So 21.22 revolutions times 51,200 steps per revolution is 1086464. This is the max steps needed to move the motor by 1 meter. </p>
+<p>To calculate the number of steps to move, first measure the diameter of your motor pulley to calculate the circumferance travelled per revolution.</p>
+<p>Example: If your GT2 pulley (20 teeth) diameter is 12.2mm, it has a circumfereance of 38.33mm. This means one full revolution (51200 steps) will cause your belt to move 38.33mm</p>
+<p>Example: To move 1 meter, we take 1000mm/38.33 which is 26.09. This means we need 26.09 revolutions to move 1 meter. So 26.09 revolutions times 51,200 steps per revolution is 1335808. This is the max steps needed to move the motor by 1 meter. </p>
 <label><b>max steps: </b></label>
 <input value = "%PLACEHOLDER_MAX_STEPS%" type = "text" name = "max_steps">
 <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?max_steps=%PLACEHOLDER_MAX_STEPS%</p>

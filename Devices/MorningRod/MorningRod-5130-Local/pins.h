@@ -1,4 +1,4 @@
-#define CLOCKOUT 14
+#define CLOCKOUT 15//14
 #define ENABLE_PIN 32
 
 #define SCLK 26

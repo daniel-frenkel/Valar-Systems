@@ -26,10 +26,10 @@ volatile int current_cal;
 int current_calibration_value;
 
 String MYTIMEZONE;
-int close_timer;
+int close_timer = 0;
 int close_hour;
 int close_minute;
-int open_timer;
+int open_timer = 0;
 int open_hour;
 int open_minute;
 String open_time_string;
