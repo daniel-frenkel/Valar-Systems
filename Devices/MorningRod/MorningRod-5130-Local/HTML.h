@@ -668,7 +668,7 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 <p>Example: If your GT2 pulley (20 teeth) diameter is 15mm, it has a circumfereance of 47.12mm. This means one revolution will cause your belt to move 47.12mm</p>
 <p>Example: To move 1 meter, we take 1000mm/47.12 which is 21.22. This means we need 21.22 revolutions to move 1 meter. So 21.22 revolutions times 51,200 steps per revolution is 1086464. This is the max steps needed to move the motor by 1 meter. </p>
 <label><b>max steps: </b></label>
-<input value = "%PLACEHOLDER_MAX_STEPS%" type = "text" name = "max_steps">
+<input value = "%PLACEHOLDER_MAX_STEPS%" type = "number" name = "max_steps">
 <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?max_steps=%PLACEHOLDER_MAX_STEPS%</p>
 <input type="submit" value="Save">
 <br>
@@ -676,7 +676,7 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 <h3>Speed Setting</h3>
 <p>Enter a value from 10-200.</p>
 <label><b>speed: </b></label>
-<input value = "%PLACEHOLDER_MAX_SPEED%" type = "text" name = "max_speed">
+<input value = "%PLACEHOLDER_MAX_SPEED%" type = "number" name = "max_speed" min="10" max="200">
 <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?max_speed=%PLACEHOLDER_MAX_SPEED%</p>
 <input type="submit" value="Save">
 <br>
@@ -684,7 +684,7 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 <h3>Current Setting</h3>
 <p>Enter a value from 1-31.</p>
 <label><b>current: </b></label>
-<input value = "%PLACEHOLDER_CURRENT%" type = "text" name = "current">
+<input value = "%PLACEHOLDER_CURRENT%" type = "number" name = "current" min="1" max="31">
 <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?current=%PLACEHOLDER_CURRENT%</p>
 <input type="submit" value="Save">
 <br>
@@ -697,7 +697,7 @@ the starting value working with most motors.
 <br>
 -64 to +63: A higher value makes StallGuard2 less sensitive and requires more torque to indicate a stall.</p>
 <label><b>stall: </b></label>
-<input value = "%PLACEHOLDER_STALL%" type = "text" name = "stall">
+<input value = "%PLACEHOLDER_STALL%" type = "number" name = "stall" min="-64" max="63">
 <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?stall=%PLACEHOLDER_STALL%</p>
 <br>
 <input type="submit" value="Save">
