@@ -16,22 +16,8 @@ String hostname = "The-MorningRod";
 AsyncWebServer server(80);
 
 
-void startezTime(){
 
-  if (WiFi.status() == WL_CONNECTED && (open_timer==1 || close_timer==1))
-  {
-  vTaskDelay(2000);
-  setDebug(INFO);
-  waitForSync();
 
-  Serial.println();
-  Serial.println("UTC: " + UTC.dateTime());
-
-  myTZ.setLocation(MYTIMEZONE);
-  Serial.print("Time in your set timezone: ");
-  Serial.println(myTZ.dateTime());
-  }
-}
 String splitTime(String data, char separator, int index)
 {
     int found = 0;
@@ -52,22 +38,12 @@ void scheduleOpen(){
 
   Serial.println("Schedule Open Executed");
  
-  // determine today's open time
-  time_t openTime = makeTime(open_hour,open_minute,0, myTZ.day(), myTZ.month(), myTZ.year());
-
-  // is it time to do something?
-  if(now()>=openTime) {
-
   // start motor!
   move_to_steps = max_steps;
   run_motor = true;
-  
-  // set tomorrows wake up time
-  openTime = makeTime(0,0,0, myTZ.day(), myTZ.month(), myTZ.year())+86400;
-  }
 
   // set next time to wakeup
-  openEvent = myTZ.setEvent(scheduleOpen, openTime);
+  openEvent = myTZ.setEvent(scheduleOpen, myTZ.now()+24*3600);
 
   Serial.println("Schedule Open Complete");
 }
@@ -76,25 +52,48 @@ void scheduleClose(){
 
   Serial.println("Schedule Close Executed");
   
-  // determine today's close time
-  time_t closeTime = makeTime(close_hour,close_minute,0, myTZ.day(), myTZ.month(), myTZ.year());
-
-  // is it time to do something?
-  if(now()>=closeTime) {
-
   // do the alarm thing!
   move_to_steps = 0;
   run_motor = true;
 
-  // then wake up again tomorrow
-  closeTime = makeTime(0,0,0, myTZ.day(), myTZ.month(), myTZ.year())+86400;
-  }
-
   // set next time to wakeup
-  closeEvent = myTZ.setEvent(scheduleClose, closeTime);
+  closeEvent = myTZ.setEvent(scheduleClose, myTZ.now()+24*3600);
 
   Serial.println("Schedule Close Complete");
 }
+
+void startezTime(){
+
+  if (WiFi.status() == WL_CONNECTED && (open_timer==1 || close_timer==1))
+  {
+  vTaskDelay(2000);
+  setDebug(INFO);
+  waitForSync();
+
+  Serial.println();
+  Serial.println("UTC: " + UTC.dateTime());
+
+  myTZ.setLocation(MYTIMEZONE);
+  Serial.print("Time in your set timezone: ");
+  Serial.println(myTZ.dateTime());
+  
+    // determine close time
+  time_t newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+  if (myTZ.now() >= newOpenTime) newOpenTime += 24*3600;
+          
+  // set next time to wakeup
+  openEvent = myTZ.setEvent(scheduleOpen, newOpenTime);  
+  
+  // determine close time
+  time_t newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+  if (myTZ.now() >= newCloseTime) newCloseTime += 24*3600;
+          
+  // set next time to wakeup
+  closeEvent = myTZ.setEvent(scheduleClose, newCloseTime);  
+  
+  }
+}
+
 
 String processor(const String& var)
 {
