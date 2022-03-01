@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <ezTime.h>
 #include <AccelStepper.h>
 #include <HardwareSerial.h>
 #include <TMCStepper.h>

@@ -3,16 +3,93 @@
 #include "ESPAsyncWebServer.h"
 #include "AsyncJson.h"
 #include "ArduinoJson.h"
+#include "HTML.h"
+
+Timezone myTZ;
 
 const char *ap_ssid = "VALAR-AP";
 const char *ap_password = "password";
 
 String ip_address;
+String hostname = "VAL-1000";
 
 AsyncWebServer server(80);
 
-const char WIFI_HTML[] = "Enter your home Wifi Name and Password <br> <br> <form action=\"/set_wifi\">\n    <label class=\"label\">Network Name</label>\n    <input type = \"text\" name = \"ssid\"/>\n    <br/>\n    <label>Network Password</label>\n    <input type = \"text\" name = \"pass\"/>\n    <br/>\n    <input type=\"submit\" value=\"Set Values\">\n</form>";
-const char SETTINGS_HTML[] = "<h2>Valar Systems</h2>\n<h3>Motion Control</h3>\n<p>To learn more, please visit <a href=\"https://help.valarsystems.com/docs/VAL-1000/VAL-1000\">https://help.valarsystems.com</a></p>\n<p>To add this device to your network <a href=\"http://192.168.4.1/wifi\">go to http://192.168.4.1/wifi</a></p>\n<p>To remove this device from your network, press and hold the wifi reset button for 3+ seconds.</p>\n<br> \n<h2>Position</h2>\n<form action=\"/position\">\n    <p>Enter a value from 0-100. This is the percent of the max_steps value to move the motor.</p>\n    <label><b>move_to_position :</b></label>\n    <input value = \"%PLACEHOLDER_PERCENT%\" type = \"text\" name = \"move_percent\"/>\n    <br/>\n    <input type=\"submit\" value=\"Set Position\">\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/position?move_percent=%PLACEHOLDER_PERCENT%</p>\n</form>\n<br>\n<h2>Motor Parameters</h2>\n<form action=\"/set_motor\">\n    <p>Enter the max steps the motor should move. The percentage above will be based on the steps set here.</p>\n<p> There are <b>200 steps</b> per motor revolution.</p>\n<p> A <b>negative value</b> will move it on the opposite direction.</p> \n<p> Pressing the large button on the VAL-1000 will move the motor to this value. The other button will move the motor back to 0.</p>\n    <label><b>max_steps</b></label>\n    <input value = \"%PLACEHOLDER_MAX_STEPS%\" type = \"text\" name = \"max_steps\"/>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?max_steps=%PLACEHOLDER_MAX_STEPS%</p>\n    <br/>\n    <p>Enter a value from 400-2000. This is the amount of RMS current the motor will draw.</p>\n    <label><b>current</b></label>\n    <input value = \"%PLACEHOLDER_CURRENT%\" type = \"text\" name = \"current\"/>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?current=%PLACEHOLDER_MAX_STEPS%</p>\n    <br/>\n    <p>Enter a stall value from 0-255. The higher the value, the easier it will stall.</p>\n    <label><b>stall</b></label>\n    <input value = \"%PLACEHOLDER_STALL%\" type = \"text\" name = \"stall\"/>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?stall=%PLACEHOLDER_STALL%</p>\n    <br/>\n    <p>Enter an acceleration value. Slow acceleration may affect stall. Please read the guide to learn more.</p>\n    <label><b>accel</b></label>\n    <input value = \"%PLACEHOLDER_ACCEL%\" type = \"text\" name = \"accel\"/>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?accel=%PLACEHOLDER_ACCEL%</p>\n    <br/>\n    <p>Enter a maximum speed up to 500. To go faster, please read the guide to learn more.</p>\n    <label><b>max_speed</b></label>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?max_speed=%PLACEHOLDER_MAX_SPEED%</p>\n    <input value = \"%PLACEHOLDER_MAX_SPEED%\" type = \"text\" name = \"max_speed\"/>\n    <br>\n    <input type=\"submit\" value=\"Set Parameters\">\n<p>To set all values at once, send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?max_steps=%PLACEHOLDER_MAX_STEPS%&amp;current=%PLACEHOLDER_CURRENT%&stall=%PLACEHOLDER_STALL%&accel=%PLACEHOLDER_ACCEL%&max_speed=%PLACEHOLDER_MAX_SPEED%</p>\n</form>\n<br>\n<br>\n<p>Press this button to set the home position of your motor to zero</p>\n<form action=\"/set_zero\">\n<input type=\"hidden\" name=\"set_zero\" value=\"1\" />\n<input type=\"submit\" value=\"Set Zero\">\n</form>";
+String splitTime(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
+void scheduleOpen(){
+
+  Serial.println("Schedule Open Executed");
+ 
+  // start motor!
+  move_to_position = max_steps;
+  run_motor = true;
+
+  // set next time to wakeup
+  openEvent = myTZ.setEvent(scheduleOpen, myTZ.now()+24*3600);
+
+  Serial.println("Schedule Open Complete");
+}
+
+void scheduleClose(){
+
+  Serial.println("Schedule Close Executed");
+  
+  // do the alarm thing!
+  move_to_position = 0;
+  run_motor = true;
+
+  // set next time to wakeup
+  closeEvent = myTZ.setEvent(scheduleClose, myTZ.now()+24*3600);
+
+  Serial.println("Schedule Close Complete");
+}
+
+void startezTime(){
+
+  if (WiFi.status() == WL_CONNECTED && (open_timer==1 || close_timer==1))
+  {
+  vTaskDelay(2000);
+  setDebug(INFO);
+  waitForSync();
+
+  Serial.println();
+  Serial.println("UTC: " + UTC.dateTime());
+
+  myTZ.setLocation(MYTIMEZONE);
+  Serial.print("Time in your set timezone: ");
+  Serial.println(myTZ.dateTime());
+  
+    // determine close time
+  time_t newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+  if (myTZ.now() >= newOpenTime) newOpenTime += 24*3600;
+          
+  // set next time to wakeup
+  openEvent = myTZ.setEvent(scheduleOpen, newOpenTime);  
+  
+  // determine close time
+  time_t newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+  if (myTZ.now() >= newCloseTime) newCloseTime += 24*3600;
+          
+  // set next time to wakeup
+  closeEvent = myTZ.setEvent(scheduleClose, newCloseTime);  
+  
+  }
+}
 
 String processor(const String& var)
 {
@@ -37,6 +114,15 @@ String processor(const String& var)
   }
   else if(var == "PLACEHOLDER_IP_ADDRESS"){
     return String(ip_address);
+  }
+  else if(var == "PLACEHOLDER_TIMEZONE"){
+    return String(MYTIMEZONE);
+  }
+  else if(var == "PLACEHOLDER_OPEN_TIME"){
+    return String(open_time_string);
+  }
+  else if(var == "PLACEHOLDER_CLOSE_TIME"){
+    return String(close_time_string);
   }
  
   return String();
@@ -174,6 +260,91 @@ server.on("/set_zero", HTTP_GET, [](AsyncWebServerRequest *request){
     Serial.print("set_zero: ");
     Serial.println(set_zero);   
 
+    request->redirect("/");
+  
+  });
+
+server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
+
+    int paramsNr = request->params();
+ 
+    for(int i=0;i<paramsNr;i++){
+        AsyncWebParameter* p = request->getParam(i);
+    }
+    if(request->hasParam("timezone"))
+        {
+          MYTIMEZONE = request->getParam("timezone")->value().c_str();
+          preferences.putString ("timezone", MYTIMEZONE);
+          Serial.print("timezone: ");
+          Serial.println(MYTIMEZONE);
+          myTZ.setLocation(MYTIMEZONE);
+          Serial.print("Time in your set timezone: ");
+          Serial.println(myTZ.dateTime());
+  
+        }
+    if(request->hasParam("open_time"))
+        {
+          open_time_string = request->getParam("open_time")->value().c_str();
+          preferences.putString ("open_string", open_time_string);
+          String open_hour_s = splitTime(open_time_string, ':', 0);
+          open_hour = open_hour_s.toInt();
+          preferences.putInt ("open_hour", open_hour);
+          String open_minute_s = splitTime(open_time_string, ':', 1);
+          open_minute = open_minute_s.toInt();
+          preferences.putInt ("open_minute", open_minute);
+        }
+    if(request->hasParam("open_timer"))
+        {
+          open_timer = request->getParam("open_timer")->value().toInt();
+          if (open_timer == 1){
+            
+          // determine open time
+          time_t newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+          // set next time to wakeup
+          openEventNow = myTZ.setEvent(scheduleOpen, newOpenTime);
+          
+          
+          }else{
+            deleteEvent(openEvent); 
+            deleteEvent(openEventNow);
+          }
+          
+          preferences.putInt ("open_timer", open_timer);
+        }     
+
+    if(request->hasParam("close_time"))
+        {
+          close_time_string = request->getParam("close_time")->value().c_str();
+          preferences.putString("close_string", close_time_string);
+          String close_hour_s = splitTime(close_time_string, ':', 0);
+          close_hour = close_hour_s.toInt();
+          preferences.putInt ("close_hour", close_hour);
+          String close_minute_s = splitTime(close_time_string, ':', 1);
+          close_minute = close_minute_s.toInt();
+          preferences.putInt ("close_minute", close_minute);
+        }
+    if(request->hasParam("close_timer"))
+        {
+          close_timer = request->getParam("close_timer")->value().toInt();
+          if(close_timer == 1){
+
+          // determine open time
+          time_t newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+          // set next time to wakeup
+         closeEventNow = myTZ.setEvent(scheduleClose, newCloseTime);
+
+          
+          }else{
+            deleteEvent(closeEvent);
+            deleteEvent(closeEventNow); 
+          }
+          preferences.putInt ("close_timer", close_timer);
+        }
+
+    startezTime();
+        
     request->redirect("/");
   
   });

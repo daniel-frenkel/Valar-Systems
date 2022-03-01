@@ -18,6 +18,20 @@ bool wifi_button = false;;
 String ssid;
 String pass;
 
+String MYTIMEZONE;
+int close_timer = 0;
+int close_hour;
+int close_minute;
+int open_timer = 0;
+int open_hour;
+int open_minute;
+String open_time_string;
+String close_time_string;
+int openEvent;
+int closeEvent;
+int openEventNow;
+int closeEventNow;
+
 // Filter anti-rebond (debouncer)
 #define DEBOUNCE_TIME 250
 volatile uint32_t DebounceTimer = 0;
