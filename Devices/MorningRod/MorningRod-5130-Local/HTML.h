@@ -51,7 +51,7 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 <h2>Valar Systems</h2>
 <h3>Motion Control</h3>
 <p>To learn more, please visit <a href="https://help.valarsystems.com/docs/VAL-1000/VAL-1000">https://help.valarsystems.com</a></p>
-<p>To add this device to your network go to <a href="http://192.168.4.1/wifi"> http://192.168.4.1</a></p>
+<p>To add this device to your network go to <a href="http://192.168.4.1/wifi"> http://192.168.4.1/wifi</a></p>
 <p>To remove this device from your network, press and hold the wifi reset button for 3+ seconds.</p>
 </div>
 <br>

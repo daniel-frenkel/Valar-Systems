@@ -5,8 +5,8 @@
 #include <Preferences.h>
 #include "pins.h"
 #include "Variables.h"
-#include "API.h"
 #include "ResetButton.h"
+#include "API.h"
 #include "motor_control.h"
 #include "motor_calibration.h"
 

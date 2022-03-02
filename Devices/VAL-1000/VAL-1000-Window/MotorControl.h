@@ -12,7 +12,7 @@
 #define SENSOR1 32
 #define SENSOR2 22
 
-#define SHAFT false
+#define SHAFT true
 
 #define SERIAL_PORT_2    Serial2    // TMC2208/TMC2224 HardwareSerial port
 #define DRIVER_ADDRESS   0b00       // TMC2209 Driver address according to MS1 and MS2

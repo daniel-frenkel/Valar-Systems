@@ -76,6 +76,7 @@ void MotorTask(void *pvParameters)  // Motor Task
     }
     else if(wifi_button == true)
     {
+      Serial.println("Wifi Pressed");
       //button_action();
       button_change();
       wifi_button = false;

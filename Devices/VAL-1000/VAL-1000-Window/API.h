@@ -3,16 +3,16 @@
 #include "ESPAsyncWebServer.h"
 #include "AsyncJson.h"
 #include "ArduinoJson.h"
+#include "HTML.h"
 
 const char *ap_ssid = "VALAR-AP";
 const char *ap_password = "password";
 
 String ip_address;
+String hostname = "valar-systems";
 
 AsyncWebServer server(80);
 
-const char WIFI_HTML[] = "Enter your home Wifi Name and Password <br> <br> <form action=\"/set_wifi\">\n    <label class=\"label\">Network Name</label>\n    <input type = \"text\" name = \"ssid\"/>\n    <br/>\n    <label>Network Password</label>\n    <input type = \"text\" name = \"pass\"/>\n    <br/>\n    <input type=\"submit\" value=\"Set Values\">\n</form>";
-const char SETTINGS_HTML[] = "<h2>Valar Systems</h2>\n<h3>Motion Control</h3>\n<p>To learn more, please visit <a href=\"https://help.valarsystems.com/docs/VAL-1000/VAL-1000\">https://help.valarsystems.com</a></p>\n<p>To add this device to your network <a href=\"http://192.168.4.1/wifi\">go to http://192.168.4.1/wifi</a></p>\n<p>To remove this device from your network, press and hold the wifi reset button for 3+ seconds.</p>\n<br> \n<h2>Position</h2>\n<form action=\"/position\">\n    <p>Enter a value from 0-100. This is the percent of the max_steps value to move the motor.</p>\n    <label><b>move_to :</b></label>\n    <input value = \"%PLACEHOLDER_PERCENT%\" type = \"text\" name = \"move_percent\"/>\n    <br/>\n    <input type=\"submit\" value=\"Set Position\">\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/position?move_percent=%PLACEHOLDER_PERCENT%</p>\n</form>\n<br>\n<h2>Motor Parameters</h2>\n<form action=\"/set_motor\">\n    <p>Enter a value from 400-2000. This is the amount of RMS current the motor will draw.</p>\n    <label><b>current</b></label>\n    <input value = \"%PLACEHOLDER_CURRENT%\" type = \"text\" name = \"current\"/>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?current=%PLACEHOLDER_MAX_STEPS%</p>\n    <br/>\n    <p>Enter a stall value from 0-255. The higher the value, the easier it will stall.</p>\n    <label><b>stall</b></label>\n    <input value = \"%PLACEHOLDER_STALL%\" type = \"text\" name = \"stall\"/>\n    <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?stall=%PLACEHOLDER_STALL%</p>\n    <br/>\n        <input type=\"submit\" value=\"Set Parameters\">\n<p>To set all values at once, send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/set_motor?max_steps=%PLACEHOLDER_MAX_STEPS%&amp;current=%PLACEHOLDER_CURRENT%&stall=%PLACEHOLDER_STALL%&accel=%PLACEHOLDER_ACCEL%&max_speed=%PLACEHOLDER_MAX_SPEED%</p>\n</form>\n<br>\n<br>\n<p>Press this button to set the home position of your motor to zero</p>\n<form action=\"/calibrate\">\n<input type=\"hidden\" name=\"calibrate\" value=\"1\" />\n<input type=\"submit\" value=\"Calibrate\">\n</form>";
 String processor(const String& var)
 {
  
@@ -41,6 +41,31 @@ String processor(const String& var)
   return String();
 }
 
+void connectWifi(){
+  WiFi.softAPdisconnect(true);
+  Serial.println(ssid);
+  Serial.println(pass);
+  WiFi.mode(WIFI_STA);
+  WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+  WiFi.setHostname(hostname.c_str()); 
+  WiFi.begin(ssid.c_str(), pass.c_str());
+
+      while (WiFi.status() != WL_CONNECTED) {
+            vTaskDelay(1000);
+            Serial.print(".");
+
+        if(wifi_button == true)
+        {
+        Serial.println("Wifi Pressed");
+        button_change();
+        wifi_button = false;
+        }
+      }
+        
+  Serial.println(WiFi.localIP());
+  ip_address = WiFi.localIP().toString();
+}
+
 void API()
 {
     //Preferences library create varaiable to save
@@ -56,19 +81,7 @@ void API()
   }
   else if (wifi_set == 1)
   {
-  WiFi.softAPdisconnect(true);
-  Serial.println(ssid);
-  Serial.println(pass);
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid.c_str(), pass.c_str());
-
-      while (WiFi.status() != WL_CONNECTED) {
-            delay(500);
-            Serial.print(".");
-        }
-        
-  Serial.println(WiFi.localIP());
-  ip_address = WiFi.localIP().toString();
+  connectWifi();
   }
   
   server.on("/wifi", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -100,9 +113,8 @@ void API()
       Serial.println(preferences.getString ("pass", "NO_PASSWORD"));
       
       request->send(200, "text/html", "WiFi Credentials Set. Connect to your home WiFi network, find the IP address of this device, and go to http://NEW-IP-ADDRESS");
-      WiFi.softAPdisconnect(true);
-      delay(500);
-      WiFi.begin(ssid.c_str(), pass.c_str());  
+
+      connectWifi();
 
     }
                                   

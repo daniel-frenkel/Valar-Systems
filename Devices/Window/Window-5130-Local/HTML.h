@@ -37,7 +37,7 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
          <div class="card">
             <h1>Valar Systems</h1>
             <h3>Motion Control</h3>
-            <p>To add this device to your network go to http://192.168.4.1/wifi</p>
+            <p>To add this device to your network go to <a href="http://192.168.4.1/wifi"> http://192.168.4.1/wifi</a></p>
             <p>To remove this device from your network, press and hold the wifi reset button for 3+ seconds.</p>
             <br>
          </div>

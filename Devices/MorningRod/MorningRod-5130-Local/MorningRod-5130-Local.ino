@@ -15,8 +15,8 @@
 #include <Preferences.h>
 #include "pins.h"
 #include "Memory.h"
-#include "API.h"
 #include "ResetButton.h"
+#include "API.h"
 #include "MotorControl.h"
 
 TaskHandle_t TaskA;

@@ -15,9 +15,6 @@ String hostname = "The-MorningRod";
 
 AsyncWebServer server(80);
 
-
-
-
 String splitTime(String data, char separator, int index)
 {
     int found = 0;
@@ -129,6 +126,31 @@ String processor(const String& var)
   return String();
 }
 
+void connectWifi(){
+  WiFi.softAPdisconnect(true);
+  Serial.println(ssid);
+  Serial.println(pass);
+  WiFi.mode(WIFI_STA);
+  WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+  WiFi.setHostname(hostname.c_str()); 
+  WiFi.begin(ssid.c_str(), pass.c_str());
+
+      while (WiFi.status() != WL_CONNECTED) {
+            vTaskDelay(1000);
+            Serial.print(".");
+
+        if(wifi_button == true)
+        {
+        Serial.println("Wifi Pressed");
+        button_change();
+        wifi_button = false;
+        }
+      }
+        
+  Serial.println(WiFi.localIP());
+  ip_address = WiFi.localIP().toString();
+}
+
 void API()
 {
     //Preferences library create varaiable to save
@@ -144,19 +166,7 @@ void API()
   }
   else if (wifi_set == 1)
   {
-  WiFi.softAPdisconnect(true);
-  WiFi.mode(WIFI_STA);
-  WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
-  WiFi.setHostname(hostname.c_str()); 
-  WiFi.begin(ssid.c_str(), pass.c_str());
-
-      while (WiFi.status() != WL_CONNECTED) {
-            delay(500);
-            Serial.print(".");
-        }
-        
-  Serial.println(WiFi.localIP());
-  ip_address = WiFi.localIP().toString();
+  connectWifi();
   }
   
   server.on("/wifi", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -188,11 +198,8 @@ void API()
       Serial.println(preferences.getString ("pass", "NO_PASSWORD"));
       
       request->send(200, "text/html", "WiFi Credentials Set. Connect to your home WiFi network, find the IP address of this device, and go to http://NEW-IP-ADDRESS");
-      WiFi.softAPdisconnect(true);
-      delay(500);
-      WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
-      WiFi.setHostname(hostname.c_str()); 
-      WiFi.begin(ssid.c_str(), pass.c_str());  
+
+      connectWifi();
 
     }
                                   

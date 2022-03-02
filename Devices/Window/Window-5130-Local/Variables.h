@@ -19,6 +19,8 @@
 #define OPEN_CLOSE 20
 #define AUTO_TUNE 21
 
+Preferences preferences;
+
 String device_status;
 
 int waitTime;
