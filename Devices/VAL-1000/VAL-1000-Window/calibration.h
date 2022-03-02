@@ -10,8 +10,6 @@ void TravelDistance()
 
   //disable stallguard
   detachInterrupt(STALLGUARD);
-  //esp_err_t gpio_intr_disable(gpio_num_t STALLGUARD);
-  
 
   stepper.enableOutputs();
   driver.rms_current(1500); //current = 2000
