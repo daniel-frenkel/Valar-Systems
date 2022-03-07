@@ -10,7 +10,7 @@ Timezone myTZ;
 String ip_address;
 String hostname = "val-1000";
 
-AsyncWebServer server(80);
+AsyncWebServer serverAPI(8080);
 
 String splitTime(String data, char separator, int index)
 {
@@ -177,15 +177,15 @@ void API()
   connectWifi();
   }
   
-  server.on("/wifi", HTTP_GET, [](AsyncWebServerRequest *request){
+  serverAPI.on("/wifi", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200, "text/html", WIFI_HTML);
   });
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/html", SETTINGS_HTML, processor);
-  });
+  // server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+  // request->send_P(200, "text/html", SETTINGS_HTML, processor);
+  // });
 
-  server.on("/set_wifi", HTTP_GET, [] (AsyncWebServerRequest *request) {
+  serverAPI.on("/set_wifi", HTTP_GET, [] (AsyncWebServerRequest *request) {
     
   if (request->hasParam("ssid")) {
       ssid = request->getParam("ssid")->value().c_str();
@@ -213,7 +213,7 @@ void API()
                                   
   });
 
-  server.on("/set_motor", HTTP_GET, [](AsyncWebServerRequest *request){
+  serverAPI.on("/set_motor", HTTP_GET, [](AsyncWebServerRequest *request){
     
     int paramsNr = request->params();
     Serial.print("Params: ");
@@ -266,7 +266,7 @@ void API()
     
   });
 
-server.on("/set_zero", HTTP_GET, [](AsyncWebServerRequest *request){
+serverAPI.on("/set_zero", HTTP_GET, [](AsyncWebServerRequest *request){
 
     int paramsNr = request->params();
  
@@ -282,7 +282,7 @@ server.on("/set_zero", HTTP_GET, [](AsyncWebServerRequest *request){
   
   });
 
-server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
+serverAPI.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
 
     int paramsNr = request->params();
  
@@ -367,7 +367,7 @@ server.on("/schedule", HTTP_GET, [](AsyncWebServerRequest *request){
   
   });
 
-server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
+serverAPI.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
     
     int paramsNr = request->params();
   
@@ -389,7 +389,7 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
 });
 
 
-server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request){
+serverAPI.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request){
 
 DynamicJsonDocument doc(2048);
 doc["position"] = stepper.currentPosition();
@@ -400,7 +400,5 @@ serializeJson(doc, json);
 request->send(200, "application/json", json);
 });
 
-
-
-  server.begin();
+  serverAPI.begin();
 }
