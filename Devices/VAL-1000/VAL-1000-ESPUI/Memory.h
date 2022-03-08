@@ -32,6 +32,16 @@ int closeEvent;
 int openEventNow;
 int closeEventNow;
 
+
+int open_am_pm;
+String open_am_pm_s;
+  
+int close_am_pm;
+String close_am_pm_s;
+  
+
+String wifiStatus = "SET";
+
 // Filter anti-rebond (debouncer)
 #define DEBOUNCE_TIME 250
 volatile uint32_t DebounceTimer = 0;
@@ -52,6 +62,18 @@ void load_preferences(){
   max_speed = preferences.getInt("max_speed", 100);
   tcools = (3089838.00*pow(float(max_speed),-1.00161534))*1.5;
 
+  open_timer = preferences.getInt("open_timer", 0);
+  close_timer = preferences.getInt("close_timer", 0);
+  open_hour = preferences.getInt("open_hour", 0);
+  open_am_pm = preferences.getInt("open_am_pm", 0);
+  open_am_pm_s = preferences.getString("open_am_pm_", "AM");
+  
+  close_hour = preferences.getInt("close_hour", 0);
+  open_minute = preferences.getInt("open_minute", 0);
+  close_minute = preferences.getInt("close_minute", 0);
+  close_am_pm = preferences.getInt("close_am_pm", 0);
+  close_am_pm_s = preferences.getString("close_am_pm_s", "AM");
+  
   Serial.println("FINISHED LOADING PREFERENCES");
   }
 
