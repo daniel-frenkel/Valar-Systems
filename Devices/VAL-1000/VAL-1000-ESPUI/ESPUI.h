@@ -27,36 +27,51 @@ void selectCloseAmPmCall(Control* sender, int value) //Dropdown
     if(sender->value == "AM")
     {
      Serial.println(sender->value);
-
+     close_am_pm = 0;
+     close_am_pm_s = "AM";
+     preferences.putInt("close_am_pm", close_am_pm);
+     preferences.putString("close_am_pm_s", close_am_pm_s);
      
     }else
     {
      Serial.println(sender->value); 
-
-     
+     close_am_pm = 1;
+     close_am_pm_s = "PM";
+     preferences.putInt("close_am_pm", close_am_pm);
+     preferences.putString("close_am_pm_s", close_am_pm_s);
     }
 }
 
 void numberMaxStepsCall(Control* sender, int type)
 {
-    Serial.println(sender->value);
+    max_steps = sender->value.toInt();
+    preferences.putInt ("max_steps", max_steps);
+    Serial.print("max_steps: ");
+    Serial.println(max_steps);
 }
 
 void numberCurrentCall(Control* sender, int type)
 {
-    Serial.println(sender->value);
+    current = sender->value.toInt();
+    preferences.putInt ("current", current);
+    Serial.print("current: ");
+    Serial.println(current);
 }
 
 void numberStallCall(Control* sender, int type)
 {
     Serial.println(sender->value);
+    stall = sender->value.toInt();
+    driver.SGTHRS(stall);
+    preferences.putInt ("stall", stall);
+    Serial.print("stall: ");
+    Serial.println(stall);
 }
 
 void numberOpenHourCall(Control* sender, int type)
 {
     Serial.println(sender->value);
     open_hour = sender->value.toInt();
-    Serial.println(open_hour);
     preferences.putInt ("open_hour", open_hour);
 }
 
@@ -64,7 +79,6 @@ void numberOpenMinuteCall(Control* sender, int type)
 {
     Serial.println(sender->value);
     open_minute = sender->value.toInt();
-    Serial.println(open_minute);
     preferences.putInt ("open_minute", open_minute);    
 }
 
@@ -72,7 +86,6 @@ void numberCloseHourCall(Control* sender, int type)
 {
     Serial.println(sender->value);
     close_hour = sender->value.toInt();
-    Serial.println(close_hour);
     preferences.putInt ("close_hour", close_hour);
 }
 
@@ -80,7 +93,6 @@ void numberCloseMinuteCall(Control* sender, int type)
 {
     Serial.println(sender->value);
     close_minute = sender->value.toInt();
-    Serial.println(close_minute);
     preferences.putInt ("close_minute", close_minute);
 }
 
@@ -91,6 +103,11 @@ void sliderPosition(Control* sender, int type)
     Serial.print(sender->id);
     Serial.print(", Value: ");
     Serial.println(sender->value);
+
+    move_percent = sender->value;
+    move_to_position = (max_steps/100)*move_percent;
+    run_motor=true;
+      
 }
 
 void buttonSetZeroCall(Control* sender, int type)
@@ -106,38 +123,28 @@ void buttonSetZeroCall(Control* sender, int type)
     }
 }
 
-void buttonClearNetworkCall(Control* sender, int type)
-{
-    switch (type)
-    {
-    case B_DOWN:
-        Serial.println("Button Pressed");
-        break;
-    }
-}
 
-void buttonSaveNetworkCall(Control* sender, int type)
-{
-    switch (type)
-    {
-    case B_DOWN:
-        Serial.println("Button Pressed");
-        break;
-    }
-}
-
-void padPosition(Control* sender, int value)
+void switchChangeDirectionCall(Control* sender, int value)
 {
     switch (value)
     {
-    case P_LEFT_UP:
-        Serial.print("left");
+    case S_ACTIVE:
+        Serial.print("Active");
+        open_direction = 1;
+        preferences.putInt("open_dir", open_direction);
+        driver.shaft(true); 
         break;
 
-    case P_RIGHT_UP:
-        Serial.print("right");
+    case S_INACTIVE:
+        Serial.print("Inactive");
+        open_direction = 0;
+        preferences.putInt("open_dir", open_direction);
+        driver.shaft(false); 
         break;
     }
+
+    Serial.print(" ");
+    Serial.println(sender->id);
 }
 
 void switchOpenScheduleCall(Control* sender, int value)
@@ -188,18 +195,44 @@ void switchCloseScheduleCall(Control* sender, int value)
 
 void textNetworkCall(Control* sender, int type)
 {
-    Serial.print("Text: ID: ");
-    Serial.print(sender->id);
-    Serial.print(", Value: ");
-    Serial.println(sender->value);
+    ssid = sender->value;
+    Serial.print(ssid);
+
 }
 
 void textPasswordCall(Control* sender, int type)
 {
-    Serial.print("Text: ID: ");
-    Serial.print(sender->id);
-    Serial.print(", Value: ");
-    Serial.println(sender->value);
+    pass = sender->value;
+    Serial.print(pass);
+}
+
+void buttonSaveNetworkCall(Control* sender, int type)
+{
+    switch (type)
+    {
+    case B_DOWN:
+        Serial.println("Button Pressed");
+        preferences.putString ("ssid", ssid);
+        preferences.putString ("pass", pass);
+        wifi_set = 1;
+        preferences.putInt ("wifi_set", 1);
+        connectWifi();
+        break;
+    }
+}
+
+void buttonClearNetworkCall(Control* sender, int type)
+{
+    switch (type)
+    {
+    case B_DOWN:
+        preferences.putInt ("wifi_set", 0);
+        preferences.putString ("ssid", "NOT_SET");
+        preferences.putString ("pass", "NOT_SET");
+        preferences.end();
+        ESP.restart();
+        break;
+    }
 }
 
 void ESPUIsetup(){
@@ -217,22 +250,27 @@ void ESPUIsetup(){
    //Text: Current position percent
    status = ESPUI.addControl(ControlType::Label, "Current Position:", String(move_percent), ControlColor::Turquoise, tab1);
    //Slider: Move to position
-   ESPUI.addControl(ControlType::Slider, "Position", "0", ControlColor::Alizarin, tab1, &sliderPosition);
-   //Pad: Move to position (update other values after press)
-   ESPUI.addControl(ControlType::Pad, "Pad without center", "", ControlColor::Carrot, tab1, &padPosition);
+   uint16_t positionMax = ESPUI.addControl(ControlType::Slider, "Position", "0", ControlColor::Alizarin, tab1, &sliderPosition);
+   ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, positionMax);
+   ESPUI.addControl(ControlType::Max, "", "100", ControlColor::None, positionMax);
 
 //Tab2: Settings
    ESPUI.addControl(ControlType::Separator, "Home Position", "", ControlColor::Peterriver, tab2);
    //Button: Set Zero
-   ESPUI.addControl(ControlType::Button, "Set Zero", "Set", ControlColor::Alizarin, tab2, &buttonSetZeroCall);
+   ESPUI.addControl(ControlType::Switcher, "Change Direction", String(open_direction), ControlColor::Dark, tab2, &switchChangeDirectionCall);
+   ESPUI.addControl(ControlType::Button, "Set Zero", "Set", ControlColor::Dark, tab2, &buttonSetZeroCall);
    
    ESPUI.addControl(ControlType::Separator, "Motor Setting", "", ControlColor::Peterriver, tab2);
    //Number: Max Steps
-   ESPUI.addControl(ControlType::Number, "Max Steps:", "0", ControlColor::Peterriver, tab2, &numberMaxStepsCall);
+   ESPUI.addControl(ControlType::Number, "Max Steps:", String(max_steps), ControlColor::Peterriver, tab2, &numberMaxStepsCall);
    //Number: Current
-   ESPUI.addControl(ControlType::Number, "Current(mA):", "400", ControlColor::Alizarin, tab2, &numberCurrentCall);
+   uint16_t currentMax = ESPUI.addControl(ControlType::Number, "Current(mA):", String(current), ControlColor::Alizarin, tab2, &numberCurrentCall);
+   ESPUI.addControl(ControlType::Min, "", "400", ControlColor::None, currentMax);
+   ESPUI.addControl(ControlType::Max, "", "2000", ControlColor::None, currentMax);
    //Number: Stall
-   ESPUI.addControl(ControlType::Number, "Stall:", "0", ControlColor::Carrot, tab2, &numberStallCall);
+   uint16_t stallMax = ESPUI.addControl(ControlType::Number, "Stall:", String(stall), ControlColor::Carrot, tab2, &numberStallCall);
+   ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, stallMax);
+   ESPUI.addControl(ControlType::Max, "", "255", ControlColor::None, stallMax);
 
 
 //Tab3: Schedule
@@ -246,11 +284,15 @@ void ESPUIsetup(){
    //Switch: Turn on open timer
    ESPUI.addControl(ControlType::Switcher, "Open Schedule", String(open_timer), ControlColor::Sunflower, tab3, &switchOpenScheduleCall);
    //Number: Hour
-   ESPUI.addControl(ControlType::Number, "Hour:", String(open_hour), ControlColor::Sunflower, tab3, &numberOpenHourCall);
+   uint16_t openHourMax = ESPUI.addControl(ControlType::Number, "Open Hour", String(open_hour), ControlColor::Sunflower, tab3, &numberOpenHourCall);
+   ESPUI.addControl(ControlType::Min, "", "1", ControlColor::None, openHourMax);
+   ESPUI.addControl(ControlType::Max, "", "12", ControlColor::None, openHourMax);
    //Number: minute
-   ESPUI.addControl(ControlType::Number, "Minute:", String(open_minute), ControlColor::Sunflower, tab3, &numberOpenMinuteCall);
+   uint16_t openMinuteMax = ESPUI.addControl(ControlType::Number, "Open Minute", String(open_minute), ControlColor::Sunflower, tab3, &numberOpenMinuteCall);
+   ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, openMinuteMax);
+   ESPUI.addControl(ControlType::Max, "", "59", ControlColor::None, openMinuteMax);
    //Drop Down: AM/PM
-   uint16_t openTime = ESPUI.addControl(ControlType::Select, "AM/PM:", "AM", ControlColor::Sunflower, tab3, &selectOpenAmPmCall);
+   uint16_t openTime = ESPUI.addControl(ControlType::Select, "AM/PM:", open_am_pm_s, ControlColor::Sunflower, tab3, &selectOpenAmPmCall);
    ESPUI.addControl(ControlType::Option, "AM", "AM", ControlColor::None, openTime);
    ESPUI.addControl(ControlType::Option, "PM", "PM", ControlColor::None, openTime);
 
@@ -259,11 +301,15 @@ void ESPUIsetup(){
    //Switch: Turn off close
    ESPUI.addControl(ControlType::Switcher, "Close Schedule", String(open_timer), ControlColor::Dark, tab3, &switchOpenScheduleCall);
    //Number: Hour
-   ESPUI.addControl(ControlType::Number, "Hour", String(close_hour), ControlColor::Dark, tab3, &numberCloseHourCall);
+   uint16_t closeHourMax = ESPUI.addControl(ControlType::Number, "Close Hour", String(close_hour), ControlColor::Dark, tab3, &numberCloseHourCall);
+   ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, closeHourMax);
+   ESPUI.addControl(ControlType::Max, "", "59", ControlColor::None, closeHourMax);
    //Number: minute
-   ESPUI.addControl(ControlType::Number, "Minute", String(close_minute), ControlColor::Dark, tab3, &numberCloseMinuteCall);
+   uint16_t closeMinuteMax = ESPUI.addControl(ControlType::Number, "Close Minute", String(close_minute), ControlColor::Dark, tab3, &numberCloseMinuteCall);
+   ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, closeMinuteMax);
+   ESPUI.addControl(ControlType::Max, "", "59", ControlColor::None, closeMinuteMax);
    //Drop Down: AM/PM
-   uint16_t closeTime = ESPUI.addControl(ControlType::Select, "AM/PM:", "AM", ControlColor::Dark, tab3, &selectCloseAmPmCall);
+   uint16_t closeTime = ESPUI.addControl(ControlType::Select, "AM/PM:", close_am_pm_s, ControlColor::Dark, tab3, &selectCloseAmPmCall);
    ESPUI.addControl(ControlType::Option, "AM", "AM", ControlColor::None, closeTime);
    ESPUI.addControl(ControlType::Option, "PM", "PM", ControlColor::None, closeTime);
 
@@ -275,7 +321,15 @@ void ESPUIsetup(){
    ESPUI.addControl(ControlType::Button, "Clear Settings", "CLEAR", ControlColor::Emerald, tab4, &buttonClearNetworkCall);
    //Text: Name
 
-   ESPUI.addControl(ControlType::Separator, "Set Wifi", "", ControlColor::None, tab4);
+   String display_wifi;
+   if(wifi_set)
+   {
+   display_wifi = "SET";  
+   }else
+   {
+   display_wifi = "NOT SET";  
+   }
+   ESPUI.addControl(ControlType::Separator, "Set Wifi", display_wifi, ControlColor::None, tab4);
    ESPUI.addControl(ControlType::Text, "Network", ssid, ControlColor::Emerald, tab4, &textNetworkCall);
    
    //Text: Password

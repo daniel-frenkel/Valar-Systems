@@ -191,7 +191,14 @@ void setup_motors(){
   driver.TCOOLTHRS(tcools); // 
   driver.TPWMTHRS(0);
   driver.semin(0);
-  driver.shaft(true);  
+  
+  if (open_direction == 1)
+  {
+    driver.shaft(true);  
+  }else{
+    driver.shaft(false);  
+  }
+  
   driver.en_spreadCycle(false);
   driver.pdn_disable(true);
 
