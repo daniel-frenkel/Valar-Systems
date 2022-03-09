@@ -74,6 +74,8 @@ void load_preferences(){
   close_minute = preferences.getInt("close_minute", 0);
   close_am_pm = preferences.getInt("close_am_pm", 0);
   close_am_pm_s = preferences.getString("close_am_pm_s", "AM");
+
+  MYTIMEZONE = preferences.getString("timezone", "America/Los_Angeles");
   
   Serial.println("FINISHED LOADING PREFERENCES");
   }
