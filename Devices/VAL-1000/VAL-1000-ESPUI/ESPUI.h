@@ -99,13 +99,10 @@ void numberCloseMinuteCall(Control* sender, int type)
 
 void sliderPosition(Control* sender, int type)
 {
-    Serial.print("Slider: ID: ");
-    Serial.print(sender->id);
-    Serial.print(", Value: ");
     Serial.println(sender->value);
-
-    move_percent = sender->value;
+    move_percent = sender->value.toInt();
     move_to_position = (max_steps/100)*move_percent;
+    stepper.moveTo(move_to_position);
     run_motor=true;
       
 }
@@ -171,9 +168,6 @@ void switchOpenScheduleCall(Control* sender, int value)
         deleteEvent(openEventNow);
         break;
     }
-
-    Serial.print(" ");
-    Serial.println(sender->id);
 }
 
 void switchCloseScheduleCall(Control* sender, int value)
@@ -181,16 +175,25 @@ void switchCloseScheduleCall(Control* sender, int value)
     switch (value)
     {
     case S_ACTIVE:
-        Serial.print("Active:");
+        Serial.print("Active");
+        close_timer = 1;
+        preferences.putInt("close_timer", close_timer);
+        
+        // determine open time
+        newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+        // set next time to wakeup
+        closeEventNow = myTZ.setEvent(scheduleClose, newCloseTime);
         break;
 
     case S_INACTIVE:
         Serial.print("Inactive");
+        close_timer = 0;
+        preferences.putInt("close_timer", close_timer);
+        deleteEvent(closeEvent); 
+        deleteEvent(closeEventNow);
         break;
     }
-
-    Serial.print(" ");
-    Serial.println(sender->id);
 }
 
 void textNetworkCall(Control* sender, int type)

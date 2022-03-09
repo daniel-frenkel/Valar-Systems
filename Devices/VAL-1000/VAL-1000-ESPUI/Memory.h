@@ -67,7 +67,7 @@ void load_preferences(){
   close_timer = preferences.getInt("close_timer", 0);
   open_hour = preferences.getInt("open_hour", 0);
   open_am_pm = preferences.getInt("open_am_pm", 0);
-  open_am_pm_s = preferences.getString("open_am_pm_", "AM");
+  open_am_pm_s = preferences.getString("open_am_pm_s", "AM");
   
   close_hour = preferences.getInt("close_hour", 0);
   open_minute = preferences.getInt("open_minute", 0);
