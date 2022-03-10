@@ -41,9 +41,6 @@ String open_am_pm_s;
 int close_am_pm;
 String close_am_pm_s;
   
-
-String wifiStatus = "SET";
-
 // Filter anti-rebond (debouncer)
 #define DEBOUNCE_TIME 250
 volatile uint32_t DebounceTimer = 0;

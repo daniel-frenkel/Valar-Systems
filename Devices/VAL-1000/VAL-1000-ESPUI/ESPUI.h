@@ -1,6 +1,8 @@
 
 uint16_t openLabel;
 uint16_t closeLabel;
+uint16_t labelWifi;
+String display_wifi;
 char openTimeDis[50];
 char closeTimeDis[50];
 
@@ -334,6 +336,8 @@ void buttonSaveNetworkCall(Control* sender, int type)
         preferences.putString ("ssid", ssid);
         preferences.putString ("pass", pass);
         wifi_set = 1;
+        display_wifi = "SET";
+        ESPUI.updateLabel(labelWifi, display_wifi);
         preferences.putInt ("wifi_set", 1);
         connectWifi();
         break;
@@ -889,10 +893,7 @@ void ESPUIsetup(){
 
    //Open Schedule
    ESPUI.addControl(ControlType::Separator, "Open Scheduler", "", ControlColor::Dark, tab3);
-   
-   snprintf(openTimeDis, sizeof(openTimeDis), "%i:%i %s", open_hour, open_minute, open_am_pm_s.c_str()); 
-   openLabel = ESPUI.addControl(ControlType::Label, "Open Time", openTimeDis, ControlColor::Emerald, tab3);
-   
+    
    //Switch: Turn on open timer
    ESPUI.addControl(ControlType::Switcher, "Open Schedule", String(open_timer), ControlColor::Sunflower, tab3, &switchOpenScheduleCall);
    //Number: Hour
@@ -910,9 +911,6 @@ void ESPUIsetup(){
 
    //Close Schedule
    ESPUI.addControl(ControlType::Separator, "Close Scheduler", "", ControlColor::Dark, tab3);
-   
-   snprintf(closeTimeDis, sizeof(closeTimeDis), "%i:%i %s", close_hour, close_minute, close_am_pm_s.c_str()); 
-   closeLabel = ESPUI.addControl(ControlType::Label, "Close Time", closeTimeDis, ControlColor::Emerald, tab3);
    
    //Switch: Turn off close
    ESPUI.addControl(ControlType::Switcher, "Close Schedule", String(open_timer), ControlColor::Dark, tab3, &switchOpenScheduleCall);
@@ -932,20 +930,23 @@ void ESPUIsetup(){
 //Tab4: WiFi 
    ESPUI.addControl(ControlType::Separator, "Wifi Status", "", ControlColor::None, tab4);
    //Label: Is wifi set?
-   ESPUI.addControl(ControlType::Label, "Wifi Status", wifiStatus, ControlColor::Emerald, tab4);
-     //Button: Clear Network Settings
-   ESPUI.addControl(ControlType::Button, "Clear Settings", "CLEAR", ControlColor::Emerald, tab4, &buttonClearNetworkCall);
-   //Text: Name
-
-   String display_wifi;
+   
+   
    if(wifi_set)
    {
    display_wifi = "SET";  
    }else
    {
-   display_wifi = "NOT SET";  
+   display_wifi = "ACCESS POINT";  
    }
-   ESPUI.addControl(ControlType::Separator, "Set Wifi", display_wifi, ControlColor::None, tab4);
+   
+   labelWifi = ESPUI.addControl(ControlType::Label, "Wifi Status", display_wifi, ControlColor::Emerald, tab4);
+     //Button: Clear Network Settings
+   ESPUI.addControl(ControlType::Button, "Clear Settings", "CLEAR", ControlColor::Emerald, tab4, &buttonClearNetworkCall);
+   //Text: Name
+
+
+   ESPUI.addControl(ControlType::Separator, "Set Wifi", "", ControlColor::None, tab4);
    ESPUI.addControl(ControlType::Text, "Network", ssid, ControlColor::Emerald, tab4, &textNetworkCall);
    
    //Text: Password
