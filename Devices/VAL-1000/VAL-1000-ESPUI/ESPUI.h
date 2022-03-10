@@ -367,7 +367,7 @@ void ESPUIsetup(){
 
 //Tab1: Positioning
    //Text: Current position percent
-   status = ESPUI.addControl(ControlType::Label, "Current Position:", String(move_percent), ControlColor::Turquoise, tab1);
+   positionLabel = ESPUI.addControl(ControlType::Label, "Current Position", String(move_percent), ControlColor::Turquoise, tab1);
    //Slider: Move to position
    uint16_t positionMax = ESPUI.addControl(ControlType::Slider, "Position", "0", ControlColor::Alizarin, tab1, &sliderPosition);
    ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, positionMax);
