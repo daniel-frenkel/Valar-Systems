@@ -1,6 +1,8 @@
-uint16_t button1;
-uint16_t switchOne;
-uint16_t status;
+
+uint16_t openLabel;
+uint16_t closeLabel;
+char openTimeDis[50];
+char closeTimeDis[50];
 
 void selectOpenAmPmCall(Control* sender, int value) //Dropdown
 {
@@ -12,6 +14,19 @@ void selectOpenAmPmCall(Control* sender, int value) //Dropdown
      open_am_pm_s = "AM";
      preferences.putString("open_am_pm_s", open_am_pm_s);
      
+     open_hour = open_hour_input;
+     preferences.putInt ("open_hour", open_hour);
+
+     // determine open time
+     newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+    // set next time to wakeup
+    openEventNow = myTZ.setEvent(scheduleOpen, newOpenTime);
+
+    
+    snprintf(openTimeDis, sizeof(openTimeDis), "%i:%i %s", open_hour, open_minute, open_am_pm_s.c_str()); 
+    ESPUI.updateLabel(openLabel, openTimeDis);
+     
     }else
     {
      Serial.println(sender->value); 
@@ -19,6 +34,19 @@ void selectOpenAmPmCall(Control* sender, int value) //Dropdown
      preferences.putInt("open_am_pm", open_am_pm);
      open_am_pm_s = "PM";
      preferences.putString("open_am_pm_s", open_am_pm_s);
+
+     open_hour = open_hour_input + 12;
+     preferences.putInt ("open_hour", open_hour);
+
+     // determine open time
+     newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+     // set next time to wakeup
+     openEventNow = myTZ.setEvent(scheduleOpen, newOpenTime);
+
+    snprintf(openTimeDis, sizeof(openTimeDis), "%i:%i %s", open_hour, open_minute, open_am_pm_s.c_str()); 
+    ESPUI.updateLabel(openLabel, openTimeDis);
+     
     }
 }
 
@@ -28,17 +56,43 @@ void selectCloseAmPmCall(Control* sender, int value) //Dropdown
     {
      Serial.println(sender->value);
      close_am_pm = 0;
-     close_am_pm_s = "AM";
      preferences.putInt("close_am_pm", close_am_pm);
+     close_am_pm_s = "AM";
      preferences.putString("close_am_pm_s", close_am_pm_s);
+     
+     close_hour = close_hour_input;
+     preferences.putInt ("close_hour", close_hour);
+
+     // determine open time
+     newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+    // set next time to wakeup
+    closeEventNow = myTZ.setEvent(scheduleClose, newCloseTime);
+
+    
+    snprintf(closeTimeDis, sizeof(closeTimeDis), "%i:%i %s", close_hour, close_minute, close_am_pm_s.c_str()); 
+    ESPUI.updateLabel(closeLabel, closeTimeDis);
      
     }else
     {
      Serial.println(sender->value); 
      close_am_pm = 1;
-     close_am_pm_s = "PM";
      preferences.putInt("close_am_pm", close_am_pm);
+     close_am_pm_s = "PM";
      preferences.putString("close_am_pm_s", close_am_pm_s);
+
+     close_hour = close_hour_input + 12;
+     preferences.putInt ("close_hour", close_hour);
+
+     // determine open time
+     newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+     // set next time to wakeup
+     closeEventNow = myTZ.setEvent(scheduleClose, newCloseTime);
+
+     snprintf(closeTimeDis, sizeof(closeTimeDis), "%i:%i %s", close_hour, close_minute, close_am_pm_s.c_str()); 
+     ESPUI.updateLabel(closeLabel, closeTimeDis);
+     
     }
 }
 
@@ -80,28 +134,82 @@ void numberOpenHourCall(Control* sender, int type)
 {
     Serial.println(sender->value);
     open_hour = sender->value.toInt();
+    if (open_hour > 12) open_hour = 12;
+    if (open_hour < 1) open_hour = 1; 
+    open_hour_input = open_hour;
+    
+    if (open_am_pm ==1) open_hour = open_hour + 12;
+    
     preferences.putInt ("open_hour", open_hour);
+    preferences.putInt ("open_hour_in", open_hour_input);
+
+    // determine open time
+    newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+    // set next time to wakeup
+    openEventNow = myTZ.setEvent(scheduleOpen, newOpenTime);
+
+    snprintf(openTimeDis, sizeof(openTimeDis), "%i:%i %s", open_hour, open_minute, open_am_pm_s.c_str()); 
+    ESPUI.updateLabel(openLabel, openTimeDis);
 }
 
 void numberOpenMinuteCall(Control* sender, int type)
 {
     Serial.println(sender->value);
     open_minute = sender->value.toInt();
-    preferences.putInt ("open_minute", open_minute);    
+    if (open_minute > 59) open_minute = 59;
+    if (open_minute < 0) open_minute = 0; 
+    preferences.putInt ("open_minute", open_minute); 
+
+    // determine open time
+    newOpenTime = makeTime(open_hour, open_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+    // set next time to wakeup
+    openEventNow = myTZ.setEvent(scheduleOpen, newOpenTime);
+
+    snprintf(openTimeDis, sizeof(openTimeDis), "%i:%i %s", open_hour, open_minute, open_am_pm_s.c_str()); 
+    ESPUI.updateLabel(openLabel, openTimeDis);
 }
 
 void numberCloseHourCall(Control* sender, int type)
 {
     Serial.println(sender->value);
     close_hour = sender->value.toInt();
+    if (close_hour > 12) close_hour = 12;
+    if (close_hour < 1) close_hour = 1; 
+    
+    close_hour_input = close_hour;
+    if (close_am_pm ==1) close_hour = close_hour + 12;
+    
     preferences.putInt ("close_hour", close_hour);
+    preferences.putInt ("close_hour_in", close_hour_input);
+    
+    // determine close time
+    newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+    // set next time to wakeup
+    closeEventNow = myTZ.setEvent(scheduleClose, newCloseTime);
+
+    snprintf(closeTimeDis, sizeof(closeTimeDis), "%i:%i %s", close_hour, close_minute, close_am_pm_s.c_str()); 
+    ESPUI.updateLabel(closeLabel, closeTimeDis);
 }
 
 void numberCloseMinuteCall(Control* sender, int type)
 {
     Serial.println(sender->value);
     close_minute = sender->value.toInt();
+    if (close_minute > 59) close_minute = 59;
+    if (close_minute < 0) close_minute = 0; 
     preferences.putInt ("close_minute", close_minute);
+
+    // determine close time
+    newCloseTime = makeTime(close_hour, close_minute, 0, myTZ.day(), myTZ.month(), myTZ.year());
+          
+    // set next time to wakeup
+    closeEventNow = myTZ.setEvent(scheduleClose, newCloseTime);
+
+    snprintf(closeTimeDis, sizeof(closeTimeDis), "%i:%i %s", close_hour, close_minute, close_am_pm_s.c_str()); 
+    ESPUI.updateLabel(closeLabel, closeTimeDis);
 }
 
 
@@ -779,11 +887,12 @@ void ESPUIsetup(){
       ESPUI.addControl(ControlType::Option, "UTC+13", "UTC+13", ControlColor::None, timeZoneDrop);
       ESPUI.addControl(ControlType::Option, "UTC+14", "UTC+14", ControlColor::None, timeZoneDrop);
 
-   
-   
-   
    //Open Schedule
    ESPUI.addControl(ControlType::Separator, "Open Scheduler", "", ControlColor::Dark, tab3);
+   
+   snprintf(openTimeDis, sizeof(openTimeDis), "%i:%i %s", open_hour, open_minute, open_am_pm_s.c_str()); 
+   openLabel = ESPUI.addControl(ControlType::Label, "Open Time", openTimeDis, ControlColor::Emerald, tab3);
+   
    //Switch: Turn on open timer
    ESPUI.addControl(ControlType::Switcher, "Open Schedule", String(open_timer), ControlColor::Sunflower, tab3, &switchOpenScheduleCall);
    //Number: Hour
@@ -801,12 +910,16 @@ void ESPUIsetup(){
 
    //Close Schedule
    ESPUI.addControl(ControlType::Separator, "Close Scheduler", "", ControlColor::Dark, tab3);
+   
+   snprintf(closeTimeDis, sizeof(closeTimeDis), "%i:%i %s", close_hour, close_minute, close_am_pm_s.c_str()); 
+   closeLabel = ESPUI.addControl(ControlType::Label, "Close Time", closeTimeDis, ControlColor::Emerald, tab3);
+   
    //Switch: Turn off close
    ESPUI.addControl(ControlType::Switcher, "Close Schedule", String(open_timer), ControlColor::Dark, tab3, &switchOpenScheduleCall);
    //Number: Hour
    uint16_t closeHourMax = ESPUI.addControl(ControlType::Number, "Close Hour", String(close_hour), ControlColor::Dark, tab3, &numberCloseHourCall);
-   ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, closeHourMax);
-   ESPUI.addControl(ControlType::Max, "", "59", ControlColor::None, closeHourMax);
+   ESPUI.addControl(ControlType::Min, "", "1", ControlColor::None, closeHourMax);
+   ESPUI.addControl(ControlType::Max, "", "12", ControlColor::None, closeHourMax);
    //Number: minute
    uint16_t closeMinuteMax = ESPUI.addControl(ControlType::Number, "Close Minute", String(close_minute), ControlColor::Dark, tab3, &numberCloseMinuteCall);
    ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, closeMinuteMax);
@@ -817,9 +930,9 @@ void ESPUIsetup(){
    ESPUI.addControl(ControlType::Option, "PM", "PM", ControlColor::None, closeTime);
 
 //Tab4: WiFi 
-    ESPUI.addControl(ControlType::Separator, "Wifi Status", "", ControlColor::None, tab4);
+   ESPUI.addControl(ControlType::Separator, "Wifi Status", "", ControlColor::None, tab4);
    //Label: Is wifi set?
-    ESPUI.addControl(ControlType::Label, "Wifi Status", wifiStatus, ControlColor::Emerald, tab4);
+   ESPUI.addControl(ControlType::Label, "Wifi Status", wifiStatus, ControlColor::Emerald, tab4);
      //Button: Clear Network Settings
    ESPUI.addControl(ControlType::Button, "Clear Settings", "CLEAR", ControlColor::Emerald, tab4, &buttonClearNetworkCall);
    //Text: Name
@@ -850,8 +963,7 @@ void ESPUIsetup(){
    snprintf(apisettings, sizeof(apisettings), "http://%s:8080/settings", ip_address.c_str());
    ESPUI.addControl(ControlType::Label, "Check Settings", apisettings, ControlColor::Turquoise, tab5);
 
-
-    ESPUI.sliderContinuous = true;
-    ESPUI.begin("Valar Systems");
+   ESPUI.sliderContinuous = true;
+   ESPUI.begin("Valar Systems");
     
 }

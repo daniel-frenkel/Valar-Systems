@@ -1,3 +1,5 @@
+uint16_t status;
+
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
 
@@ -163,6 +165,7 @@ else if(move_to_position < current_position)
       current_position = stepper.currentPosition();
       stepper.disableOutputs();
       printf("Motor Function Complete\n");
+      ESPUI.updateLabel(status, String((current_position/max_steps)*100));
 }
 
 // put your setup code here, to run once:

@@ -21,9 +21,11 @@ String pass;
 String MYTIMEZONE;
 int close_timer = 0;
 int close_hour;
+int close_hour_input;
 int close_minute;
 int open_timer = 0;
 int open_hour;
+int open_hour_input;
 int open_minute;
 String open_time_string;
 String close_time_string;
@@ -65,11 +67,15 @@ void load_preferences(){
   
   open_timer = preferences.getInt("open_timer", 0);
   close_timer = preferences.getInt("close_timer", 0);
-  open_hour = preferences.getInt("open_hour", 0);
+  open_hour = preferences.getInt("open_hour", 12);
+  open_hour_input = preferences.getInt("open_hour_in", 12);
+  
   open_am_pm = preferences.getInt("open_am_pm", 0);
   open_am_pm_s = preferences.getString("open_am_pm_s", "AM");
   
-  close_hour = preferences.getInt("close_hour", 0);
+  close_hour = preferences.getInt("close_hour", 12);
+  close_hour_input = preferences.getInt("close_hour_in", 12);
+  
   open_minute = preferences.getInt("open_minute", 0);
   close_minute = preferences.getInt("close_minute", 0);
   close_am_pm = preferences.getInt("close_am_pm", 0);
