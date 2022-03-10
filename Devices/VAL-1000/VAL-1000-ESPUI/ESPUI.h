@@ -896,7 +896,7 @@ void ESPUIsetup(){
    //Switch: Turn on open timer
    ESPUI.addControl(ControlType::Switcher, "Open Schedule", String(open_timer), ControlColor::Sunflower, tab3, &switchOpenScheduleCall);
    //Number: Hour
-   uint16_t openHourMax = ESPUI.addControl(ControlType::Number, "Open Hour", String(open_hour), ControlColor::Sunflower, tab3, &numberOpenHourCall);
+   uint16_t openHourMax = ESPUI.addControl(ControlType::Number, "Open Hour", String(open_hour_input), ControlColor::Sunflower, tab3, &numberOpenHourCall);
    ESPUI.addControl(ControlType::Min, "", "1", ControlColor::None, openHourMax);
    ESPUI.addControl(ControlType::Max, "", "12", ControlColor::None, openHourMax);
    //Number: minute
@@ -917,7 +917,7 @@ void ESPUIsetup(){
    //Switch: Turn off close
    ESPUI.addControl(ControlType::Switcher, "Close Schedule", String(open_timer), ControlColor::Dark, tab3, &switchOpenScheduleCall);
    //Number: Hour
-   uint16_t closeHourMax = ESPUI.addControl(ControlType::Number, "Close Hour", String(close_hour), ControlColor::Dark, tab3, &numberCloseHourCall);
+   uint16_t closeHourMax = ESPUI.addControl(ControlType::Number, "Close Hour", String(close_hour_input), ControlColor::Dark, tab3, &numberCloseHourCall);
    ESPUI.addControl(ControlType::Min, "", "1", ControlColor::None, closeHourMax);
    ESPUI.addControl(ControlType::Max, "", "12", ControlColor::None, closeHourMax);
    //Number: minute
