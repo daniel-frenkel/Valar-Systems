@@ -62,8 +62,11 @@ void MotorTask(void *pvParameters)  // Motor Task
     }
     else if(calibrate == 1)
     {
+      TravelDistance();
       CalibrateCurrent();
+      ESPUI.updateNumber(currentMax, current);
       CalibrateStall();
+      ESPUI.updateNumber(stallMax, stall);
       calibrate = 0;
     }
     else if(wifi_button == true)

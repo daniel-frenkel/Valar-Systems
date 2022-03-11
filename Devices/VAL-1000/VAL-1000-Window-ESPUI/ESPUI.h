@@ -1,8 +1,9 @@
-
 uint16_t openLabel;
 uint16_t closeLabel;
 uint16_t labelWifi;
 uint16_t wifi_ssid_text, wifi_pass_text;
+uint16_t currentMax;
+uint16_t stallMax;
 String display_wifi;
 char openTimeDis[50];
 char closeTimeDis[50];
@@ -373,11 +374,11 @@ void ESPUIsetup(){
    ESPUI.addControl(ControlType::Separator, "Motor Settings", "", ControlColor::Peterriver, tab2);
    //Number: Max Steps
 
-   uint16_t currentMax = ESPUI.addControl(ControlType::Number, "Current(mA):", String(current), ControlColor::Alizarin, tab2, &numberCurrentCall);
+   currentMax = ESPUI.addControl(ControlType::Number, "Current(mA", String(current), ControlColor::Alizarin, tab2, &numberCurrentCall);
    ESPUI.addControl(ControlType::Min, "", "400", ControlColor::None, currentMax);
    ESPUI.addControl(ControlType::Max, "", "2000", ControlColor::None, currentMax);
    //Number: Stall
-   uint16_t stallMax = ESPUI.addControl(ControlType::Number, "Stall:", String(stall), ControlColor::Carrot, tab2, &numberStallCall);
+   stallMax = ESPUI.addControl(ControlType::Number, "Stall", String(stall), ControlColor::Carrot, tab2, &numberStallCall);
    ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, stallMax);
    ESPUI.addControl(ControlType::Max, "", "255", ControlColor::None, stallMax);
 
