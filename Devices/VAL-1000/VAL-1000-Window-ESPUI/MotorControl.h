@@ -1,3 +1,5 @@
+uint16_t positionLabel;
+
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
 
@@ -66,12 +68,12 @@ void IRAM_ATTR wifi_button_press()
 
 void move_motor() {
   Serial.print("Current Position: ");
-  Serial.println(XACTUAL);
+  Serial.println(current_position);
   
   Serial.print("Moving to Position: ");
   Serial.println(move_to_step);
 
-  stepper.setCurrentPosition(XACTUAL);
+  stepper.setCurrentPosition(current_position);
   stepper.moveTo(move_to_step);
   
   stalled_motor = false;
@@ -111,7 +113,7 @@ if(move_to_step == 0)
 
       }
   }
-  else if(move_to_step > XACTUAL) // Open
+  else if(move_to_step > current_position) // Open
   {
 
       Serial.println("Opening"); 
@@ -136,7 +138,7 @@ if(move_to_step == 0)
       feedTheDog();
       }
   }
-  else if(move_to_step < XACTUAL)
+  else if(move_to_step < current_position)
   {
   
       Serial.println("Closing");
@@ -163,7 +165,7 @@ if(move_to_step == 0)
 
       }
 }
-else if(XACTUAL == move_to_step)
+else if(current_position == move_to_step)
 {
   Serial.println("ALREADY THERE!");
 }
@@ -172,7 +174,7 @@ else
   Serial.println("DO NOTHING!");
 }
 
-      XACTUAL = stepper.currentPosition();
+      current_position = stepper.currentPosition();
       stepper.disableOutputs();
       printf("Motor Function Complete\n");
 }

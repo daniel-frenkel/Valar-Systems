@@ -37,8 +37,8 @@ void TravelDistance()
         stepper.stop(); // Stop as fast as possible: sets new target
         stepper.runToPosition();
         sensor1_trip = false;
-        XACTUAL = 0;
-        stepper.setCurrentPosition(XACTUAL);
+        current_position = 0;
+        stepper.setCurrentPosition(current_position);
         break;
       }
     }
@@ -93,8 +93,8 @@ void TravelDistance()
         stepper.stop(); // Stop as fast as possible: sets new target
         stepper.runToPosition();
         sensor1_trip = false;
-        XACTUAL = 0;
-        stepper.setCurrentPosition(XACTUAL);
+        current_position = 0;
+        stepper.setCurrentPosition(current_position);
         break;
       }
     }

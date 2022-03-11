@@ -220,8 +220,8 @@ void numberCloseMinuteCall(Control* sender, int type)
 void sliderPosition(Control* sender, int type)
 {
     Serial.println(sender->value);
-    move_percent = sender->value.toInt();
-    move_to_step = (max_steps/100)*move_percent;
+    move_to_percent = sender->value.toInt();
+    move_to_step = (max_steps/100)*move_to_percent;
     stepper.moveTo(move_to_step);
     run_motor=true;
       
@@ -359,7 +359,7 @@ void ESPUIsetup(){
 
 //Tab1: Positioning
    //Text: Current position percent
-   positionLabel = ESPUI.addControl(ControlType::Label, "Current Position", String(move_percent), ControlColor::Turquoise, tab1);
+   positionLabel = ESPUI.addControl(ControlType::Label, "Current Position", String(move_to_percent), ControlColor::Turquoise, tab1);
    //Slider: Move to position
    uint16_t positionMax = ESPUI.addControl(ControlType::Slider, "Position", "0", ControlColor::Alizarin, tab1, &sliderPosition);
    ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, positionMax);
@@ -943,7 +943,7 @@ void ESPUIsetup(){
    
 //Tab5: API 
    char apiPosition[50];
-   snprintf(apiPosition, sizeof(apiPosition), "http://%s:8080/position?move_percent=%i", ip_address.c_str(), move_percent);
+   snprintf(apiPosition, sizeof(apiPosition), "http://%s:8080/position?move_to_percent=%i", ip_address.c_str(), move_to_percent);
    ESPUI.addControl(ControlType::Label, "Move to Position", apiPosition, ControlColor::Turquoise, tab5);
    
    char apisettings[50];
