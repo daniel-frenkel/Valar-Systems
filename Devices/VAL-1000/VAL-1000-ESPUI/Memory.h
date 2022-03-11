@@ -9,8 +9,8 @@ int stall;
 int accel;
 int max_speed;
 int tcools;
-int move_to_position = 0;
-int move_percent = 0;
+int move_to_step = 0;
+int move_to_percent = 0;
 int set_zero = 0; // Set to 1 to set home position
 bool run_motor = false;
 int wifi_set;

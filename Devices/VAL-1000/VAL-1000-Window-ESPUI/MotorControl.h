@@ -1,5 +1,3 @@
-uint16_t positionLabel;
-
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
 
@@ -14,9 +12,11 @@ uint16_t positionLabel;
 #define SENSOR1 32
 #define SENSOR2 22
 
+#define SHAFT true
+
 #define SERIAL_PORT_2    Serial2    // TMC2208/TMC2224 HardwareSerial port
 #define DRIVER_ADDRESS   0b00       // TMC2209 Driver address according to MS1 and MS2
-#define R_SENSE          0.10f      // R_SENSE for current calc.  
+#define R_SENSE          0.10f      // E_SENSE for current calc.  
 
 
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
@@ -45,7 +45,7 @@ void IRAM_ATTR button2pressed()
 void IRAM_ATTR stalled_position()
 {
   stalled_motor = true;
-  stop_motor = true;
+
 }
 
 void IRAM_ATTR sensor_short()
@@ -63,29 +63,15 @@ void IRAM_ATTR wifi_button_press()
   wifi_button = true;
 }
 
-void setZero()
-{
-      current_position=0;
-      stepper.setCurrentPosition(0);
-      Serial.print("current_position: ");
-      Serial.println(current_position);
-}
-
-void goHome()
-{
-      current_position = 0;
-      move_to_step = -10000;
-      run_motor = true;
-}
 
 void move_motor() {
   Serial.print("Current Position: ");
-  Serial.println(current_position);
+  Serial.println(XACTUAL);
   
   Serial.print("Moving to Position: ");
   Serial.println(move_to_step);
 
-  stepper.setCurrentPosition(current_position);
+  stepper.setCurrentPosition(XACTUAL);
   stepper.moveTo(move_to_step);
   
   stalled_motor = false;
@@ -98,19 +84,42 @@ void move_motor() {
   driver.SGTHRS(stall);
   driver.TCOOLTHRS(tcools);
 
-if(current_position == move_to_step)
+if(move_to_step == 0)
 {
-  Serial.println("ALREADY THERE!");
-}
-else if(move_to_step > current_position) // Open
-{
+  
+  Serial.println("Closing until Trip");
+  stepper.moveTo(-10000);
+  stepper.enableOutputs();
+    
+      while (stepper.currentPosition() != stepper.targetPosition()) 
+      {
+          if (sensor1_trip == true || (digitalRead(SENSOR1) == LOW)) 
+          {
+            printf("TRIPPED ON 1\n");
+            stepper.setCurrentPosition(0);
+            stepper.moveTo(0);
+          }
+          
+          if (digitalRead(STALLGUARD) == HIGH)
+          {
+            printf("Stalled\n");
+            stepper.moveTo(stepper.currentPosition());
+          }
+
+      stepper.run();
+      feedTheDog();
+
+      }
+  }
+  else if(move_to_step > XACTUAL) // Open
+  {
 
       Serial.println("Opening"); 
       stepper.enableOutputs();
     
       while (stepper.currentPosition() != stepper.targetPosition()) {
 
-      if ((digitalRead(SENSOR2) == LOW))//(sensor2_trip == true) || 
+      if (sensor2_trip == true || digitalRead(SENSOR2) == LOW)
       {
         printf("TRIPPED ON 2\n");
         stepper.setCurrentPosition(max_steps);
@@ -120,18 +129,15 @@ else if(move_to_step > current_position) // Open
       if (stalled_motor == true)
       {
         printf("Stalled\n");
-        stepper.setCurrentPosition(0);
-        stepper.moveTo(0);
+        stepper.moveTo(stepper.currentPosition());
       }
 
       stepper.run();
       feedTheDog();
       }
-
-}
-
-else if(move_to_step < current_position)
-{
+  }
+  else if(move_to_step < XACTUAL)
+  {
   
       Serial.println("Closing");
       stepper.enableOutputs();
@@ -139,7 +145,7 @@ else if(move_to_step < current_position)
       while (stepper.currentPosition() != stepper.targetPosition()) 
       {
         
-          if ((digitalRead(SENSOR1) == LOW)) //(sensor1_trip == true) || 
+          if (sensor1_trip == true ||(digitalRead(SENSOR1) == LOW)) //(sensor1_trip == true) || 
           {
             printf("TRIPPED ON 1\n");
             stepper.setCurrentPosition(0);
@@ -149,19 +155,24 @@ else if(move_to_step < current_position)
           if (stalled_motor == true)
           {
             printf("Stalled\n");
-            stepper.setCurrentPosition(0);
-            stepper.moveTo(0);
+            stepper.moveTo(stepper.currentPosition());
           }
 
       stepper.run();
       feedTheDog();
 
       }
-}else
+}
+else if(XACTUAL == move_to_step)
+{
+  Serial.println("ALREADY THERE!");
+}
+else
 {
   Serial.println("DO NOTHING!");
 }
-      current_position = stepper.currentPosition();
+
+      XACTUAL = stepper.currentPosition();
       stepper.disableOutputs();
       printf("Motor Function Complete\n");
 }
@@ -192,14 +203,7 @@ void setup_motors(){
   driver.TCOOLTHRS(tcools); // 
   driver.TPWMTHRS(0);
   driver.semin(0);
-  
-  if (open_direction == 1)
-  {
-    driver.shaft(true);  
-  }else{
-    driver.shaft(false);  
-  }
-  
+  driver.shaft(SHAFT);  
   driver.en_spreadCycle(false);
   driver.pdn_disable(true);
 

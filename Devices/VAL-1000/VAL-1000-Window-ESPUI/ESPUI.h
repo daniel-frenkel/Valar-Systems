@@ -220,26 +220,21 @@ void numberCloseMinuteCall(Control* sender, int type)
 void sliderPosition(Control* sender, int type)
 {
     Serial.println(sender->value);
-    move_to_percent = sender->value.toInt();
-    move_to_step = (max_steps/100)*move_to_percent;
+    move_percent = sender->value.toInt();
+    move_to_step = (max_steps/100)*move_percent;
     stepper.moveTo(move_to_step);
     run_motor=true;
       
 }
 
-void buttonSetZeroCall(Control* sender, int type)
+void buttonAutoTune(Control* sender, int type)
 {
-    switch (type)
-    {
-    case B_DOWN:
-        Serial.println("Button Pressed");
-        set_zero = 1;
-        Serial.print("set_zero: ");
-        Serial.println(set_zero);  
-        break;
+if(type == B_UP) {
+        calibrate = 1;
+        Serial.print("calibrate: ");
+        Serial.println(calibrate);  
     }
 }
-
 
 void switchChangeDirectionCall(Control* sender, int value)
 {
@@ -318,16 +313,10 @@ void switchCloseScheduleCall(Control* sender, int value)
 
 void textNetworkCall(Control* sender, int type)
 {
-//    ssid = sender->value;
-//    Serial.print(ssid);
-
 }
 
 void textPasswordCall(Control* sender, int type)
 {
-//    Serial.print(sender->value);
-//    pass = sender->value;
-//    Serial.print(pass);
 }
 
 void buttonSaveNetworkCall(Control* sender, int type)
@@ -370,22 +359,20 @@ void ESPUIsetup(){
 
 //Tab1: Positioning
    //Text: Current position percent
-   positionLabel = ESPUI.addControl(ControlType::Label, "Current Position", String(move_to_percent), ControlColor::Turquoise, tab1);
+   positionLabel = ESPUI.addControl(ControlType::Label, "Current Position", String(move_percent), ControlColor::Turquoise, tab1);
    //Slider: Move to position
    uint16_t positionMax = ESPUI.addControl(ControlType::Slider, "Position", "0", ControlColor::Alizarin, tab1, &sliderPosition);
    ESPUI.addControl(ControlType::Min, "", "0", ControlColor::None, positionMax);
    ESPUI.addControl(ControlType::Max, "", "100", ControlColor::None, positionMax);
 
 //Tab2: Settings
-   ESPUI.addControl(ControlType::Separator, "Home Position", "", ControlColor::Peterriver, tab2);
-   //Button: Set Zero
-   ESPUI.addControl(ControlType::Switcher, "Change Direction", String(open_direction), ControlColor::Dark, tab2, &switchChangeDirectionCall);
-   ESPUI.addControl(ControlType::Button, "Set Zero", "Set", ControlColor::Dark, tab2, &buttonSetZeroCall);
+   ESPUI.addControl(ControlType::Separator, "Automatic Calibration", "", ControlColor::Peterriver, tab2);
+
+   ESPUI.addControl(ControlType::Button, "Auto Tune", "Start", ControlColor::Dark, tab2, &buttonAutoTune);
    
-   ESPUI.addControl(ControlType::Separator, "Motor Setting", "", ControlColor::Peterriver, tab2);
+   ESPUI.addControl(ControlType::Separator, "Motor Settings", "", ControlColor::Peterriver, tab2);
    //Number: Max Steps
-   ESPUI.addControl(ControlType::Number, "Max Steps:", String(max_steps), ControlColor::Peterriver, tab2, &numberMaxStepsCall);
-   //Number: Current
+
    uint16_t currentMax = ESPUI.addControl(ControlType::Number, "Current(mA):", String(current), ControlColor::Alizarin, tab2, &numberCurrentCall);
    ESPUI.addControl(ControlType::Min, "", "400", ControlColor::None, currentMax);
    ESPUI.addControl(ControlType::Max, "", "2000", ControlColor::None, currentMax);
@@ -956,7 +943,7 @@ void ESPUIsetup(){
    
 //Tab5: API 
    char apiPosition[50];
-   snprintf(apiPosition, sizeof(apiPosition), "http://%s:8080/position?move_to_percent=%i", ip_address.c_str(), move_to_percent);
+   snprintf(apiPosition, sizeof(apiPosition), "http://%s:8080/position?move_percent=%i", ip_address.c_str(), move_percent);
    ESPUI.addControl(ControlType::Label, "Move to Position", apiPosition, ControlColor::Turquoise, tab5);
    
    char apisettings[50];

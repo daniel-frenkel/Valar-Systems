@@ -10,13 +10,16 @@
 #include "ResetButton.h"
 #include "MotorControl.h"
 #include "API.h"
+#include "calibration.h"
 #include "ESPUI.h"
 
+// the setup function runs once when you press reset or power the board
 void setup() {
   
   Serial.begin(115200);
   delay(1000);
   preferences.begin("local", false);
+  
   load_preferences();
   setup_motors();
   API();
@@ -30,12 +33,13 @@ void setup() {
     ,  NULL
     ,  3  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL 
-    ,  1);
+    ,  0);
 }
 
 void loop()
 {
   // Empty. Things are done in Tasks.
+
 }
 
 /*--------------------------------------------------*/
@@ -56,10 +60,11 @@ void MotorTask(void *pvParameters)  // Motor Task
       ESPUI.updateLabel(positionLabel, String(int(((float)current_position/(float)max_steps)*100)));
       Serial.println("Motor Complete");
     }
-    else if(set_zero == 1)
+    else if(calibrate == 1)
     {
-      setZero();
-      set_zero = 0;
+      CalibrateCurrent();
+      CalibrateStall();
+      calibrate = 0;
     }
     else if(wifi_button == true)
     {
