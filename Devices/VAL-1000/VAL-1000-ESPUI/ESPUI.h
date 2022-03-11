@@ -2,9 +2,11 @@
 uint16_t openLabel;
 uint16_t closeLabel;
 uint16_t labelWifi;
+uint16_t wifi_ssid_text, wifi_pass_text;
 String display_wifi;
 char openTimeDis[50];
 char closeTimeDis[50];
+
 
 void selectOpenAmPmCall(Control* sender, int value) //Dropdown
 {
@@ -316,23 +318,24 @@ void switchCloseScheduleCall(Control* sender, int value)
 
 void textNetworkCall(Control* sender, int type)
 {
-    ssid = sender->value;
-    Serial.print(ssid);
+//    ssid = sender->value;
+//    Serial.print(ssid);
 
 }
 
 void textPasswordCall(Control* sender, int type)
 {
-    pass = sender->value;
-    Serial.print(pass);
+//    Serial.print(sender->value);
+//    pass = sender->value;
+//    Serial.print(pass);
 }
 
 void buttonSaveNetworkCall(Control* sender, int type)
 {
-    switch (type)
-    {
-    case B_DOWN:
+if(type == B_UP) {
         Serial.println("Button Pressed");
+        ssid = ESPUI.getControl(wifi_ssid_text)->value;
+        pass = ESPUI.getControl(wifi_pass_text)->value;
         preferences.putString ("ssid", ssid);
         preferences.putString ("pass", pass);
         wifi_set = 1;
@@ -340,21 +343,17 @@ void buttonSaveNetworkCall(Control* sender, int type)
         ESPUI.updateLabel(labelWifi, display_wifi);
         preferences.putInt ("wifi_set", 1);
         connectWifi();
-        break;
     }
 }
 
 void buttonClearNetworkCall(Control* sender, int type)
 {
-    switch (type)
-    {
-    case B_DOWN:
+if(type == B_UP) {
         preferences.putInt ("wifi_set", 0);
         preferences.putString ("ssid", "NOT_SET");
         preferences.putString ("pass", "NOT_SET");
         preferences.end();
         ESP.restart();
-        break;
     }
 }
 
@@ -947,10 +946,10 @@ void ESPUIsetup(){
 
 
    ESPUI.addControl(ControlType::Separator, "Set Wifi", "", ControlColor::None, tab4);
-   ESPUI.addControl(ControlType::Text, "Network", ssid, ControlColor::Emerald, tab4, &textNetworkCall);
+   wifi_ssid_text = ESPUI.addControl(ControlType::Text, "Network", ssid, ControlColor::Emerald, tab4, &textNetworkCall);
    
    //Text: Password
-   ESPUI.addControl(ControlType::Text, "Password", "******", ControlColor::Emerald, tab4, &textPasswordCall);
+   wifi_pass_text = ESPUI.addControl(ControlType::Text, "Password", "******", ControlColor::Emerald, tab4, &textPasswordCall);
 
    //Button: Save
    ESPUI.addControl(ControlType::Button, "Save Settings", "SAVE", ControlColor::Emerald, tab4, &buttonSaveNetworkCall);
