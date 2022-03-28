@@ -26,7 +26,17 @@ void setup() {
   API();
   ESPUIsetup();
 
-  
+  ledcAttachPin(LED1, 1); // assign a led pins to a channel
+  ledcAttachPin(LED2, 0); // assign a led pins to a channel
+
+  ledcSetup(0, 5000, 8); // 12 kHz PWM, 8-bit resolution
+  ledcSetup(1, 5000, 8); // 12 kHz PWM, 8-bit resolution
+
+  ledcWrite(0, 0); // turn off LED 
+  ledcWrite(1, 0); // turn off LED 
+
+
+
   // Now set up tasks to run independently.
   xTaskCreatePinnedToCore(
     OtherTask //Motor Task
@@ -45,6 +55,10 @@ void setup() {
     ,  2  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL 
     ,  0);
+
+
+
+
 }
 
 void loop()
@@ -74,6 +88,7 @@ void OtherTask(void *pvParameters)  // Motor Task
       motorRunning = true;
       move_to_step = -10000;
       run_motor = true;
+      if(motor_running == true) stepper->moveTo(move_to_step);
       }
     
     if (brightness0 <= 255 && brightness0 >= 0) { 
@@ -108,6 +123,7 @@ void OtherTask(void *pvParameters)  // Motor Task
       motorRunning = true;
       move_to_step = max_steps;
       run_motor = true;
+      if(motor_running == true) stepper->moveTo(move_to_step);
       }
       
     if (brightness1 <= 255 && brightness1 >= 0) { 

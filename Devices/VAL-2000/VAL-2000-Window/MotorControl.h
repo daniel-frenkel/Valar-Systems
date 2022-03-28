@@ -22,8 +22,6 @@ uint16_t positionLabel;
 #define DRIVER_ADDRESS   0b00       // TMC2209 Driver address according to MS1 and MS2
 #define R_SENSE          0.10f      // E_SENSE for current calc.  
 
-
-//AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
 FastAccelStepperEngine engine = FastAccelStepperEngine();
 FastAccelStepper *stepper = NULL;
 
@@ -46,7 +44,6 @@ void IRAM_ATTR button2pressed()
 void IRAM_ATTR stalled_position()
 {
   stalled_motor = true;
-
 }
 
 void IRAM_ATTR sensor_short()
@@ -72,8 +69,7 @@ void move_motor() {
   Serial.println(move_to_step);
 
   stepper->setCurrentPosition(current_position);
-  //stepper->moveTo(move_to_step);
-  
+
   stalled_motor = false;
   sensor1_trip = false;
   sensor2_trip = false;
@@ -84,12 +80,15 @@ void move_motor() {
   driver.SGTHRS(stall);
   driver.TCOOLTHRS(tcools);
 
+  
+  
 if(move_to_step == 0)
 {
   
   Serial.println("Closing until Trip");
   stepper->moveTo(-10000);
-
+  motor_running = true;
+  
       while (stepper->getCurrentPosition() != stepper->targetPos()) 
       {
           if (sensor1_trip == true || (digitalRead(SENSOR1) == LOW)) 
@@ -115,7 +114,7 @@ if(move_to_step == 0)
 
       Serial.println("Opening");
       stepper->moveTo(move_to_step);
-      //stepper.enableOutputs();
+      motor_running = true;
     
       while (stepper->getCurrentPosition() != stepper->targetPos()) {
 
@@ -143,7 +142,7 @@ if(move_to_step == 0)
   
       Serial.println("Closing");
       stepper->moveTo(move_to_step);
-      //stepper.enableOutputs();
+      motor_running = true;
     
       while (stepper->getCurrentPosition() != stepper->targetPos()) 
       {
@@ -174,9 +173,8 @@ else
 {
   Serial.println("DO NOTHING!");
 }
-
+      motor_running = false;
       current_position = stepper->getCurrentPosition();
-      //stepper.disableOutputs();
       printf("Motor Function Complete\n");
 }
 
@@ -192,8 +190,8 @@ void setup_motors(){
   pinMode(SENSOR1,INPUT);
   pinMode(SENSOR2,INPUT);
 
-  pinMode(BUTTON1,INPUT_PULLUP);
-  pinMode(BUTTON2,INPUT_PULLUP);
+  pinMode(BUTTON1,INPUT);
+  pinMode(BUTTON2,INPUT);
   pinMode(LED1,OUTPUT);
   pinMode(LED2,OUTPUT);
 
@@ -223,10 +221,6 @@ void setup_motors(){
   stepper->setEnablePin(ENABLE_PIN);
   stepper->setAutoEnable(true);
     
-  //stepper.setEnablePin(ENABLE_PIN);
-  //stepper.setPinsInverted(false, false, true);
-  //stepper.disableOutputs();
-  
   attachInterrupt(STALLGUARD, stalled_position, RISING);
   attachInterrupt(WIFI_PIN, wifi_button_press, FALLING);
   attachInterrupt(BUTTON1, button1pressed, FALLING);

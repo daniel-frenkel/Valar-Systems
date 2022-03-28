@@ -57,6 +57,7 @@ int button2Timer;
 int waitButton1Timer;
 int waitButton2Timer;
 bool motorRunning;
+bool motor_running = false;
 
 int brightness0 = 0;    // how bright the LED is
 int brightness1 = 0;    // how bright the LED is
