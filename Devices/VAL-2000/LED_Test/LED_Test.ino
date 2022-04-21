@@ -1,17 +1,16 @@
-#define LED1 19
-#define LED2 22
-#define BUTTON1 4
-#define BUTTON2 2
+#define LED1 33
+#define LED2 18
+#define BUTTON1 23
+#define BUTTON2 34
 
 int brightness0 = 0;    // how bright the LED is
 int brightness1 = 0;    // how bright the LED is
-int brightness2 = 0;    // how bright the LED is
 int fade0Amount = 15;    // how many points to fade the LED by
 int fade1Amount = 15; 
 
 int btn1Press;
 int btn2Press;
-int allowButtons;
+
 
 int allowButtonTime;
 

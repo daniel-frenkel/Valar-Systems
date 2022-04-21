@@ -19,6 +19,7 @@ void setup() {
   preferences.begin("local", false);
   load_preferences();
   setup_motors();
+  setup_leds();
   API();
   ESPUIsetup();
   
@@ -47,7 +48,75 @@ void MotorTask(void *pvParameters)  // Motor Task
   (void) pvParameters;
 
   for (;;)
-  {
+  { 
+    if(btn1Press == 1) {
+    //Serial.println("BUTTON 1 PRESS");
+    button1Timer = millis();
+    waitButton2Timer = millis() + 1000;
+    
+    if (millis() < waitButton2Timer && btn2Press == 1 && motorRunning == false) {
+      Serial.println("START MOTOR CLOSE");
+      motorRunning = true;
+      move_to_step = -10000;
+      run_motor = true;
+      }
+    
+    if (brightness0 <= 255 && brightness0 >= 0) { 
+      ledcWrite(0, brightness0); // set the brightness of the LED
+      brightness0 = brightness0 + fade0Amount;
+      vTaskDelay(30);
+      }
+
+    //Fade instead of turn off
+    if (brightness0 > 255) {
+      brightness0 = 255;
+      fade0Amount = -fade0Amount;
+      }
+
+     if (brightness0 < 0){
+      
+      brightness0 = 0;
+      ledcWrite(0, brightness0);
+      btn1Press = 0;
+      fade0Amount = 15;
+      motorRunning = false;
+     }
+    }
+
+      if (btn2Press == 1) {
+    //Serial.println(" BUTTON 2 PRESS");
+    button2Timer = millis();
+    waitButton1Timer = millis() + 1000;
+    
+    if (millis() < waitButton1Timer && btn1Press == 1 && motorRunning == false ) {
+      Serial.println("START MOTOR OPEN");
+      motorRunning = true;
+      move_to_step = max_steps;
+      run_motor = true;
+      }
+      
+    if (brightness1 <= 255 && brightness1 >= 0) { 
+      ledcWrite(1, brightness1); // set the brightness of the LED
+      brightness1 = brightness1 + fade1Amount;
+      vTaskDelay(30);
+      }
+
+    //Fade instead of turn off
+    if (brightness1 > 255) {
+      brightness1 = 255;
+      fade1Amount = -fade1Amount;
+      }
+
+     if (brightness1 < 0){
+      
+      brightness1 = 0;
+      ledcWrite(1, brightness1);
+      btn2Press = 0;
+      fade1Amount = 15;
+      motorRunning = false;
+     }
+  }
+  
     if(run_motor == true)
     {
       Serial.println("Run Motor Function");

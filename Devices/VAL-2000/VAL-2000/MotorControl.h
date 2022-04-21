@@ -3,7 +3,7 @@ uint16_t positionLabel;
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
 
-#define STEP_PIN  13
+#define STEP_PIN  15
 #define DIR_PIN  14
 #define ENABLE_PIN 27
 #define BUTTON1 23
@@ -13,34 +13,46 @@ uint16_t positionLabel;
 #define STALLGUARD 2 
 #define SENSOR1 32
 #define SENSOR2 22
+#define LED1 33
+#define LED2 18
 
 #define SERIAL_PORT_2    Serial2    // TMC2208/TMC2224 HardwareSerial port
 #define DRIVER_ADDRESS   0b00       // TMC2209 Driver address according to MS1 and MS2
 #define R_SENSE          0.10f      // R_SENSE for current calc.  
 
+int brightness0 = 0;    // how bright the LED is
+int brightness1 = 0;    // how bright the LED is
+int fade0Amount = 15;    // how many points to fade the LED by
+int fade1Amount = 15; 
+
+int button1Timer;
+int button2Timer;
+int waitButton1Timer;
+int waitButton2Timer;
+bool motorRunning;
+
+int btn1Press;
+int btn2Press;
+
+int allowButtonTime;
 
 FastAccelStepperEngine engine = FastAccelStepperEngine();
 FastAccelStepper *stepper = NULL;
 TMC2209Stepper driver(&SERIAL_PORT_2, R_SENSE , DRIVER_ADDRESS);
 
-void feedTheDog()
-{
-  // feed dog 0
-  TIMERG0.wdt_wprotect = TIMG_WDT_WKEY_VALUE; // write enable
-  TIMERG0.wdt_feed = 1;                       // feed dog
-  TIMERG0.wdt_wprotect = 0;                   // write protect
-}
 
 void IRAM_ATTR button1pressed() 
 {
-    move_to_step = 0;
-    run_motor = true;
+    //move_to_step = 0;
+    //run_motor = true;
+    btn1Press = 1;
 }
 
 void IRAM_ATTR button2pressed() 
 {
-    move_to_step = max_steps;
-    run_motor = true;
+    //move_to_step = max_steps;
+    //run_motor = true;
+    btn2Press = 1;
 }
 
 void IRAM_ATTR stalled_position()
@@ -198,11 +210,6 @@ void setup_motors(){
   stepper->setDirectionPin(DIR_PIN);
   stepper->setEnablePin(ENABLE_PIN);
   stepper->setAutoEnable(true);
-
-    
-  //stepper.setEnablePin(ENABLE_PIN);
-  //stepper.setPinsInverted(false, false, true);
-  //stepper.disableOutputs();
   
   attachInterrupt(STALLGUARD, stalled_position, RISING);
   attachInterrupt(WIFI_PIN, wifi_button_press, FALLING);
@@ -212,3 +219,18 @@ void setup_motors(){
   attachInterrupt(SENSOR2, sensor_short, FALLING);
 
 }
+
+void setup_leds(){
+
+  ledcAttachPin(LED1, 1); // assign a led pins to a channel
+  ledcAttachPin(LED2, 0); // assign a led pins to a channel
+
+  ledcSetup(0, 5000, 8); // 12 kHz PWM, 8-bit resolution
+  ledcSetup(1, 5000, 8); // 12 kHz PWM, 8-bit resolution
+
+  pinMode(LED1,OUTPUT);
+  pinMode(LED2,OUTPUT);
+  
+  ledcWrite(0, 0); // turn off LED 
+  ledcWrite(1, 0); // turn off LED 
+} 
