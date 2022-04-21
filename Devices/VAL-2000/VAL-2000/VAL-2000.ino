@@ -60,19 +60,30 @@ void ButtonTask(void *pvParameters)  // Motor Task
   {
 
     if (btn1Press == 1) {
-      //Serial.println("BUTTON 1 PRESS");
+
       button1Timer = millis();
       waitButton2Timer = millis() + 1000;
 
       if (millis() < waitButton2Timer && btn2Press == 1 && motorRunning == false) {
         Serial.println("START MOTOR CLOSE");
         motorRunning = true;
-        move_to_step = -10000;
-        if (run_motor == true){
+        
+        if (run_motor == true && move_to_step == max_steps){
+          stepper->forceStop();
+          move_to_step = 0;
           stepper->moveTo(move_to_step);
           }
+        
+        else if(run_motor == true && move_to_step == 0 )
+        {
+          stepper->forceStop();
+          delay(100);
+          move_to_step = stepper->getCurrentPosition();
+          stepper->moveTo(move_to_step);
+        }
         else
           {
+        move_to_step = 0;
         run_motor = true;
           }
         }
@@ -108,15 +119,26 @@ void ButtonTask(void *pvParameters)  // Motor Task
       if (millis() < waitButton1Timer && btn1Press == 1 && motorRunning == false ) {
         Serial.println("START MOTOR OPEN");
         motorRunning = true;
-        move_to_step = max_steps;
-        if (run_motor == true){
+        
+        if (run_motor == true && move_to_step == 0){
+          stepper->forceStop();
+          move_to_step = max_steps;
+          stepper->moveTo(move_to_step);
+          }
+        
+        else if(run_motor == true && move_to_step == max_steps )
+        {
+          stepper->forceStop();
+          delay(100);
+          move_to_step = stepper->getCurrentPosition();
           stepper->moveTo(move_to_step);
         }
         else
-        {
-          run_motor = true;
+          {
+        move_to_step = max_steps;
+        run_motor = true;
+          }
         }
-      }
 
       if (brightness1 <= 255 && brightness1 >= 0) {
         ledcWrite(1, brightness1); // set the brightness of the LED

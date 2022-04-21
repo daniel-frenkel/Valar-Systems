@@ -82,6 +82,8 @@ void setZero()
   stepper->setCurrentPosition(0);
   Serial.print("current_position: ");
   Serial.println(current_position);
+  ESPUI.updateLabel(positionLabel, String(current_position));
+  
 }
 
 void goHome()
@@ -128,8 +130,6 @@ void move_motor() {
         printf("Stalled\n");
         stepper->forceStop();
         break;
-        //stepper->setCurrentPosition(move_to_step);
-        //stepper->moveTo(move_to_step);
       }
 
       vTaskDelay(1);
@@ -143,7 +143,6 @@ void move_motor() {
 
     Serial.println("Closing");
     stepper->moveTo(move_to_step);
-    //stepper.enableOutputs();
 
     while (stepper->getCurrentPosition() != stepper->targetPos())
     {
@@ -153,9 +152,8 @@ void move_motor() {
         printf("Stalled\n");
         stepper->forceStop();
         break;
-        stepper->setCurrentPosition(0);
-        stepper->moveTo(0);
       }
+      
       vTaskDelay(1);
     }
   } else
@@ -163,7 +161,6 @@ void move_motor() {
     Serial.println("DO NOTHING!");
   }
   current_position = stepper->getCurrentPosition();
-  //stepper.disableOutputs();
   printf("Motor Function Complete\n");
 }
 
