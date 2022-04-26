@@ -6,7 +6,7 @@ int current_position;
 int max_steps;
 int current;
 int stall; 
-int accel = 150;
+int accel = 80;
 int max_speed = 200;
 int tcools = (3089838.00*pow(float(max_speed*64),-1.00161534))*1.5;
 int move_to_step = 0;

@@ -30,10 +30,10 @@ void TravelDistance()
 
       if (sensor1_trip == true)
       {
-        printf("Tripped1\n");
-        //stepper->setAcceleration(2000000);
+        printf("Tripped 1\n");
+        printf("FORCE STOP\n");
         stepper->forceStop(); // Stop as fast as possible: sets new target
-        //stepper.runToPosition();
+        delay(100);
         sensor1_trip = false;
         current_position = 0;
         stepper->setCurrentPosition(current_position);
@@ -59,9 +59,8 @@ void TravelDistance()
       if (sensor2_trip == true)
       {
         printf("Tripped2\n");
-        //stepper->setAcceleration(2000000);
         stepper->forceStop(); // Stop as fast as possible: sets new target
-        //stepper.runToPosition();
+        delay(100);
         sensor2_trip = false;
         max_steps = stepper->getCurrentPosition();
         break;
@@ -84,9 +83,8 @@ void TravelDistance()
       if (sensor1_trip == true)
       {
         printf("Tripped1: MOVE 3\n");
-        //stepper->setAcceleration(2000000);
         stepper->forceStop(); // Stop as fast as possible: sets new target
-        //stepper.runToPosition();
+        delay(100);
         sensor1_trip = false;
         current_position = 0;
         stepper->setCurrentPosition(current_position);
@@ -155,9 +153,8 @@ void CalibrateCurrent() //AUTO CURRENT
       , NULL
       , 1 // Priority
       , &CurrentCalibrationTaskHandle
-      , 1);
+      , 0);
 
- // stepper.enableOutputs();
 
   //Open and close 2 times to be sure.
   int i;
@@ -181,13 +178,12 @@ void CalibrateCurrent() //AUTO CURRENT
       
       while (stepper->getCurrentPosition() != stepper->targetPos())
       {
-        //stepper.run();
-        //feedTheDog();
 
         if (sensor2_trip == true)
         {
           printf("Tripped2\n");
           stepper->forceStop(); // Stop as fast as possible: sets new target
+          delay(100);
           sensor2_trip = false;
           break;
         }
@@ -206,13 +202,12 @@ void CalibrateCurrent() //AUTO CURRENT
 
       while (stepper->getCurrentPosition() != stepper->targetPos())
       {
-        //stepper.run();
-        //feedTheDog();
 
         if (sensor1_trip == true)
         {
           printf("Tripped1\n");
           stepper->forceStop(); // Stop as fast as possible: sets new target
+          delay(100);
           sensor1_trip = false;
           break;
         }
@@ -221,12 +216,9 @@ void CalibrateCurrent() //AUTO CURRENT
   }
 
   current = current_cal + 100;
-  //stepper.disableOutputs();
   printf("current_high: %i\n", current);
 
   vTaskDelete(CurrentCalibrationTaskHandle);
-  //vTaskSuspend(CurrentChangeHandle);
-  //vTaskResume(StateChangeHandle);
 
   preferences.putInt ("current", current);
   printf("current_high = %d\n", current);
@@ -276,7 +268,7 @@ void CalibrateStall() //AUTO CURRENT
       , NULL
       , 1 // Priority
       , &StallCalibrationTaskHandle
-      , 1);
+      , 0);
 
   //stepper.enableOutputs();
 
@@ -295,13 +287,12 @@ void CalibrateStall() //AUTO CURRENT
 
       while (stepper->getCurrentPosition() != stepper->targetPos())
       {
-        //stepper.run();
-        //feedTheDog();
 
         if (sensor2_trip == true)
         {
           printf("Tripped2\n");
           stepper->forceStop(); // Stop as fast as possible: sets new target
+          delay(100);
           sensor2_trip = false;
           break;
         }
@@ -318,13 +309,12 @@ void CalibrateStall() //AUTO CURRENT
 
       while (stepper->getCurrentPosition() != stepper->targetPos())
       {
-        //stepper.run();
-        //feedTheDog();
 
         if (sensor1_trip == true)
         {
           printf("Tripped1\n");
           stepper->forceStop(); // Stop as fast as possible: sets new target
+          delay(100);
           sensor1_trip = false;
           break;
         }
@@ -333,7 +323,7 @@ void CalibrateStall() //AUTO CURRENT
   }
 
   stall = stall_cal - 20; //Subract 10 to make it not so sensative
-  //stepper.disableOutputs();
+
   printf("stall: %i\n", stall);
   vTaskDelete(StallCalibrationTaskHandle);
   preferences.putInt ("stall", stall);

@@ -3,18 +3,18 @@ uint16_t positionLabel;
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
 
-#define STEP_PIN  13
+#define STEP_PIN  15
 #define DIR_PIN  14
 #define ENABLE_PIN 27
 #define BUTTON1 23
 #define BUTTON2 34
 #define RXD2 16
 #define TXD2 17
-#define STALLGUARD 2 
+#define STALLGUARD 2
 #define SENSOR1 32
 #define SENSOR2 22
-#define LED1 19
-#define LED2 22
+#define LED1 33
+#define LED2 18
 
 #define SHAFT true
 
@@ -95,6 +95,7 @@ if(move_to_step == 0)
           {
             printf("TRIPPED ON 1\n");
             stepper->forceStop(); // Stop as fast as possible: sets new target
+            delay(100);
             stepper->setCurrentPosition(0);
             stepper->moveTo(0);
           }
@@ -103,6 +104,7 @@ if(move_to_step == 0)
           {
             printf("Stalled\n");
             stepper->forceStop(); // Stop as fast as possible: sets new target
+            delay(100);
             stepper->moveTo(stepper->getCurrentPosition());
           }
 
@@ -122,6 +124,7 @@ if(move_to_step == 0)
       {
         printf("TRIPPED ON 2\n");
         stepper->forceStop(); // Stop as fast as possible: sets new target
+        delay(100);
         stepper->setCurrentPosition(max_steps);
         stepper->moveTo(max_steps);
       }
@@ -130,6 +133,7 @@ if(move_to_step == 0)
       {
         printf("Stalled\n");
         stepper->forceStop(); // Stop as fast as possible: sets new target
+        delay(100);
         stepper->moveTo(stepper->getCurrentPosition());
       }
 
@@ -151,6 +155,7 @@ if(move_to_step == 0)
           {
             printf("TRIPPED ON 1\n");
             stepper->forceStop(); // Stop as fast as possible: sets new target
+            delay(100);
             stepper->setCurrentPosition(0);
             stepper->moveTo(0);
           }
@@ -159,6 +164,7 @@ if(move_to_step == 0)
           {
             printf("Stalled\n");
             stepper->forceStop(); // Stop as fast as possible: sets new target
+            delay(100);
             stepper->moveTo(stepper->getCurrentPosition());
           }
 
@@ -192,11 +198,7 @@ void setup_motors(){
 
   pinMode(BUTTON1,INPUT);
   pinMode(BUTTON2,INPUT);
-  pinMode(LED1,OUTPUT);
-  pinMode(LED2,OUTPUT);
 
-
-  
   SERIAL_PORT_2.begin(115200);
 
   driver.begin();
@@ -227,6 +229,19 @@ void setup_motors(){
   attachInterrupt(BUTTON2, button2pressed, FALLING);
   attachInterrupt(SENSOR1, sensor_long, FALLING);
   attachInterrupt(SENSOR2, sensor_short, FALLING);
-  
+}
 
+void setup_leds() {
+
+  ledcAttachPin(LED1, 1); // assign a led pins to a channel
+  ledcAttachPin(LED2, 0); // assign a led pins to a channel
+
+  ledcSetup(0, 5000, 8); // 12 kHz PWM, 8-bit resolution
+  ledcSetup(1, 5000, 8); // 12 kHz PWM, 8-bit resolution
+
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+
+  ledcWrite(0, 0); // turn off LED
+  ledcWrite(1, 0); // turn off LED
 }
