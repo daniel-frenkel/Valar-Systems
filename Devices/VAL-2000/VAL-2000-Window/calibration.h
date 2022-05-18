@@ -1,6 +1,73 @@
 TaskHandle_t CurrentCalibrationTaskHandle;
 TaskHandle_t StallCalibrationTaskHandle;
 
+
+void ClosePosition()
+{
+  
+printf("Moving to Close");
+
+  sensor1_trip = false;
+  sensor2_trip = false;
+
+  //disable stallguard
+  detachInterrupt(STALLGUARD);
+
+  driver.rms_current(1500); 
+  stepper->setAcceleration(accel);
+  stepper->setSpeedInHz(max_speed); //quarter speed
+
+  //First move to close position, in case closed, then skip
+  printf("MOVE 1: OPENING\n");
+  if (digitalRead(SENSOR2)) //Only do this if sensor1 is not tripped
+  {
+
+    stepper->setAcceleration(accel);
+    stepper->setSpeedInHz(max_speed); //quarter speed
+    stepper->moveTo(one_inch * 2 );        //close all the way
+
+    while (stepper->getCurrentPosition() != stepper->targetPos())
+    {
+
+      if (sensor2_trip == true)
+      {
+        printf("Tripped 2\n");
+        printf("FORCE STOP\n");
+        stepper->forceStop(); // Stop as fast as possible: sets new target
+        delay(100);
+        sensor1_trip = false;
+        break;
+      }
+    }
+  }
+
+  //First move to close position, in case closed, then skip
+  printf("MOVE 2: CLOSING\n");
+  if (digitalRead(SENSOR1)) //Only do this if sensor1 is not tripped
+  {
+
+    stepper->setAcceleration(accel);
+    stepper->setSpeedInHz(max_speed); //quarter speed
+    stepper->moveTo(-10000);        //close all the way
+
+    while (stepper->getCurrentPosition() != stepper->targetPos())
+    {
+
+      if (sensor1_trip == true)
+      {
+        printf("Tripped 1\n");
+        printf("FORCE STOP\n");
+        stepper->forceStop(); // Stop as fast as possible: sets new target
+        delay(100);
+        sensor1_trip = false;
+        current_position = 0;
+        stepper->setCurrentPosition(current_position);
+        break;
+      }
+    }
+  }
+}
+  
 void TravelDistance()
 {
   printf("CALIBRATION STEP 1: SETTING MAX STEPS\n");
@@ -11,13 +78,36 @@ void TravelDistance()
   //disable stallguard
   detachInterrupt(STALLGUARD);
 
-  //stepper.enableOutputs();
-  driver.rms_current(1500); //current = 2000
+  driver.rms_current(1500); 
   stepper->setAcceleration(accel);
   stepper->setSpeedInHz(max_speed); //quarter speed
 
   //First move to close position, in case closed, then skip
-  printf("MOVE 1: CLOSING\n");
+  printf("MOVE 1: OPENING\n");
+  if (digitalRead(SENSOR2)) //Only do this if sensor1 is not tripped
+  {
+
+    stepper->setAcceleration(accel);
+    stepper->setSpeedInHz(max_speed); //quarter speed
+    stepper->moveTo(one_inch * 2);        //close all the way
+
+    while (stepper->getCurrentPosition() != stepper->targetPos())
+    {
+
+      if (sensor2_trip == true)
+      {
+        printf("Tripped 2\n");
+        printf("FORCE STOP\n");
+        stepper->forceStop(); // Stop as fast as possible: sets new target
+        delay(100);
+        sensor1_trip = false;
+        break;
+      }
+    }
+  }
+
+  //First move to close position, in case closed, then skip
+  printf("MOVE 2: CLOSING\n");
   if (digitalRead(SENSOR1)) //Only do this if sensor1 is not tripped
   {
 
@@ -43,7 +133,7 @@ void TravelDistance()
   }
 
   //Now open all the way
-  printf("MOVE 2: OPENING\n");
+  printf("MOVE 3: OPENING\n");
   if (digitalRead(SENSOR2)) //Only do this if sensor2 is not tripped
   {
 
@@ -69,7 +159,7 @@ void TravelDistance()
   }
 
   //Now close all the way
-  printf("MOVE 3: FINISHING CLOSING\n");
+  printf("MOVE 4: FINISHING CLOSING\n");
   if (digitalRead(SENSOR1)) //Only do this if sensor2 is not tripped
   {
     stepper->setAcceleration(accel);

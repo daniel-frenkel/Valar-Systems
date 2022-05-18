@@ -9,7 +9,7 @@ void move_motor_position_1() {
   move_close_stall=false;
   move_open_stall=false;
   
-  digitalWrite(ENABLE_PIN, LOW);      // enable the TMC5
+  digitalWrite(ENABLE_PIN, LOW);      // enable the TMC5130
   
   //Get Xactual Position
   delay(50);
@@ -23,8 +23,8 @@ void move_motor_position_1() {
   Serial.println(XACTUAL);
   XACTUAL = sendData(0x21, 0);
   
-  Serial.print("move_to_position: ");
-  Serial.println(move_to_position);
+  Serial.print("move_to_steps: ");
+  Serial.println(move_to_steps);
 
   sendData(0xA0, 0);     // Positioning mode 0
   sendData(0x26 + 0x80, MOVE_ACCEL);//AMAX
@@ -32,18 +32,18 @@ void move_motor_position_1() {
   sendData(0x34 + 0x80, 0x000); // Disable stallguard /
   sendData(0x34 + 0x80, 0x400); // Enable stallguard /
     
-  int start_move_position=move_to_position;
+  int start_move_position=move_to_steps;
 
   int maxOpenTime = millis() + 120000; //max amount of time to close in case of problem
 
 
-if(move_to_position == XACTUAL){
-  Serial.println("move_to_position == XACTUAL");
+if(move_to_steps == XACTUAL){
+  Serial.println("move_to_steps == XACTUAL");
 }
 
 
 //V1 TWO Movements OPEN
-else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_to_position > just_open_position)){
+else if((just_open_position > XACTUAL) && (move_to_steps > XACTUAL) && (move_to_steps > just_open_position)){
 
   Serial.println("V1 Opening 2 Positions");
   move_direction=2;
@@ -64,14 +64,14 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
       sendData(0x6D + 0x80, stall_open_low); //
       sendData(0x10 + 0x80, open_current_low);   
       Serial.println("STALL LOW SET");
-      sendData(0x2D + 0x80, move_to_position); //XTARGET: Starts Movement
+      sendData(0x2D + 0x80, move_to_steps); //XTARGET: Starts Movement
       number_stop = 1;     
       }
       
     sendData(0x35, 0) & 0x200;
   
     if (!(sendData(0x35, 0) & 0x200) == 0 & number_stop == 1) { //JOP reached
-      Serial.println("move_to_position REACHED");
+      Serial.println("move_to_steps REACHED");
       Serial.println("BREAKING");
       break;    
       }
@@ -103,7 +103,8 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
     delay(1);
     
   }
-}else if((XACTUAL > just_open_position) && (XACTUAL > move_to_position) && (move_to_position < just_open_position)){
+  
+}else if((XACTUAL > just_open_position) && (XACTUAL > move_to_steps) && (move_to_steps < just_open_position)){
 
   Serial.println("V2 Closing 2 Positions");
   move_direction=1;
@@ -125,8 +126,8 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
       sendData(0x6D + 0x80, stall_close_high); //
       sendData(0x10 + 0x80, close_current_high);   // 0x00001F00 = IHOLD_IRUN 1F00 = 3.05A 1400 = 2A
       Serial.println("STALL HIGH SET");
-      //sendData(0x2D+0x80, move_to_position); //XTARGET: Starts Movement
-      if(move_to_position==0){ //If 0, then full close until sensor
+      //sendData(0x2D+0x80, move_to_steps); //XTARGET: Starts Movement
+      if(move_to_steps==0){ //If 0, then full close until sensor
         sendData(0x20 + 0x80, 2); // RAMPMODE close
         }else{
         number_stop = 1;
@@ -136,8 +137,8 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
       
   sendData(0x35, 0) & 0x200;
   
-  if (!(sendData(0x35, 0) & 0x200) == 0 && number_stop == 1) { //move_to_position reached
-      Serial.println("move_to_position REACHED");
+  if (!(sendData(0x35, 0) & 0x200) == 0 && number_stop == 1) { //move_to_steps reached
+      Serial.println("move_to_steps REACHED");
       Serial.println("BREAKING");
       break;    
       }
@@ -150,18 +151,7 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
       sendData(0x27+0x80, 0); //VMAX
       restart_movement = true;
       break;
-      
-      /*
-      if(run_section==2){
-          sendData(0x2D+0x80, move_to_position); //XTARGET: Starts Movement
-          sendData(0x34 + 0x80, 0x000); // Disable stallguard /
-          sendData(0x34 + 0x80, 0x400); // Enable stallguard /
-          }else{
-          sendData(0x27+0x80, 0); //VMAX
-          break;
-          }
-          */
-    }
+     }
 
   if (!digitalRead(position_1_sensor) && move_direction == 1) {
       Serial.println("TRIPPED AT POSITION 1");
@@ -170,21 +160,19 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
       break;  // end loop and stop motor
      }   
 
-
-      
-      if(digitalRead(btn1)==LOW || digitalRead(btn2)==LOW){ // Button to stop
+  if (digitalRead(btn1)==LOW || digitalRead(btn2)==LOW) { // Button to stop
       Serial.println("Button Stopped");
       sendData(0x26+0x80, MOVE_DECEL); //Decelerate super fast
       sendData(0x27+0x80, 0); //Set velocity to 0
       delay(200);
       break;  // end loop and stop motor
-      }
-   
-
-    delay(1);
+     }
+     
+    delay(1); 
     
   }
-}else if((XACTUAL > just_open_position) && (XACTUAL < move_to_position) && (just_open_position < move_to_position)){
+  
+}else if((XACTUAL > just_open_position) && (XACTUAL < move_to_steps) && (just_open_position < move_to_steps)){
 
   Serial.println("V3");
   move_direction=2;
@@ -192,7 +180,7 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
   sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x6D + 0x80, stall_open_low); // 
   sendData(0x10 + 0x80, open_current_low);   // 0x00001F00 = IHOLD_IRUN 1F00 = 3.05A 1400 = 2A
-  sendData(0x2D + 0x80, move_to_position); //XTARGET: Starts Movement 
+  sendData(0x2D + 0x80, move_to_steps); //XTARGET: Starts Movement 
 
 
   while (millis()<maxOpenTime) { // wait for position_reached flag
@@ -200,7 +188,7 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
   sendData(0x35, 0) & 0x200;
   
   if (!(sendData(0x35, 0) & 0x200) == 0) { //JOP reached
-      Serial.println("move_to_position REACHED");
+      Serial.println("move_to_steps REACHED");
       Serial.println("BREAKING");
       break;    
       }
@@ -230,7 +218,8 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
     delay(1);
     
   }
-}else if((XACTUAL > just_open_position) && (XACTUAL > move_to_position) && (just_open_position < move_to_position)){
+  
+}else if((XACTUAL > just_open_position) && (XACTUAL > move_to_steps) && (just_open_position < move_to_steps)){
 
   Serial.println("V4");
   move_direction=1;
@@ -238,14 +227,14 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
   sendData(0x14 + 0x80, MOVE_CLOSE_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x6D + 0x80, stall_close_low); // 
   sendData(0x10 + 0x80, close_current_low);   // 0x00001F00 = IHOLD_IRUN 1F00 = 3.05A 1400 = 2A
-  sendData(0x2D + 0x80, move_to_position); //XTARGET: Starts Movement 
+  sendData(0x2D + 0x80, move_to_steps); //XTARGET: Starts Movement 
 
   while (millis()<maxOpenTime) { // wait for position_reached flag
 
   sendData(0x35, 0) & 0x200;
   
   if (!(sendData(0x35, 0) & 0x200) == 0) { //JOP reached
-      Serial.println("move_to_position REACHED");
+      Serial.println("move_to_steps REACHED");
       Serial.println("BREAKING");
       break;    
       }
@@ -266,18 +255,19 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
       break;  // end loop and stop motor
      }   
 
-      if(digitalRead(btn1)==LOW || digitalRead(btn2)==LOW){ // Button to stop
+  if (digitalRead(btn1)==LOW || digitalRead(btn2)==LOW) { // Button to stop
       Serial.println("Button Stopped");
       sendData(0x26+0x80, MOVE_DECEL); //Decelerate super fast
       sendData(0x27+0x80, 0); //Set velocity to 0
       delay(200);
       break;  // end loop and stop motor
-      }
+     }
 
     delay(1);
     
   }
-}else if((XACTUAL < just_open_position) && (XACTUAL > move_to_position) && (just_open_position > move_to_position)){
+  
+}else if((XACTUAL < just_open_position) && (XACTUAL > move_to_steps) && (just_open_position > move_to_steps)){
 
   Serial.println("V5");
   move_direction=1;
@@ -285,14 +275,14 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
   sendData(0x14 + 0x80, MOVE_CLOSE_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x6D + 0x80, stall_close_high); // 
   sendData(0x10 + 0x80, close_current_high);   // 0x00001F00 = IHOLD_IRUN 1F00 = 3.05A 1400 = 2A
-  sendData(0x2D + 0x80, move_to_position); //XTARGET: Starts Movement 
+  sendData(0x2D + 0x80, move_to_steps); //XTARGET: Starts Movement 
 
   while (millis()<maxOpenTime) { // wait for position_reached flag
 
   sendData(0x35, 0) & 0x200;
   
   if (!(sendData(0x35, 0) & 0x200) == 0) { //JOP reached
-      Serial.println("move_to_position REACHED");
+      Serial.println("move_to_steps REACHED");
       Serial.println("BREAKING");
       break;    
       }
@@ -324,7 +314,7 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
 
     delay(1);  
   }
-}else if((XACTUAL < just_open_position) && (XACTUAL < move_to_position) && (just_open_position > move_to_position)){ //V6
+}else if((XACTUAL < just_open_position) && (XACTUAL < move_to_steps) && (just_open_position > move_to_steps)){ //V6
 
   Serial.println("V6");
   move_direction=2;
@@ -332,14 +322,14 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
   sendData(0x14 + 0x80, MOVE_OPEN_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x6D + 0x80, stall_open_high); // 
   sendData(0x10 + 0x80, open_current_high);   // 0x00001F00 = IHOLD_IRUN 1F00 = 3.05A 1400 = 2A
-  sendData(0x2D + 0x80, move_to_position); //XTARGET: Starts Movement 
+  sendData(0x2D + 0x80, move_to_steps); //XTARGET: Starts Movement 
 
   while (millis()<maxOpenTime) { // wait for position_reached flag
 
   sendData(0x35, 0) & 0x200;  
   
   if (!(sendData(0x35, 0) & 0x200) == 0) { //JOP reached
-      Serial.println("move_to_position REACHED");
+      Serial.println("move_to_steps REACHED");
       Serial.println("BREAKING");
       break;    
      }
@@ -370,7 +360,7 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
 
     delay(1);
 }
-}else { //LAST RESORT COMMAND TO CLOSE //V7 else if(XACTUAL > move_to_position) {
+}else { //LAST RESORT COMMAND TO CLOSE //V7 else if(XACTUAL > move_to_steps) {
 
   Serial.println("V7 LAST RESORT");
   move_direction=1;
@@ -380,7 +370,7 @@ else if((just_open_position > XACTUAL) && (move_to_position > XACTUAL) && (move_
   sendData(0x14 + 0x80, MOVE_CLOSE_VELOCITY - 100); // writing value 0x00088888 = 559240 = 0.0 to address 11 = 0x14(TCOOLTHRS)
   sendData(0x6D + 0x80, stall_close_high); // 
   sendData(0x10 + 0x80, close_current_high);   // 0x00001F00 = IHOLD_IRUN 1F00 = 3.05A 1400 = 2A
-  sendData(0x2D + 0x80, move_to_position); //XTARGET: Starts Movement 
+  sendData(0x2D + 0x80, move_to_steps); //XTARGET: Starts Movement 
 
   while (millis()<maxOpenTime) { // wait for position_reached flag
 
@@ -535,6 +525,10 @@ void setup_motors() {
   pinMode(chipCS, OUTPUT);
   pinMode(CLOCKOUT, OUTPUT);
   pinMode(ENABLE_PIN, OUTPUT);
+  pinMode(position_2_sensor, INPUT_PULLUP);
+  pinMode(position_1_sensor, INPUT_PULLUP);
+  pinMode(btn1, INPUT_PULLUP);
+  pinMode(btn2, INPUT_PULLUP);
 
   digitalWrite(chipCS, HIGH);
   digitalWrite(ENABLE_PIN, HIGH);

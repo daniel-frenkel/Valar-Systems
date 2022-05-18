@@ -8,13 +8,8 @@
 const char *ap_ssid = "VALAR-AP";
 const char *ap_password = "password";
 
-int wifi_set;
-bool wifi_button = false;;
-String ssid;
-String pass;
 String ip_address;
-
-String hostname = "valar-systems";
+String hostname = "Valar-Systems";
 
 AsyncWebServer server(80);
 
@@ -22,7 +17,7 @@ String processor(const String& var)
 {
  
   if(var == "PLACEHOLDER_PERCENT"){
-    return String((move_to_position/max_steps)*100);
+    return String(move_percent);
   }
   else if(var == "PLACEHOLDER_MAX_STEPS"){
     return String(max_steps);
@@ -64,7 +59,8 @@ String processor(const String& var)
   return String();
 }
 
-void connectWifi(){
+void connectWifi()
+{
   WiFi.softAPdisconnect(true);
   Serial.println(ssid);
   Serial.println(pass);
@@ -521,17 +517,17 @@ server.on("/position", HTTP_GET, [](AsyncWebServerRequest *request){
         AsyncWebParameter* p = request->getParam(i);
     }
 
-    if(request->hasParam("move_to_position"))
+    if(request->hasParam("move_percent"))
     {
-        int i = request->getParam("move_to_position")->value().toInt();
-        int q=(max_steps/100)*i;
+        move_percent = request->getParam("move_percent")->value().toInt();
+        move_to_steps = (max_steps/100)*move_percent;
+        sendData(0x2D+0x80, move_to_steps); //XTARGET:
         
       if(motor_running==false){
-         move_to_position = q;
          command = CUSTOM_MOVE;
     }
     
-    Serial.println(move_to_position);
+    Serial.println(move_to_steps);
     }  
 
     request->redirect("/");

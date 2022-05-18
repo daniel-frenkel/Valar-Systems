@@ -3,7 +3,7 @@ uint16_t positionLabel;
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
 
-#define STEP_PIN  15
+#define STEP_PIN  13
 #define DIR_PIN  14
 #define ENABLE_PIN 27
 #define BUTTON1 23
@@ -209,7 +209,7 @@ void setup_motors(){
   driver.mstep_reg_select(true);
   driver.rms_current(current); 
   driver.SGTHRS(stall);
-  driver.microsteps(0);
+  driver.microsteps(motor_microsteps);
   driver.TCOOLTHRS(tcools); // 
   driver.TPWMTHRS(0);
   driver.semin(0);

@@ -237,6 +237,15 @@ if(type == B_UP) {
     }
 }
 
+void buttonClosePos(Control* sender, int type)
+{
+if(type == B_UP) {
+        close_pos = 1;
+        Serial.print("calibrate: ");
+        Serial.println(calibrate);  
+    }
+}
+
 void switchChangeDirectionCall(Control* sender, int value)
 {
     switch (value)
@@ -368,7 +377,7 @@ void ESPUIsetup(){
 
 //Tab2: Settings
    ESPUI.addControl(ControlType::Separator, "Automatic Calibration", "", ControlColor::Peterriver, tab2);
-
+   ESPUI.addControl(ControlType::Button, "Close Position", "Start", ControlColor::Dark, tab2, &buttonClosePos);
    ESPUI.addControl(ControlType::Button, "Auto Tune", "Start", ControlColor::Dark, tab2, &buttonAutoTune);
    
    ESPUI.addControl(ControlType::Separator, "Motor Settings", "", ControlColor::Peterriver, tab2);

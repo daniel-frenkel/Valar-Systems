@@ -54,11 +54,11 @@ void load_preferences() {
   wifi_set = preferences.getInt("wifi_set", 0);
   ssid = preferences.getString ("ssid", "NOT_SET");
   pass = preferences.getString ("pass", "NOT_SET");
-  max_steps = preferences.getInt("max_steps", 2000);
-  current = preferences.getLong("current", 400);
+  max_steps = preferences.getInt("max_steps", 300000);
+  current = preferences.getLong("current", 1000);
   stall = preferences.getInt("stall", 10);
-  accel = preferences.getInt("accel", 100);
-  max_speed = preferences.getInt("max_speed", 100);
+  accel = preferences.getInt("accel", 10000);
+  max_speed = preferences.getInt("max_speed", 30000);
   tcools = (3089838.00 * pow(float(max_speed), -1.00161534)) * 1.5;
   open_direction =  preferences.getInt("open_dir", 0);
 

@@ -41,6 +41,7 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
             <p>To remove this device from your network, press and hold the wifi reset button for 3+ seconds.</p>
             <br>
          </div>
+         <br>
          <div class="card">
             <h2>How to set up the motor</h2>
             <ol>
@@ -65,16 +66,16 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
          </div>
          <br>
          <div class="card">
-         <h2>Position Percent</h2>
-         <form action="/position">
-            <p>Enter a value from 0-100. This is the percent of the max_steps value to move the motor.</p>
-            <label><b>move_to :</b></label>    
-            <input value = %PLACEHOLDER_PERCENT% type = "text" name = "move_to_position">
-            <br/>
-            <input type="submit" value="Set Position">
-            <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/position?move_to_position=%PLACEHOLDER_PERCENT%</p>
-         </form>
-         </div>
+          <h2>Position Percent</h2>
+          <form action="/position">    
+          <p>Enter a value from 0-100. This is the percent of the max_steps value to move the motor.</p>
+          <label><b>Percent Open :</b></label>    
+          <input value = "%PLACEHOLDER_PERCENT%" type = "number" name = "move_percent" min="0" max="100">
+          <br/>
+          <input type="submit" value="Set Position">
+          <p>You can also send an HTTP request to http://%PLACEHOLDER_IP_ADDRESS%/position?move_percent=%PLACEHOLDER_PERCENT%</p>
+          </form>
+          </div>    
          <br>
          <div class="card">
          <h2>Auto Tune Motor</h2>

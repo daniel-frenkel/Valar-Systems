@@ -19,7 +19,7 @@ String ssid;
 String pass;
 volatile int stall_cal;
 volatile int current_cal;
-
+int close_pos = 0;
 
 String MYTIMEZONE;
 int close_timer = 0;

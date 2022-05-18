@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <ESPUI.h>
 #include <ezTime.h>
-//#include <AccelStepper.h>
 #include "FastAccelStepper.h"
 #include <HardwareSerial.h>
 #include <TMCStepper.h>
@@ -20,7 +19,6 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   preferences.begin("local", false);
-  
   load_preferences();
   setup_motors();
   setup_leds();
@@ -65,6 +63,8 @@ void ButtonTask(void *pvParameters)  // Motor Task
 
   for (;;)
   {
+
+    //Serial.println(digitalRead(SENSOR1));
 
     if (btn1Press == 1) {
 
@@ -202,6 +202,11 @@ void MotorTask(void *pvParameters)  // Motor Task
       CalibrateStall();
       ESPUI.updateNumber(stallMax, stall);
       calibrate = 0;
+    }
+    else if(close_pos == 1)
+    {
+      ClosePosition();
+      close_pos = 0;
     }
     else if(wifi_button == true)
     {
