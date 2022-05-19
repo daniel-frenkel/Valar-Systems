@@ -16,6 +16,7 @@ void setup() {
 
   Serial.begin(115200);
   delay(1000);
+  Serial.println("VERSION: 2.0");
   preferences.begin("local", false);
 
   xTaskCreatePinnedToCore(
