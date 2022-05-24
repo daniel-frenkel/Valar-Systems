@@ -6,8 +6,8 @@ int current_position;
 int max_steps;
 int current;
 int stall; 
-int accel = 80;
-int max_speed = 200;
+int accel = 10000;
+int max_speed = 30000;
 int tcools = (3089838.00*pow(float(max_speed*64),-1.00161534))*1.5;
 int move_to_step = 0;
 int move_to_percent = 0;
@@ -46,11 +46,11 @@ String close_am_pm_s;
 
 float gear_ratio = 1;
 float inches_mm = 25.4;
-int motor_microsteps = 0; 
+int motor_microsteps = 64; 
 int motor_steps_per_rev = 200;
 int thread_pitch = 2;
 int starts = 4;
-int one_inch = gear_ratio * ((motor_steps_per_rev * 1)/(thread_pitch * starts)) * inches_mm;
+int one_inch = (gear_ratio * ((motor_steps_per_rev * 1)/(thread_pitch * starts)) * inches_mm) * motor_microsteps;
 
 int button1Timer;
 int button2Timer;
@@ -76,10 +76,27 @@ void load_preferences(){
   wifi_set = preferences.getInt("wifi_set", 0);
   ssid = preferences.getString ("ssid", "NO_SSID");
   pass = preferences.getString ("pass", "NO_PASSWORD");
-  max_steps = preferences.getInt("max_steps", 2000);
-  Serial.println(max_steps);
-  current = preferences.getLong("current", 400);
+  max_steps = preferences.getInt("max_steps", 300000);
+  current = preferences.getLong("current", 1000);
   stall = preferences.getInt("stall", 10);
+
+  open_timer = preferences.getInt("open_timer", 0);
+  close_timer = preferences.getInt("close_timer", 0);
+  open_hour = preferences.getInt("open_hour", 12);
+  open_hour_input = preferences.getInt("open_hour_in", 12);
+
+  open_am_pm = preferences.getInt("open_am_pm", 0);
+  open_am_pm_s = preferences.getString("open_am_pm_s", "AM");
+
+  close_hour = preferences.getInt("close_hour", 12);
+  close_hour_input = preferences.getInt("close_hour_in", 12);
+
+  open_minute = preferences.getInt("open_minute", 0);
+  close_minute = preferences.getInt("close_minute", 0);
+  close_am_pm = preferences.getInt("close_am_pm", 0);
+  close_am_pm_s = preferences.getString("close_am_pm_s", "AM");
+
+  MYTIMEZONE = preferences.getString("timezone", "America/Los_Angeles");
 
   Serial.println("FINISHED LOADING PREFERENCES");
   }

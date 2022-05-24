@@ -64,8 +64,6 @@ void ButtonTask(void *pvParameters)  // Motor Task
   for (;;)
   {
 
-    //Serial.println(digitalRead(SENSOR1));
-
     if (btn1Press == 1) {
 
       button1Timer = millis();
@@ -77,7 +75,6 @@ void ButtonTask(void *pvParameters)  // Motor Task
         
         if (run_motor == true && move_to_step == max_steps){
           stepper->forceStop();
-          delay(100);
           move_to_step = 0;
           stepper->moveTo(move_to_step);
           }
@@ -130,7 +127,6 @@ void ButtonTask(void *pvParameters)  // Motor Task
         
         if (run_motor == true && move_to_step == 0){
           stepper->forceStop();
-          delay(100);
           move_to_step = max_steps;
           stepper->moveTo(move_to_step);
           }
@@ -174,7 +170,6 @@ void ButtonTask(void *pvParameters)  // Motor Task
     else
     {
       vTaskDelay(1);
-      //Serial.println(digitalRead(STALLGUARD));
     }
   }
 }

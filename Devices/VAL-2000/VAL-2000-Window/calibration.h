@@ -5,7 +5,7 @@ TaskHandle_t StallCalibrationTaskHandle;
 void ClosePosition()
 {
   
-printf("Moving to Close");
+printf("Moving to Close/n");
 
   sensor1_trip = false;
   sensor2_trip = false;
@@ -35,7 +35,7 @@ printf("Moving to Close");
         printf("FORCE STOP\n");
         stepper->forceStop(); // Stop as fast as possible: sets new target
         delay(100);
-        sensor1_trip = false;
+        sensor2_trip = false;
         break;
       }
     }
@@ -46,9 +46,12 @@ printf("Moving to Close");
   if (digitalRead(SENSOR1)) //Only do this if sensor1 is not tripped
   {
 
+    sensor1_trip = false;
+    sensor2_trip = false;
+  
     stepper->setAcceleration(accel);
     stepper->setSpeedInHz(max_speed); //quarter speed
-    stepper->moveTo(-10000);        //close all the way
+    stepper->moveTo(-one_inch * 20);        //close all the way
 
     while (stepper->getCurrentPosition() != stepper->targetPos())
     {
@@ -100,7 +103,7 @@ void TravelDistance()
         printf("FORCE STOP\n");
         stepper->forceStop(); // Stop as fast as possible: sets new target
         delay(100);
-        sensor1_trip = false;
+        sensor2_trip = false;
         break;
       }
     }
@@ -111,9 +114,12 @@ void TravelDistance()
   if (digitalRead(SENSOR1)) //Only do this if sensor1 is not tripped
   {
 
+    sensor1_trip = false;
+    sensor2_trip = false;
+    
     stepper->setAcceleration(accel);
-    stepper->setSpeedInHz(max_speed); //quarter speed
-    stepper->moveTo(-10000);        //close all the way
+    stepper->setSpeedInHz(max_speed/2); //quarter speed
+    stepper->moveTo(-one_inch * 20);        //close all the way
 
     while (stepper->getCurrentPosition() != stepper->targetPos())
     {
@@ -137,9 +143,12 @@ void TravelDistance()
   if (digitalRead(SENSOR2)) //Only do this if sensor2 is not tripped
   {
 
+    sensor1_trip = false;
+    sensor2_trip = false;
+    
     stepper->setAcceleration(accel);
-    stepper->setSpeedInHz(max_speed); //quarter speed
-    stepper->moveTo(10000);
+    stepper->setSpeedInHz(max_speed/2); //quarter speed
+    stepper->moveTo(one_inch * 20);
     sensor2_trip = false;
 
     while (stepper->getCurrentPosition() != stepper->targetPos())
@@ -153,6 +162,7 @@ void TravelDistance()
         delay(100);
         sensor2_trip = false;
         max_steps = stepper->getCurrentPosition();
+        preferences.putInt ("max_steps", max_steps);
         break;
       }
     }
@@ -164,7 +174,7 @@ void TravelDistance()
   {
     stepper->setAcceleration(accel);
     stepper->setSpeedInHz(max_speed); //quarter speed
-    stepper->moveTo(-10000);
+    stepper->moveTo(-one_inch * 20);
     sensor1_trip = false;
 
     while (stepper->getCurrentPosition() != stepper->targetPos())
@@ -184,9 +194,7 @@ void TravelDistance()
   }
 
   printf("Finished Setting Max Steps: %i\n", max_steps);
-  //stepper.disableOutputs();
   attachInterrupt(STALLGUARD, stalled_position, RISING);
-  preferences.putInt ("max_steps", max_steps);
 }
 
 
