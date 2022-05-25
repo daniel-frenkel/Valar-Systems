@@ -8,7 +8,7 @@ int current;
 int stall; 
 int accel = 10000;
 int max_speed = 30000;
-int tcools = (3089838.00*pow(float(max_speed*64),-1.00161534))*1.5;
+int tcools = (3089838.00*pow(float(max_speed),-1.00161534))*1.5; //*64 after max speed
 int move_to_step = 0;
 int move_to_percent = 0;
 int calibrate = 0; // Set to 1 to set home position

@@ -69,6 +69,8 @@ printf("Moving to Close/n");
       }
     }
   }
+
+  attachInterrupt(STALLGUARD, stalled_position, RISING);
 }
   
 void TravelDistance()
@@ -118,7 +120,7 @@ void TravelDistance()
     sensor2_trip = false;
     
     stepper->setAcceleration(accel);
-    stepper->setSpeedInHz(max_speed/2); //quarter speed
+    stepper->setSpeedInHz(max_speed); //quarter speed
     stepper->moveTo(-one_inch * 20);        //close all the way
 
     while (stepper->getCurrentPosition() != stepper->targetPos())
@@ -147,7 +149,7 @@ void TravelDistance()
     sensor2_trip = false;
     
     stepper->setAcceleration(accel);
-    stepper->setSpeedInHz(max_speed/2); //quarter speed
+    stepper->setSpeedInHz(max_speed); //quarter speed
     stepper->moveTo(one_inch * 20);
     sensor2_trip = false;
 
@@ -224,7 +226,7 @@ printf("Starting Current Calibration\n");
 
 void CalibrateCurrent() //AUTO CURRENT
 {
-  printf("CALIBRATION STEP 2: Setting Current: \n");
+  Serial.println("CALIBRATION STEP 2: Setting Current: ");
 
   sensor1_trip = false;
   sensor2_trip = false;
@@ -249,7 +251,7 @@ void CalibrateCurrent() //AUTO CURRENT
       , "CurrentCalibrationTask"
       , 1024 * 4 // Stack size
       , NULL
-      , 1 // Priority
+      , 2 // Priority
       , &CurrentCalibrationTaskHandle
       , 0);
 
@@ -258,22 +260,16 @@ void CalibrateCurrent() //AUTO CURRENT
   int i;
   for (i = 0; i < 2; i++)
   {
-    //Now open all the way
-    Serial.println(digitalRead(SENSOR1));
-    Serial.println(digitalRead(SENSOR2));
-    
+
     if (digitalRead(SENSOR2)) //Only do this if sensor2 is not tripped
     {
-      printf("MOVE 1: OPENING\n");
+      printf("MOVE 1: CURRENT OPENING\n");
       stepper->setAcceleration(accel);
       stepper->setSpeedInHz(max_speed); //quarter speed
       stepper->setCurrentPosition(0);
       stepper->moveTo(one_inch * 20);
       sensor2_trip = false;
 
-      Serial.println(stepper->getCurrentPosition());
-      Serial.println(stepper->targetPos());
-      
       while (stepper->getCurrentPosition() != stepper->targetPos())
       {
 
